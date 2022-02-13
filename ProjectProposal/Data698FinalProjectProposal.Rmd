@@ -1,0 +1,35 @@
+---
+title: "Data 698 - Final Project Proposal"
+subtitle: "Predicting Winning New York Mega Millions Lottery Numbers"
+author: "Stephen Haslett, Richard Zheng"
+date: "2/13/2022"
+output:
+ html_document:
+    toc: true
+    toc_float: true
+    theme: flatly
+    highlight: tango
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+## Introduction
+
+### Mega Millions Lottery Game Rules
+
+Mega Millions is a US multi-state lottery game that is drawn twice a week on Tuesdays and Fridays. To participate in the game, players purchase one or more lottery tickets at a cost of $2 per ticket.
+
+Players must then pick 5 unique numbers from 1 to 70, and 1 number from 1 to 25 for the Mega Ball. Alternatively, players can request the Quick Pick option when purcahsing their ticket.  
+
+## Data Source
+
+The main dataset that will be used for this project can be found on the [NY Open Data](https://data.ny.gov/) website, and contains biweekly winning Mega Millions lottery numbers from 2002, through the currrent week. The dataset is in CSV format and can be accessed here - 
+[Lottery Mega Millions Winning Numbers: Beginning 2002](https://data.ny.gov/Government-Finance/Lottery-Mega-Millions-Winning-Numbers-Beginning-20/5xaw-6ayf/data). As of writing, the set consists of 2058 observations broken into 4 columns:
+
+- **Draw Date**: _The date on which the lottery draw took place_.
+- **Winning Numbers**: _The winning numbers for the given lottery draw_.
+- **Mega Ball**: _The winning Mega Ball for the draw_.
+- **Multiplier**: _The winning multiplier number for the draw_. 

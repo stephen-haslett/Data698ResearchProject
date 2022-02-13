@@ -1,6 +1,6 @@
 ---
 title: "Data 698 Analaytics Master’s Research Project"
-subtitle: "Predicting Winning Powerball Numbers"
+subtitle: "Predicting Winning New York Mega Millions Lottery Numbers"
 author: "Stephen Haslett"
 date: "2/7/2022"
 output: html_document
@@ -12,25 +12,10 @@ knitr::opts_chunk$set(echo = TRUE)
 library('RCurl')
 ```
 
-## R Markdown
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
-
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
-
-```{r cars}
-
-powerballDataURL <- "https://data.ny.gov/resource/d6yy-54nr.csv"
-powerballWinningNumbers <- read.csv(textConnection(getURL(powerballDataURL)))
-head(powerballWinningNumbers, 100)
+```{r dataImport}
+megaMillionsDataURL <- "https://data.ny.gov/resource/5xaw-6ayf.csv"
+megaMillionsWinningNumbers <- read.csv(textConnection(getURL(megaMillionsDataURL)))
+head(megaMillionsWinningNumbers, 10000000)
 ```
 
-## Including Plots
-
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
