@@ -1,7 +1,7 @@
 ---
 title: "Data 698 Analaytics Master’s Research Project"
 subtitle: "Predicting Winning New York Mega Millions Lottery Numbers"
-author: "Stephen Haslett"
+author: "Stephen Haslett, Richard Zheng"
 date: "2/7/2022"
 output: html_document
 ---
