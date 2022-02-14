@@ -1,6 +1,6 @@
 ---
 title: "Data 698 - Final Project Proposal"
-subtitle: "Predicting Winning New York Mega Millions Lottery Numbers"
+subtitle: "Predicting winning New York Mega Millions lottery numbers"
 author: "Stephen Haslett, Richard Zheng"
 date: "2/13/2022"
 output:
@@ -23,7 +23,7 @@ library(kableExtra)
 
 ### Mega Millions Lottery Game Rules
 
-Mega Millions is a US multi-state lottery game that is drawn twice a week on Tuesdays and Fridays. To participate in the game, players purchase one or more lottery tickets at a cost of $2 per ticket. Players must pick **5** _unique numbers_ from **1** to **70**, and **1** number from **1** to **25** for the _Mega Ball_. Alternatively, players can opt for the _Quick Pick_ option when purchasing their ticket. In this case, their numbers will be randomly selected for them at the time their ticket is printed.
+Mega Millions is a US multi-state lottery game that is drawn twice a week on Tuesdays and Fridays. To participate in the game, players purchase one or more lottery tickets at a cost of $2 per ticket. Players must pick **5** _unique numbers_ from **1** to **70**, and **1** number from **1** to **25** for the _Mega Ball_. Optionally, players can opt for randomly selected numbers at the time of ticket purchase.
 
 Lottery numbers are drawn randomly **twice** a week on _Tuesdays_ and _Fridays_ at 11PM (EST). 50% of lottery ticket sales is allocated as prize money (_75% of which is_
 _used for the jackpot payout_). If all of the numbers selected by the player (_including the Mega Ball_) are drawn, then the player wins the jackpot. If multiple players win the jackpot, then the jackpot is divided equally amongst the winning players. If no one wins the jackpot for a particular drawing, then the jackpot amount rolls over to the next drawing. The remaining 25% of the prize money is then allocated to lower tiered prizes.
@@ -45,6 +45,7 @@ kable(tableData, caption = 'Prize Tiers and Payouts') %>%
       scroll_box(width = '100%')
 ```
 
+Additionally, Players can pay an extra dollor to purchase a multiplier number. Multiplier numbers range from 2 to 5. If a player picks a winning multiplier number and also winning lottery numbers, then the payout for the winning lottery numbers will be multiplied by the winning multiplier number. 
 
 ## Data Source
 
