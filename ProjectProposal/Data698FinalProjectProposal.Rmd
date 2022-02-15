@@ -27,11 +27,16 @@ The purpose of this investigation is to establish whether or not it is possible 
 
 - Can a pattern be identified regarding which winning numbers are drawn most often per game over time?
 
+- Does using these numbers increase our chances of winning?
+
 - In terms of winning, is it better to play the same numbers, or pick different numbers every game?
 
-- What strategy can be applied to ensure our chances of winning are increased (if any)?
+- What strategies can be applied to ensure our chances of winning are increased (if any)?
 
-- What statistical theories are applicable to our goal, and which theories can benefit us (if any)?
+- What statistical theories are applicable to our goal, and which theories can benefit us (if any):
+    - [Law of Large Numbers](https://en.wikipedia.org/wiki/Law_of_large_numbers)
+    - [Monty Hall Problem](https://en.wikipedia.org/wiki/Monty_Hall_problem)
+    - [Gambler's Fallacy](https://en.wikipedia.org/wiki/Gambler%27s_fallacy)
 
 
 ### Mega Millions Lottery Game
