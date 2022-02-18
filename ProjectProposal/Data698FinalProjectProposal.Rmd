@@ -33,6 +33,8 @@ The purpose of this investigation is to establish whether or not it is possible 
 
 - What strategies can be applied to ensure our chances of winning are increased (if any)?
 
+- How to winning numbers correlate to payout amount?
+
 - What statistical theories are applicable to our goal, and which theories can benefit us (if any):
     - [Law of Large Numbers](https://en.wikipedia.org/wiki/Law_of_large_numbers)
     - [Monty Hall Problem](https://en.wikipedia.org/wiki/Monty_Hall_problem)
@@ -79,7 +81,9 @@ Additionally, Players can pay an extra dollar to purchase a multiplier number. M
 ## Data Source
 
 The main dataset that will be used for this project can be found on the [NY Open Data](https://data.ny.gov/) website, and contains biweekly winning Mega Millions lottery numbers from 2002, through the current week. The dataset is in CSV format and can be accessed here - 
-[Lottery Mega Millions Winning Numbers: Beginning 2002](https://data.ny.gov/Government-Finance/Lottery-Mega-Millions-Winning-Numbers-Beginning-20/5xaw-6ayf/data). As of writing, the set consists of 2058 observations broken into 4 columns:
+[Lottery Mega Millions Winning Numbers: Beginning 2002](https://data.ny.gov/Government-Finance/Lottery-Mega-Millions-Winning-Numbers-Beginning-20/5xaw-6ayf/data). As of writing, 
+Winning payouts: https://www.megamillions.com/jackpot-history
+the set consists of 2058 observations broken into 4 columns:
 
 - **Draw Date**: _The date on which the lottery draw took place_.
 - **Winning Numbers**: _The winning numbers for the given lottery draw_.
