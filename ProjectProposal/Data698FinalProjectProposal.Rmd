@@ -33,7 +33,7 @@ The purpose of this investigation is to establish whether or not it is possible 
 
 - What strategies can be applied to ensure our chances of winning are increased (if any)?
 
-- How to winning numbers correlate to payout amount?
+- How do winning numbers correlate to payout amounts?
 
 - What statistical theories are applicable to our goal, and which theories can benefit us (if any):
     - [Law of Large Numbers](https://en.wikipedia.org/wiki/Law_of_large_numbers)
@@ -57,7 +57,7 @@ tableData <- data.frame(c("Jackpot", "Second Prize", "Third Prize", "Fourth Priz
                         c("5 matching numbers with the Mega Ball", "5 matching numbers", "4 matching numbers with the Mega Ball",
                           "4 matching numbers", "3 matching numbers with the Mega Ball", "3 matching numbers", "2 matching numbers with the Mega Ball",
                           "1 matching number with the Mega Ball", "No matching numbers with the Mega Ball"),
-                        c("75% of total prize money", "$1,000,000", "$10,000", "$500", "$200", "$10", "$10", "$4", "$2"),
+                        c("75% of the total prize money", "$1,000,000", "$10,000", "$500", "$200", "$10", "$10", "$4", "$2"),
                         c("1 in 302,575,350", "1 in 12,607,306", "1 in 931,001", "1 in 38,792", "1 in 14,547", "1 in 606", "1 in 693", "1 in 89", "1 in 37"))
                           
 colnames(tableData) <- c("Prize", "Winning Criterion", "Payout", "Odds of Winning")
@@ -94,4 +94,18 @@ As of writing, the set consists of 2058 observations broken into 4 columns:
 - **Mega Ball**: _The winning Mega Ball for the draw_.
 - **Multiplier**: _The winning multiplier number for the draw_.
 
-It is impossible to predict the unknown so we will split the dataset into separate training, and test sets. The training set will be used to identify winning number patterns, and the test set will be used to establish if our predictions influence the winning numbers.   
+## Approach
+
+It is impossible to evaluate our predictions against future winning lottery numbers so we will split the dataset into separate training, and test sets. The training set will be used to identify winning number patterns, and the test set will be used to establish if our predictions influence the winning numbers.
+
+### Lottery Number Selection Strategies
+
+There are several lottery number selection strategies that we need to simulate:
+
+##### **Random Number Selection**
+
+To simulate picking random lottery numbers, we will write a number generator in R that generates 6 random numbers (_5 unique numbers, and 1 Mega Ball number_) within the range of numbers that the game is based on (_1 to 70_ for the unique numbers, and _1 to 25_ for the Mega Ball). We will also generate a random **Multiplier** number within the range of _2 to 5_.
+
+##### **Frequent Winning Number Selection**
+
+In order to evaluate which selection strategy (_if any_) is most effective, we will compare our selections against our test data to evaluate which selection strategy results in winning selections most often.
