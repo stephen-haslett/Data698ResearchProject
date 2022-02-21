@@ -109,7 +109,8 @@ As of writing, the set consists of 2058 observations broken into 4 columns:
 
 ## Approach
 
-It is impossible to evaluate our predictions against future winning lottery numbers so we will split the dataset into separate training, and test sets. The training set will be used to identify winning number patterns, and the test set will be used to establish if our predictions influence the winning numbers.
+It is impossible to evaluate our predictions against future winning lottery numbers so we will split the dataset into separate training, and test sets. 
+The training set will be used to identify winning number patterns, and the test set will be used to establish if our predictions influence the winning numbers.
 
 ### Lottery Number Selection Strategies
 
@@ -117,7 +118,8 @@ There are several lottery number selection strategies that we need to simulate:
 
 ##### **Random Number Selection**
 
-To simulate picking random lottery numbers, we will write a number generator in R that generates 6 random numbers (_5 unique numbers, and 1 Mega Ball number_) within the range of numbers that the game is based on (_1 to 70_ for the unique numbers, and _1 to 25_ for the Mega Ball). We will also generate a random **Multiplier** number within the range of _2 to 5_.
+To simulate picking random lottery numbers, we will write a number generator in R that generates 6 random numbers (_5 unique numbers, and 1 Mega Ball number_) within the range of numbers that the game is based on (_1 to 70_ for the unique numbers, and _1 to 25_ for the Mega Ball). 
+We will also generate a random **Multiplier** number within the range of _2 to 5_.
 
 ##### **Frequent Winning Number Selection**
 
