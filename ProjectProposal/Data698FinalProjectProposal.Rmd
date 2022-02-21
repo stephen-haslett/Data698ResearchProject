@@ -21,7 +21,7 @@ library(kableExtra)
 
 ## Introduction
 
-The purpose of this investigation is to establish whether or not it is possible to predict future winning lottery numbers based on past winning results. 
+The purpose of this investigation is to establish whether or not it is possible to predict future winning lottery numbers based on past winning results.
 To do this, we will analyze the past 20 years of winning numbers for the [Mega Millions](https://nylottery.ny.gov/draw-game/?game=megamillions) lottery to answer the following questions:
 
 - Is it possible to predict future winning lottery numbers based on previous results?
@@ -37,23 +37,24 @@ To do this, we will analyze the past 20 years of winning numbers for the [Mega M
 - How do winning numbers correlate to payout amounts?
 
 - What statistical theories are applicable to our goal, and which theories can benefit us (if any):
+
     - [Law of Large Numbers](https://en.wikipedia.org/wiki/Law_of_large_numbers)
     - [Monty Hall Problem](https://en.wikipedia.org/wiki/Monty_Hall_problem)
     - [Gambler's Fallacy](https://en.wikipedia.org/wiki/Gambler%27s_fallacy)
- 
-Similar to previous studies, we want to understand weather or not it is possible to obtain an edge when playing the lottery. 
-With the Data we have gathered (From nylottery and the megamillions websites) we will study the trends present in that data along with simulatings to answer these questions. 
-In addition to testing various "winning strategies" we also want to explore the various payouts, as jackpot numbers change, and the expected values of playing the lottery.
+    - [Hot Hand Fallacy](https://www.investopedia.com/terms/h/hot-hand.asp#:~:text=The%20hot%20hand%20fallacy%20is,rolled%20it%20in%20the%20past)
 
+Similar to previous studies, we want to understand whether or not it is possible to obtain an edge when playing the lottery. With the Data that we have gathered
+(_From the nylottery and megamillions websites_), we will identify data trends and use simulations to answer the aforementioned questions. In addition to testing various "winning strategies",
+we also want to explore lottery payout amounts, as jackpot numbers change, and prize money expections.
 
 ### Mega Millions Lottery Game
 
-Mega Millions is a US multi-state lottery game that is drawn twice a week on Tuesdays and Fridays. 
-To participate in the game, players purchase one or more lottery tickets at a cost of $2 per ticket. 
-Players must pick **5** _unique numbers_ from **1** to **70**, and **1** number from **1** to **25** for the _Mega Ball_. 
+Mega Millions is a US multi-state lottery game that is drawn twice a week on Tuesdays and Fridays.
+To participate in the game, players purchase one or more lottery tickets at a cost of $2 per ticket.
+Players must pick **5** _unique numbers_ from **1** to **70**, and **1** number from **1** to **25** for the _Mega Ball_.
 Optionally, players can opt for randomly selected numbers at the time of ticket purchase.
 
-### Mega Millions Lottery Game Rules
+### Game Rules
 
 Lottery numbers are drawn randomly **twice** a week on _Tuesdays_ and _Fridays_ at 11PM (EST). 
 50% of lottery ticket sales is allocated as prize money (_75% of which is__used for the jackpot payout_). 
@@ -102,9 +103,9 @@ The dataset is in CSV format and can be accessed here:
 
 [Lottery Mega Millions Winning Numbers: Beginning 2002](https://data.ny.gov/Government-Finance/Lottery-Mega-Millions-Winning-Numbers-Beginning-20/5xaw-6ayf/data). 
 
-Winning history: https://www.megamillions.com/jackpot-history
+**Winning history**: https://www.megamillions.com/jackpot-history
 
-Drawing history: https://www.megamillions.com/Winning-Numbers/Previous-Drawings.aspx
+**Drawing history**: https://www.megamillions.com/Winning-Numbers/Previous-Drawings.aspx
 
 As of writing, the set consists of 2058 observations broken into 4 columns:
 
@@ -120,16 +121,18 @@ The training set will be used to identify winning number patterns, and the test 
 
 ### Lottery Number Selection Strategies
 
-There are several lottery number selection strategies that we need to simulate:
+There are several lottery number selection strategies that we need to simulate:\
+      
+**Same Number Selection**\
+This is the simplist selection strategy. We will pick the 6 numbers required by the game (_5 unique numbers, and 1 Mega Ball number_) within the required range
+(_1 to 70_ for unique numbers, and _1 to 25_ for the Mega Ball), and a **Multiplier** number within the required range of _2 to 5_.
+       
+**Random Number Selection**\
+To simulate picking random lottery numbers, we will write a number generator in R that randomly generates the required 6 numbers and optional Multiplier number.
 
-##### **Random Number Selection**
+**Most Frequent Winning Numbers Selection**\
+To generate number selections based on the most frequent winning numbers, we will write an R program that mines the training data and counts how often specific winning numbers occur. We will then rank these numbers and based on how high specific numbers rank, we will include them in our selection.
 
-To simulate picking random lottery numbers, we will write a number generator in R that generates 6 random numbers (_5 unique numbers, and 1 Mega Ball number_) 
-within the range of numbers that the game is based on (_1 to 70_ for the unique numbers, and _1 to 25_ for the Mega Ball). 
-We will also generate a random **Multiplier** number within the range of _2 to 5_.
+### Selection Strategy Evaluation
 
-##### **Frequent Winning Number Selection**
-
-In order to evaluate which selection strategy (_if any_) is most effective, 
-we will compare our selections against our test data to evaluate which selection strategy results in winning selections most often.
-
+In order to evaluate which selection strategy (_if any_) is most effective, we will compare the strategy selections against the test data to evaluate which strategy results in winning selections most often. This will entail writing an R program that runs each individual strategy against the test data. The program will count the amount of times each strategy results in winning results, and rank them accordingly. Whichever strategy ranks highest, will tell us which strategy is most effective at predicting winning lottery results.
