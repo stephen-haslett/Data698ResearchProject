@@ -21,7 +21,8 @@ library(kableExtra)
 
 ## Introduction
 
-The purpose of this investigation is to establish whether or not it is possible to predict future winning lottery numbers based on past winning results. To do this, we will analyze the past 20 years of winning numbers for the [Mega Millions](https://nylottery.ny.gov/draw-game/?game=megamillions) lottery game to answer the following questions:
+The purpose of this investigation is to establish whether or not it is possible to predict future winning lottery numbers based on past winning results. 
+To do this, we will analyze the past 20 years of winning numbers for the [Mega Millions](https://nylottery.ny.gov/draw-game/?game=megamillions) lottery game to answer the following questions:
 
 - Is it possible to predict future winning lottery numbers based on previous results?
 
@@ -93,7 +94,8 @@ If a player picks a winning multiplier number and also winning lottery numbers, 
 
 ## Data Source
 
-The main dataset that will be used for this project can be found on the [NY Open Data](https://data.ny.gov/) website, and contains biweekly winning Mega Millions lottery numbers from 2002, through the current week. 
+The main dataset that will be used for this project can be found on the [NY Open Data](https://data.ny.gov/) website,
+and contains biweekly winning Mega Millions lottery numbers from 2002, through the current week. 
 The dataset is in CSV format and can be accessed here - [Lottery Mega Millions Winning Numbers: Beginning 2002](https://data.ny.gov/Government-Finance/Lottery-Mega-Millions-Winning-Numbers-Beginning-20/5xaw-6ayf/data). 
 
 Winning history: https://www.megamillions.com/jackpot-history
@@ -118,10 +120,12 @@ There are several lottery number selection strategies that we need to simulate:
 
 ##### **Random Number Selection**
 
-To simulate picking random lottery numbers, we will write a number generator in R that generates 6 random numbers (_5 unique numbers, and 1 Mega Ball number_) within the range of numbers that the game is based on (_1 to 70_ for the unique numbers, and _1 to 25_ for the Mega Ball). 
+To simulate picking random lottery numbers, we will write a number generator in R that generates 6 random numbers (_5 unique numbers, and 1 Mega Ball number_) 
+within the range of numbers that the game is based on (_1 to 70_ for the unique numbers, and _1 to 25_ for the Mega Ball). 
 We will also generate a random **Multiplier** number within the range of _2 to 5_.
 
 ##### **Frequent Winning Number Selection**
 
-In order to evaluate which selection strategy (_if any_) is most effective, we will compare our selections against our test data to evaluate which selection strategy results in winning selections most often.
+In order to evaluate which selection strategy (_if any_) is most effective, 
+we will compare our selections against our test data to evaluate which selection strategy results in winning selections most often.
 
