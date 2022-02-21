@@ -83,7 +83,9 @@ kable(tableData, caption = 'Prize Tiers and Payouts') %>%
 
 Additionally, Players can pay an extra dollar to purchase a multiplier number. 
 Multiplier numbers range from **2** to **5**. 
-If a player picks a winning multiplier number and also winning lottery numbers, then the payout for the winning lottery numbers will be multiplied by the winning multiplier number. 
+
+If a player picks a winning multiplier number and also winning lottery numbers, 
+then the payout for the winning lottery numbers will be multiplied by the winning multiplier number. 
 
 
 ### Relevant Academic Papers
