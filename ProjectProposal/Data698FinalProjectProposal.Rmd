@@ -39,6 +39,8 @@ The purpose of this investigation is to establish whether or not it is possible 
     - [Law of Large Numbers](https://en.wikipedia.org/wiki/Law_of_large_numbers)
     - [Monty Hall Problem](https://en.wikipedia.org/wiki/Monty_Hall_problem)
     - [Gambler's Fallacy](https://en.wikipedia.org/wiki/Gambler%27s_fallacy)
+ 
+Similar to previous studies, we want to understand weather or not it is possible to obtain an edge when playing the lottery. With the Data we have gathered (From nylottery and the megamillions websites) we will study the trends present in that data along with simulatings to answer these questions. In addition to testing various "winning strategies" we also want to explore the various payouts, as jackpot numbers change, and the expected values of playing the lottery.
 
 
 ### Mega Millions Lottery Game
