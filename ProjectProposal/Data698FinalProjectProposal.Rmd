@@ -39,16 +39,27 @@ The purpose of this investigation is to establish whether or not it is possible 
     - [Law of Large Numbers](https://en.wikipedia.org/wiki/Law_of_large_numbers)
     - [Monty Hall Problem](https://en.wikipedia.org/wiki/Monty_Hall_problem)
     - [Gambler's Fallacy](https://en.wikipedia.org/wiki/Gambler%27s_fallacy)
+ 
+Similar to previous studies, we want to understand weather or not it is possible to obtain an edge when playing the lottery. 
+With the Data we have gathered (From nylottery and the megamillions websites) we will study the trends present in that data along with simulatings to answer these questions. 
+In addition to testing various "winning strategies" we also want to explore the various payouts, as jackpot numbers change, and the expected values of playing the lottery.
 
 
 ### Mega Millions Lottery Game
 
-Mega Millions is a US multi-state lottery game that is drawn twice a week on Tuesdays and Fridays. To participate in the game, players purchase one or more lottery tickets at a cost of $2 per ticket. Players must pick **5** _unique numbers_ from **1** to **70**, and **1** number from **1** to **25** for the _Mega Ball_. Optionally, players can opt for randomly selected numbers at the time of ticket purchase.
+Mega Millions is a US multi-state lottery game that is drawn twice a week on Tuesdays and Fridays. 
+To participate in the game, players purchase one or more lottery tickets at a cost of $2 per ticket. 
+Players must pick **5** _unique numbers_ from **1** to **70**, and **1** number from **1** to **25** for the _Mega Ball_. 
+Optionally, players can opt for randomly selected numbers at the time of ticket purchase.
 
 ### Mega Millions Lottery Game Rules
 
-Lottery numbers are drawn randomly **twice** a week on _Tuesdays_ and _Fridays_ at 11PM (EST). 50% of lottery ticket sales is allocated as prize money (_75% of which is_
-_used for the jackpot payout_). If all of the numbers selected by the player (_including the Mega Ball_) are drawn, then the player wins the jackpot. If multiple players win the jackpot, then the jackpot is divided equally among the winning players. If no one wins the jackpot for a particular drawing, then the jackpot amount rolls over to the next drawing. The remaining 25% of the prize money is then allocated to lower tiered prizes.
+Lottery numbers are drawn randomly **twice** a week on _Tuesdays_ and _Fridays_ at 11PM (EST). 
+50% of lottery ticket sales is allocated as prize money (_75% of which is__used for the jackpot payout_). 
+If all of the numbers selected by the player (_including the Mega Ball_) are drawn, then the player wins the jackpot. 
+If multiple players win the jackpot, then the jackpot is divided equally among the winning players. 
+If no one wins the jackpot for a particular drawing, then the jackpot amount rolls over to the next drawing. 
+The remaining 25% of the prize money is then allocated to lower tiered prizes.
 
 **Mega Millions Prize Tiers**
 
@@ -69,7 +80,9 @@ kable(tableData, caption = 'Prize Tiers and Payouts') %>%
 
 \ 
 
-Additionally, Players can pay an extra dollar to purchase a multiplier number. Multiplier numbers range from **2** to **5**. If a player picks a winning multiplier number and also winning lottery numbers, then the payout for the winning lottery numbers will be multiplied by the winning multiplier number. 
+Additionally, Players can pay an extra dollar to purchase a multiplier number. 
+Multiplier numbers range from **2** to **5**. 
+If a player picks a winning multiplier number and also winning lottery numbers, then the payout for the winning lottery numbers will be multiplied by the winning multiplier number. 
 
 
 ### Relevant Academic Papers
@@ -80,8 +93,8 @@ Additionally, Players can pay an extra dollar to purchase a multiplier number. M
 
 ## Data Source
 
-The main dataset that will be used for this project can be found on the [NY Open Data](https://data.ny.gov/) website, and contains biweekly winning Mega Millions lottery numbers from 2002, through the current week. The dataset is in CSV format and can be accessed here - 
-[Lottery Mega Millions Winning Numbers: Beginning 2002](https://data.ny.gov/Government-Finance/Lottery-Mega-Millions-Winning-Numbers-Beginning-20/5xaw-6ayf/data). 
+The main dataset that will be used for this project can be found on the [NY Open Data](https://data.ny.gov/) website, and contains biweekly winning Mega Millions lottery numbers from 2002, through the current week. 
+The dataset is in CSV format and can be accessed here - [Lottery Mega Millions Winning Numbers: Beginning 2002](https://data.ny.gov/Government-Finance/Lottery-Mega-Millions-Winning-Numbers-Beginning-20/5xaw-6ayf/data). 
 
 Winning history: https://www.megamillions.com/jackpot-history
 
@@ -109,3 +122,4 @@ To simulate picking random lottery numbers, we will write a number generator in 
 ##### **Frequent Winning Number Selection**
 
 In order to evaluate which selection strategy (_if any_) is most effective, we will compare our selections against our test data to evaluate which selection strategy results in winning selections most often.
+
