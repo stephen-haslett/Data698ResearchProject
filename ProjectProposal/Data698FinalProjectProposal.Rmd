@@ -99,6 +99,11 @@ then the payout for the winning lottery numbers will be multiplied by the winnin
 
 - [Basic Probability Theory and Statistics](https://towardsdatascience.com/basic-probability-theory-and-statistics-3105ab637213)
 
+Most of these papers agree that trying to predict next weeks lottery numbers are absurd. Despite popular beliefs and fallacies, there is no reliable way to predict the lottery.
+If the winning the lottery are so small, someone may ask: how come people win all the time? 
+Although the odds of winning the mega millions are about one in 300 million, people win all the time because millions of people play weekly.
+While we agree with the overall consensus, that the lottery is unpredictable, we still want to see if there are any strategies to even get a slight edge when playing
+
 ## Data Source
 
 The main dataset that will be used for this project can be found on the [NY Open Data](https://data.ny.gov/) website,
