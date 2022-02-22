@@ -44,8 +44,8 @@ To do this, we will analyze the past 20 years of winning numbers for the [Mega M
     - [Hot Hand Fallacy](https://www.investopedia.com/terms/h/hot-hand.asp#:~:text=The%20hot%20hand%20fallacy%20is,rolled%20it%20in%20the%20past)
 
 Similar to previous studies, we want to understand whether or not it is possible to obtain an edge when playing the lottery. With the Data that we have gathered
-(_From the nylottery and megamillions websites_), we will identify data trends and use simulations to answer the aforementioned questions. In addition to testing various "winning strategies",
-we also want to explore lottery payout amounts, as jackpot numbers change, and prize money expections.
+(_From the nylottery and megamillions websites_), we will identify data trends and use simulations to answer the aforementioned questions. 
+In addition to testing various "winning strategies", we also want to explore lottery payout amounts, as jackpot numbers change, and prize money expections.
 
 ### Mega Millions Lottery Game
 
