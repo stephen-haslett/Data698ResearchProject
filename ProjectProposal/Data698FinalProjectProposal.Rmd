@@ -97,6 +97,7 @@ then the payout for the winning lottery numbers will be multiplied by the winnin
 
 - [The Lottery: Is It Ever Worth Playing?](https://www.investopedia.com/managing-wealth/worth-playing-lottery/)
 
+- [Basic Probability Theory and Statistics](https://towardsdatascience.com/basic-probability-theory-and-statistics-3105ab637213)
 
 ## Data Source
 
