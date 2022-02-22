@@ -91,11 +91,11 @@ then the payout for the winning lottery numbers will be multiplied by the winnin
 
 ### Relevant Academic Papers and Articles
 
-[Predicting Lotto Numbers](https://www.parisschoolofeconomics.eu/IMG/pdf/suetens_paper.pdf)
+- [Predicting Lotto Numbers](https://www.parisschoolofeconomics.eu/IMG/pdf/suetens_paper.pdf)
 
-[Math Explains Likely Long Shots, Miracles and Winning the Lottery](https://www.scientificamerican.com/article/math-explains-likely-long-shots-miracles-and-winning-the-lottery/#:~:text=One%20of%20the%20key%20strands,may%20be%20at%20each%20opportunity.)
+- [Math Explains Likely Long Shots, Miracles and Winning the Lottery](https://www.scientificamerican.com/article/math-explains-likely-long-shots-miracles-and-winning-the-lottery/#:~:text=One%20of%20the%20key%20strands,may%20be%20at%20each%20opportunity.)
 
-[The Lottery: Is It Ever Worth Playing?](https://www.investopedia.com/managing-wealth/worth-playing-lottery/)
+- [The Lottery: Is It Ever Worth Playing?](https://www.investopedia.com/managing-wealth/worth-playing-lottery/)
 
 
 ## Data Source
