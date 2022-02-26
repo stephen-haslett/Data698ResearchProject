@@ -19,3 +19,23 @@ megaMillionsWinningNumbers <- read.csv(textConnection(getURL(megaMillionsDataURL
 head(megaMillionsWinningNumbers, 10000000)
 ```
 
+```{r randomLotteryNumberGenerator}
+
+#' Simulates generating Mega Millions lottery tickets containing random numbers.
+#'
+#' This function returns a matrix of rows containing 5 unique numbers from 1 to 70,
+#` and 1 number from 1 to 25 in order to simulate a valid Mega Millions lottery ticket.
+#'
+#' @param numberOfTickets The number of lottery tickets to generate (number of repetions).
+#'
+#' @return Matrix containing rows of 6 random numbers representing a Mega Millions lottery ticket.
+#'
+#' @export
+generateRandomLotteryNumberSelections <- function(numberOfTickets) {
+  uniqueNumbers <- t(replicate(numberOfTickets, sample(1:70, 5, replace = FALSE)))
+  megaball <- replicate(numberOfTickets, sample(1:25, 1, replace = FALSE))
+  lotteryTicket <- cbind(uniqueNumbers, megaball)
+
+  return(lotteryTicket)
+}
+```
