@@ -19,22 +19,57 @@ megaMillionsWinningNumbers <- read.csv(textConnection(getURL(megaMillionsDataURL
 head(megaMillionsWinningNumbers, 10000000)
 ```
 
-```{r randomLotteryNumberGenerator}
+```{r randomLotteryTicketGenerator}
 #' Simulates generating Mega Millions lottery tickets containing random numbers.
 #'
 #' This function returns a matrix of rows containing 5 unique numbers from 1 to 70,
-#` and 1 number from 1 to 25 in order to simulate a valid Mega Millions lottery ticket.
+#` and 1 number from 1 to 25 in order to simulate a valid Mega Millions lottery ticket. If the
+#' "includeMultiplier" paramter is TRUE, a random multplier number will also be included in the results.
 #'
 #' @param numberOfTickets The number of lottery tickets to generate (number of repetions).
 #'
-#' @return Matrix containing rows of 6 random numbers representing a Mega Millions lottery ticket.
+#' @param includeMultiplier Optional Boolean: Whether or not a multiplier number should be included in the results.
+#'
+#' @return Matrix: A matrix of rows containing 6 (7 if the multplier number is included) random numbers representing
+#' a Mega Millions lottery ticket.
 #'
 #' @export
-generateRandomLotteryTickets <- function(numberOfTickets) {
+generateRandomLotteryTickets <- function(numberOfTickets,  includeMultiplier = FALSE) {
   uniqueNumbers <- t(replicate(numberOfTickets, sample(1:70, 5, replace = FALSE)))
   megaball <- replicate(numberOfTickets, sample(1:25, 1, replace = FALSE))
-  lotteryTickets <- cbind(uniqueNumbers, megaball)
+
+  if (isTRUE(includeMultiplier)) {
+    multiplier <- replicate(numberOfTickets, sample(2:5, 1, replace = FALSE))
+    lotteryTickets <- cbind(uniqueNumbers, megaball, multiplier)
+  }
+  else {
+    lotteryTickets <- cbind(uniqueNumbers, megaball)
+  }
 
   return(lotteryTickets)
 }
 ```
+
+
+```{r countNumberOfOccurrences}
+#' Counts the number of times a given number occurs within a dataframe column.
+#'
+#' This function takes a number and searches a dataframe to establish how many
+#' occurrences of that number occur within the given dataframe column.
+#'
+#' @param dataFrameColumnName The dataframe column name in which to search for the number of occurrences
+#' of the given number. Must be in the format "dataframe$columnname".
+#'
+#' @param number The number for which to search the dataframe column for occurrences.
+#'
+#' @return Integer: The number of times the given number occurs within the given dataframe column.
+#'
+#' @export
+countOccurrencesOfNumber <- function(dataFrameColumnName, number) {
+  occurrences <- length(grep(number, dataFrameColumnName))
+
+  return(occurrences)
+}
+```
+
+
