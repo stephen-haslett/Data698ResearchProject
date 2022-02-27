@@ -26,7 +26,7 @@ head(megaMillionsWinningNumbers, 10000000)
 #` and 1 number from 1 to 25 in order to simulate a valid Mega Millions lottery ticket. If the
 #' "includeMultiplier" parameter is TRUE, a random multiplier number will also be included in the results.
 #'
-#' @param numberOfTickets The number of lottery tickets to generate (number of repetions).
+#' @param numberOfTickets Integer: The number of lottery tickets to generate (number of repetitions).
 #'
 #' @param includeMultiplier Optional Boolean: Whether or not a multiplier number should be included in the results.
 #'
@@ -51,25 +51,76 @@ generateRandomLotteryTickets <- function(numberOfTickets, includeMultiplier = FA
 ```
 
 
-```{r countNumberOfOccurrences}
+```{r countOccurrencesOfNumber}
 #' Counts the number of times a given number occurs within a dataframe column.
 #'
 #' This function takes a number and searches a dataframe to establish how many
 #' occurrences of that number occur within the given dataframe column.
 #'
-#' @param dataFrameColumnName The name of the dataframe column in which to search for
-#'  the number of occurrences of the given number. Must be in the format "dataframe$columnname".
+#' @param dataFrameWithColumnName The name of the dataframe column in which to search for
+#' the number of occurrences of the given number. Must be in the format "dataframe$columnname".
 #'
-#' @param number The number for which to search the dataframe column for occurrences.
+#' @param number Integer: The number for which to search the dataframe column for occurrences.
 #'
 #' @return Integer: The number of times the given number occurs within the given dataframe column.
 #'
 #' @export
-countOccurrencesOfNumber <- function(dataFrameColumnName, number) {
-  occurrences <- length(grep(number, dataFrameColumnName))
+countOccurrencesOfNumber <- function(dataFrameWithColumnName, number) {
+  occurrences <- length(grep(number, dataFrameWithColumnName))
 
   return(occurrences)
 }
 ```
 
 
+```{r countTotalNumberOfOccurrencesByColumn}
+#' Counts the occurrences of individual numbers within a dataframe column.
+#'
+#' This function takes a dataframe column and counts the occurrences of all indivdual numbers within the column.
+#'
+#' @param dataFrameWithColumnName The dataframe column in which to count all indivdual number occurrences.
+#' Must be in the format "dataframe$columnname".
+#'
+#' @param columnName String: The name of the column in which to count all indivdual number occurrences.
+#'
+#' @return Dataframe: A dataframe of all the numbers within the given column and the number of times each
+#' number occurs (ordered by number of occurrences).
+#'
+#' @export
+countTotalNumberOfOccurrencesByColumn <- function(dataFrameWithColumnName, columnName) {
+  occurrencesWithinColumn <- 0
+  occurrenceData <- setNames(data.frame(matrix(ncol = 2)), c('Number', 'Occurrences'))
+
+  # Count occurrences of numbers within the "winning_numbers column (number range = 1 to 70).
+  if (columnName == 'winning_numbers') {
+    winningNumbersRange <- seq(1, 70, +1)
+    for (number in winningNumbersRange) {
+      numberOfOccurrences <- countOccurrencesOfNumber(dataFrameWithColumnName, number)
+      occurrenceData[number, ]  <- c(number, numberOfOccurrences)
+    }
+  }
+
+  # Count occurrences of numbers within the "mega_ball" column (number range = 1 to 25).
+  if (columnName == 'mega_ball') {
+    megaBallRange <- seq(1, 25, +1)
+    for (number in megaBallRange) {
+      numberOfOccurrences <- countOccurrencesOfNumber(dataFrameWithColumnName, number)
+      occurrenceData[number, ]  <- c(number, numberOfOccurrences)
+    }
+  }
+
+  # Count occurrences of numbers within the "multiplier"" column (number range = 2 to 5).
+  if (columnName == 'multiplier') {
+    multiplierRange <- seq(2, 5, +1)
+    for (number in multiplierRange) {
+      numberOfOccurrences <- countOccurrencesOfNumber(dataFrameWithColumnName, number)
+      occurrenceData[number, ]  <- c(number, numberOfOccurrences)
+    }
+  }
+
+  # Sort results by occurrences in decreasing order.
+  occurrenceData <- occurrenceData[order(occurrenceData[,2], decreasing = TRUE),]
+
+  return(occurrenceData)
+}
+```
