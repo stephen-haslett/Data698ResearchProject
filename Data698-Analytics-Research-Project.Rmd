@@ -91,19 +91,31 @@ countTotalNumberOfOccurrencesByColumn <- function(dataFrameWithColumnName, colum
   occurrencesWithinColumn <- 0
   occurrenceData <- setNames(data.frame(matrix(ncol = 2)), c('Number', 'Occurrences'))
 
-  # Count occurrences of numbers within the "winning_numbers column (number range = 1 to 70).
+  # Count occurrences of numbers within the "winning_numbers column (number range = 01 to 70).
   if (columnName == 'winning_numbers') {
     winningNumbersRange <- seq(1, 70, +1)
     for (number in winningNumbersRange) {
+
+      # Add leading zero to numbers below 10.
+      if (between(number, 0, 9)) {
+        number <- paste('0', number)
+      }
+
       numberOfOccurrences <- countOccurrencesOfNumber(dataFrameWithColumnName, number)
       occurrenceData[number, ]  <- c(number, numberOfOccurrences)
     }
   }
 
-  # Count occurrences of numbers within the "mega_ball" column (number range = 1 to 25).
+  # Count occurrences of numbers within the "mega_ball" column (number range = 01 to 25).
   if (columnName == 'mega_ball') {
     megaBallRange <- seq(1, 25, +1)
     for (number in megaBallRange) {
+
+      # Add leading zero to numbers below 10.
+      if (between(number, 0, 9)) {
+        number <- paste('0', number)
+      }
+
       numberOfOccurrences <- countOccurrencesOfNumber(dataFrameWithColumnName, number)
       occurrenceData[number, ]  <- c(number, numberOfOccurrences)
     }
@@ -123,4 +135,8 @@ countTotalNumberOfOccurrencesByColumn <- function(dataFrameWithColumnName, colum
 
   return(occurrenceData)
 }
+```
+
+```{r numberOccurrenceBarChart}
+
 ```
