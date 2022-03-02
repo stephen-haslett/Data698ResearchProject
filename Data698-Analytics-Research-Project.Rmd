@@ -10,13 +10,18 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 
 library('RCurl')
+library('rsample')
 ```
 
 
 ```{r dataImport}
 megaMillionsDataURL <- "https://data.ny.gov/resource/5xaw-6ayf.csv"
 megaMillionsWinningNumbers <- read.csv(textConnection(getURL(megaMillionsDataURL)))
-head(megaMillionsWinningNumbers, 10000000)
+
+# Split the data into train/test sets (70/30 split).
+dataSplit <- initial_split(megaMillionsWinningNumbers, prop = .70)
+trainingData <- training(dataSplit)
+testData <- testing(dataSplit)
 ```
 
 ```{r randomLotteryTicketGenerator}
@@ -91,21 +96,35 @@ countTotalNumberOfOccurrencesByColumn <- function(dataFrameWithColumnName, colum
   occurrencesWithinColumn <- 0
   occurrenceData <- setNames(data.frame(matrix(ncol = 2)), c('Number', 'Occurrences'))
 
-  # Count occurrences of numbers within the "winning_numbers column (number range = 1 to 70).
+  # Count occurrences of numbers within the "winning_numbers column (number range = 01 to 70).
   if (columnName == 'winning_numbers') {
     winningNumbersRange <- seq(1, 70, +1)
     for (number in winningNumbersRange) {
-      numberOfOccurrences <- countOccurrencesOfNumber(dataFrameWithColumnName, number)
-      occurrenceData[number, ]  <- c(number, numberOfOccurrences)
+      if (!is.na(number)) {
+        # Add leading zero to numbers below 10.
+        if (between(number, 0, 9)) {
+          number <- paste('0', number)
+        }
+
+        numberOfOccurrences <- countOccurrencesOfNumber(dataFrameWithColumnName, number)
+        occurrenceData[number, ]  <- c(number, numberOfOccurrences)
+      }
     }
   }
 
-  # Count occurrences of numbers within the "mega_ball" column (number range = 1 to 25).
+  # Count occurrences of numbers within the "mega_ball" column (number range = 01 to 25).
   if (columnName == 'mega_ball') {
     megaBallRange <- seq(1, 25, +1)
     for (number in megaBallRange) {
-      numberOfOccurrences <- countOccurrencesOfNumber(dataFrameWithColumnName, number)
-      occurrenceData[number, ]  <- c(number, numberOfOccurrences)
+      if (!is.na(number)) {
+        # Add leading zero to numbers below 10.
+        if (between(number, 0, 9)) {
+          number <- paste('0', number)
+        }
+
+        numberOfOccurrences <- countOccurrencesOfNumber(dataFrameWithColumnName, number)
+        occurrenceData[number, ]  <- c(number, numberOfOccurrences)
+      }
     }
   }
 
@@ -113,8 +132,10 @@ countTotalNumberOfOccurrencesByColumn <- function(dataFrameWithColumnName, colum
   if (columnName == 'multiplier') {
     multiplierRange <- seq(2, 5, +1)
     for (number in multiplierRange) {
-      numberOfOccurrences <- countOccurrencesOfNumber(dataFrameWithColumnName, number)
-      occurrenceData[number, ]  <- c(number, numberOfOccurrences)
+      if (!is.na(number)) {
+        numberOfOccurrences <- countOccurrencesOfNumber(dataFrameWithColumnName, number)
+        occurrenceData[number, ]  <- c(number, numberOfOccurrences)
+      }
     }
   }
 
@@ -123,4 +144,8 @@ countTotalNumberOfOccurrencesByColumn <- function(dataFrameWithColumnName, colum
 
   return(occurrenceData)
 }
+```
+
+```{r numberOccurrenceBarChart}
+
 ```
