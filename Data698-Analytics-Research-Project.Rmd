@@ -9,8 +9,13 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 
-library('RCurl')
-library('rsample')
+library(RCurl)
+library(rsample)
+library(dplyr)
+library(tidyr)
+library(plotly)
+library(ggplot2)
+library(forcats)
 ```
 
 
@@ -103,7 +108,7 @@ countTotalNumberOfOccurrencesByColumn <- function(dataFrameWithColumnName, colum
       if (!is.na(number)) {
         # Add leading zero to numbers below 10.
         if (between(number, 0, 9)) {
-          number <- paste('0', number)
+          number <- paste0('0', number)
         }
 
         numberOfOccurrences <- countOccurrencesOfNumber(dataFrameWithColumnName, number)
@@ -119,7 +124,7 @@ countTotalNumberOfOccurrencesByColumn <- function(dataFrameWithColumnName, colum
       if (!is.na(number)) {
         # Add leading zero to numbers below 10.
         if (between(number, 0, 9)) {
-          number <- paste('0', number)
+          number <- paste0('0', number)
         }
 
         numberOfOccurrences <- countOccurrencesOfNumber(dataFrameWithColumnName, number)
@@ -141,11 +146,43 @@ countTotalNumberOfOccurrencesByColumn <- function(dataFrameWithColumnName, colum
 
   # Sort results by occurrences in decreasing order.
   occurrenceData <- occurrenceData[order(occurrenceData[,2], decreasing = TRUE),]
+  
+  # Drop rows containing NAs from the data.
+  occurrenceData <- drop_na(occurrenceData)
 
   return(occurrenceData)
 }
 ```
 
+
+
 ```{r numberOccurrenceBarChart}
+winningNumbersData <-countTotalNumberOfOccurrencesByColumn(trainingData$winning_numbers, 'winning_numbers')
+winningNumbersData
+
+ggplot(winningNumbersData, aes(y = Occurrences)) + 
+    geom_bar(fill = '#FA8072', stat = 'count') +
+    geom_text(aes(label=..count..), stat = 'count', size = 3.5, hjust = -0.2, color = '#A52A2A') +
+    xlab('Frequency of Occurrence') +
+    ylab('Winning Number') +
+    ggtitle('Distribution of Companies by US State') + 
+    theme(panel.background = element_blank())
+
+
+winningNumbersOccurrenceChart <- winningNumbersData  %>%
+  plot_ly(x = ~winningNumbersData$Number,
+          y = winningNumbersData$Occurrences,
+          type = 'bar',
+          orientation = 'v') %>%
+  layout(title = list(text = 'Winning Numbers Frequency Of Occurrence', font = list(size = 12), plot_bgcolor = '#A52A2A'),
+    xaxis = list(
+      title = 'Winning Number'
+    ),
+    yaxis = list(
+      title = 'Frequency of Occurrence'
+    )
+  )
+
+subplot(winningNumbersOccurrenceChart)   
 
 ```
