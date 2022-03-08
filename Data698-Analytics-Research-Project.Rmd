@@ -149,6 +149,9 @@ countTotalNumberOfOccurrencesByColumn <- function(dataFrameWithColumnName, colum
   
   # Drop rows containing NAs from the data.
   occurrenceData <- drop_na(occurrenceData)
+  
+  # Add ranking based on frequency of occurrence (higher frequencies result in higer rankings).
+  occurrenceData$Rank <- round(rank(occurrenceData$Occurrences), 0)
 
   return(occurrenceData)
 }
@@ -160,26 +163,18 @@ countTotalNumberOfOccurrencesByColumn <- function(dataFrameWithColumnName, colum
 winningNumbersData <-countTotalNumberOfOccurrencesByColumn(trainingData$winning_numbers, 'winning_numbers')
 winningNumbersData
 
-ggplot(winningNumbersData, aes(y = Occurrences)) + 
-    geom_bar(fill = '#FA8072', stat = 'count') +
-    geom_text(aes(label=..count..), stat = 'count', size = 3.5, hjust = -0.2, color = '#A52A2A') +
-    xlab('Frequency of Occurrence') +
-    ylab('Winning Number') +
-    ggtitle('Distribution of Companies by US State') + 
-    theme(panel.background = element_blank())
-
-
 winningNumbersOccurrenceChart <- winningNumbersData  %>%
   plot_ly(x = ~winningNumbersData$Number,
           y = winningNumbersData$Occurrences,
           type = 'bar',
+          color = '#A52A2A',
           orientation = 'v') %>%
-  layout(title = list(text = 'Winning Numbers Frequency Of Occurrence', font = list(size = 12), plot_bgcolor = '#A52A2A'),
+  layout(title = list(text = 'Occurrences Of Winning Numbers', font = list(size = 12)),
     xaxis = list(
       title = 'Winning Number'
     ),
     yaxis = list(
-      title = 'Frequency of Occurrence'
+      title = 'Total Occurrences'
     )
   )
 
