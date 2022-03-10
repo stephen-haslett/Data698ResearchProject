@@ -200,16 +200,12 @@ simulateLotteryGame <- function(lotteryNumbersToPlay, winningNumbersTestSet) {
 #' number occurs (ordered by number of occurrences).
 #'
 #' @export
-lotteryGameSimulation <- function(lotteryNumbersToPlay, testData, includeMegaBall = FALSE) {
-  # If the Mega Ball should be include in the winning numbers, subset the data into
-  # winning_numbers an mega_ball columns. Otherwise, just include the winning_numbers column.
-  if (isTRUE(includeMegaBall)) {
-    winningNumbers <- subset(testData, select = c(winning_numbers, mega_ball))
-  }
-  else {
-    winningNumbers <- subset(testData, select = c(winning_numbers))
-  }
-  
+lotteryGameSimulation <- function(lotteryNumbersToPlay, testData) {
+  # Remove the draw_data and multiplier columns from the testData dataset
+  # so we are left with the 2 columns we need - winning_numbers and mega_ball.
+  winningNumbers <- subset(testData, select = c(winning_numbers, mega_ball))
+
+  # First check the winning_numbers column for matches.
   numberOfMatchingNumbers = apply(lotteryNumbersToPlay, 1, function(x)sum(x%in% winningNumbers))
   for (matchingNumbers in numberOfMatchingNumbers) {
     payout = "$0"
@@ -221,7 +217,7 @@ lotteryGameSimulation <- function(lotteryNumbersToPlay, testData, includeMegaBal
   return(payout)
 }
 
-
+testData
 test <- lotteryGameSimulation(randomNumbers$winning_numbers, testData)
 
 test
