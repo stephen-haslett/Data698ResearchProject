@@ -40,22 +40,29 @@ testData <- testing(dataSplit)
 #'
 #' @param includeMultiplier Optional Boolean: Whether or not a multiplier number should be included in the results.
 #'
-#' @return Matrix: A matrix of rows containing 6 (7 if the multplier number is included) random numbers representing
+#' @return Dataframe: A dataframe of rows containing 6 (7 if the multplier number is included) random numbers representing
 #' a Mega Millions lottery ticket.
 #'
 #' @export
 generateRandomLotteryTickets <- function(numberOfTickets, includeMultiplier = FALSE) {
   uniqueNumbers <- t(replicate(numberOfTickets, sample(1:70, 5, replace = FALSE)))
-  megaball <- replicate(numberOfTickets, sample(1:25, 1, replace = FALSE))
+  mega_ball <- replicate(numberOfTickets, sample(1:25, 1, replace = FALSE))
+
+  # Add leading zeros to winning numbers below 10.
+  uniqueNumbers <- formatC(x = uniqueNumbers, digits = 1, flag = '0', format = 'd')
 
   if (isTRUE(includeMultiplier)) {
     multiplier <- replicate(numberOfTickets, sample(2:5, 1, replace = FALSE))
-    lotteryTickets <- cbind(uniqueNumbers, megaball, multiplier)
+    lotteryTickets <- cbind(uniqueNumbers, mega_ball, multiplier)
   }
   else {
-    lotteryTickets <- cbind(uniqueNumbers, megaball)
+    lotteryTickets <- cbind(uniqueNumbers, mega_ball)
   }
-
+ 
+  # Combine individual number columns into one winning_numbers column.
+  lotteryTickets <- as.data.frame(lotteryTickets)
+  lotteryTickets <- unite(lotteryTickets, winning_numbers, c(V1, V2, V3, V4, V5), sep = ' ')
+  
   return(lotteryTickets)
 }
 ```
@@ -158,8 +165,74 @@ countTotalNumberOfOccurrencesByColumn <- function(dataFrameWithColumnName, colum
 ```
 
 
+```{r, selectFrequentlyOccurringWinningNumbers}
+# TODO: FIX DOCUMENTATION HERE!!!!!!
+#' Selects the most frequently occurring winning lottery numbers from the training dataset.
+#'
+#' This function simulates s. 
+#'
+#' @param lotteryNumbersToPlay Dataframe: The dataframe column in which to count all indivdual number occurrences.
+#' Must be in the format "dataframe$columnname".
+#'
+#' @param winningNumbersTestSet Dataframe: A test dataset of winning numbers to play against.
+#'
+#' @return Dataframe: A dataframe of all the numbers within the given column and the number of times each
+#' number occurs (ordered by number of occurrences).
+#'
+#' @export
+simulateLotteryGame <- function(lotteryNumbersToPlay, winningNumbersTestSet) {
+  
+}
+```
 
-```{r numberOccurrenceBarChart}
+```{r, simulateLotteryGame}
+# TODO: FIX DOCUMENTATION HERE!!!!!!
+#' Simulates playing a lottery game.
+#'
+#' This function simulates playing lottery numbers against the test dataset of winning numbers. 
+#'
+#' @param lotteryNumbersToPlay Dataframe: The dataframe column in which to count all indivdual number occurrences.
+#' Must be in the format "dataframe$columnname".
+#'
+#' @param winningNumbersTestSet Dataframe: A test dataset of winning numbers to play against.
+#'
+#' @return Dataframe: A dataframe of all the numbers within the given column and the number of times each
+#' number occurs (ordered by number of occurrences).
+#'
+#' @export
+lotteryGameSimulation <- function(lotteryNumbersToPlay, testData, includeMegaBall = FALSE) {
+  # If the Mega Ball should be include in the winning numbers, subset the data into
+  # winning_numbers an mega_ball columns. Otherwise, just include the winning_numbers column.
+  if (isTRUE(includeMegaBall)) {
+    winningNumbers <- subset(testData, select = c(winning_numbers, mega_ball))
+  }
+  else {
+    winningNumbers <- subset(testData, select = c(winning_numbers))
+  }
+  
+  numberOfMatchingNumbers = apply(lotteryNumbersToPlay, 1, function(x)sum(x%in% winningNumbers))
+  for (matchingNumbers in numberOfMatchingNumbers) {
+    payout = "$0"
+    if (matchingNumbers == 1) {
+      payout = "$10"
+    }
+  }
+  
+  return(payout)
+}
+
+
+test <- lotteryGameSimulation(randomNumbers$winning_numbers, testData)
+
+test
+
+```
+
+
+
+
+
+```{r numberOfOccurrenceBarChart}
 winningNumbersData <-countTotalNumberOfOccurrencesByColumn(trainingData$winning_numbers, 'winning_numbers')
 winningNumbersData
 
