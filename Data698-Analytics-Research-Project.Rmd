@@ -191,37 +191,64 @@ simulateLotteryGame <- function(lotteryNumbersToPlay, winningNumbersTestSet) {
 #'
 #' This function simulates playing lottery numbers against the test dataset of winning numbers. 
 #'
-#' @param lotteryNumbersToPlay Dataframe: The dataframe column in which to count all indivdual number occurrences.
+#' @param ticketNumbers Dataframe: The dataframe column in which to count all indivdual number occurrences.
 #' Must be in the format "dataframe$columnname".
 #'
-#' @param winningNumbersTestSet Dataframe: A test dataset of winning numbers to play against.
+#' @param testData Dataframe: A test dataset of winning numbers to play against.
+#'
+#' @param generationMethod String: Method to use for generating lottery ticket numbers.
+#' Options: random, frequency, consistent.
 #'
 #' @return Dataframe: A dataframe of all the numbers within the given column and the number of times each
 #' number occurs (ordered by number of occurrences).
 #'
 #' @export
-lotteryGameSimulation <- function(lotteryNumbersToPlay, testData) {
-  # Remove the draw_data and multiplier columns from the testData dataset
-  # so we are left with the 2 columns we need - winning_numbers and mega_ball.
-  winningNumbers <- subset(testData, select = c(winning_numbers, mega_ball))
-
-  # First check the winning_numbers column for matches.
-  numberOfMatchingNumbers = apply(lotteryNumbersToPlay, 1, function(x)sum(x%in% winningNumbers))
-  for (matchingNumbers in numberOfMatchingNumbers) {
-    payout = "$0"
-    if (matchingNumbers == 1) {
-      payout = "$10"
-    }
+gameSimulation <- function(ticketNumbers, testData, generationMethod) {
+  lotteryNumbers <- NULL
+  
+  # Count the number of rows in the testData dataset so we can generate an equal
+  # number of lottery numbers to play agaist the test winning numbsers dataset.
+  rowCount <- rowCount = nrow(testData)
+  
+  # When "generationMethod" is "random", generate random lottery numbers.
+  if (generationMethod == 'random') {
+    lotteryNumbers <- generateRandomLotteryTickets(rowCount)
   }
   
-  return(payout)
+  # When "generationMethod" is "frequency", generate numbers based on their frequency
+  # of occurence in the training set.
+  if (generationMethod == 'frequency') {
+    lotteryNumbers <- generateFrequencyBasedLotteryTickets(ticketNumbers, rowCount)
+  }
+  
+  # When "generationMethod" is "consistent", Validate that only one row of numbers is
+  # passed into the function and set "lotteryNumbers" to the ticketNumbers parameter value.
+  if (generationMethod == ' consistent' &&  nrow(ticketNumbers) == 1) {
+     lotteryNumbers <- ticketNumbers    
+  }
+  
+  if (!is.null(lotteryNumbers)) {
+    
+  }
+  
+  
+  # Remove the draw_data and multiplier columns from the testData dataset
+  # so we are left with the 2 columns we need - winning_numbers and mega_ball.
+  #winningNumbers <- subset(testData, select = c(winning_numbers, mega_ball))
+  
+  # Loop through testData winning numbers and check against numbersToPlay for matches.
+
+  # First check the winning_numbers column for matches.
+  #numberOfMatchingNumbers = apply(lotteryNumbersToPlay, 1, function(x)sum(x%in% winningNumbers))
+  #for (matchingNumbers in numberOfMatchingNumbers) {
+  #  payout = "$0"
+  #  if (matchingNumbers == 1) {
+  #    payout = "$10"
+  #  }
+  #}
+  
+  #eturn(payout)
 }
-
-testData
-test <- lotteryGameSimulation(randomNumbers$winning_numbers, testData)
-
-test
-
 ```
 
 
