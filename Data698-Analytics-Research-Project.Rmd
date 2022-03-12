@@ -71,19 +71,19 @@ generateRandomLotteryTickets <- function(numberOfTickets, includeMultiplier = FA
 ```{r countOccurrencesOfNumber}
 #' Counts the number of times a given number occurs within a dataframe column.
 #'
-#' This function takes a number and searches a dataframe to establish how many
-#' occurrences of that number occur within the given dataframe column.
+#' This function takes a number and searches a dataframe column to establish how many
+#' occurrences of the provided number occur within the given dataframe column.
 #'
-#' @param dataFrameWithColumnName The name of the dataframe column in which to search for
-#' the number of occurrences of the given number. Must be in the format "dataframe$columnname".
+#' @param dataFrameColumn The dataframe column in which to search for the number of
+#' occurrences of the given number. Must be in the format "dataframe$columnname".
 #'
 #' @param number Integer: The number for which to search the dataframe column for occurrences.
 #'
 #' @return Integer: The number of times the given number occurs within the given dataframe column.
 #'
 #' @export
-countOccurrencesOfNumber <- function(dataFrameWithColumnName, number) {
-  occurrences <- length(grep(number, dataFrameWithColumnName))
+countOccurrencesOfNumber <- function(dataFrameColumn, number) {
+  occurrences <- length(grep(number, dataFrameColumn))
 
   return(occurrences)
 }
@@ -95,7 +95,7 @@ countOccurrencesOfNumber <- function(dataFrameWithColumnName, number) {
 #'
 #' This function takes a dataframe column and counts the occurrences of all indivdual numbers within the column.
 #'
-#' @param dataFrameWithColumnName The dataframe column in which to count all indivdual number occurrences.
+#' @param dataFrameColumn The dataframe column in which to count all indivdual number occurrences.
 #' Must be in the format "dataframe$columnname".
 #'
 #' @param columnName String: The name of the column in which to count all indivdual number occurrences.
@@ -104,7 +104,7 @@ countOccurrencesOfNumber <- function(dataFrameWithColumnName, number) {
 #' number occurs (ordered by number of occurrences).
 #'
 #' @export
-countTotalNumberOfOccurrencesByColumn <- function(dataFrameWithColumnName, columnName) {
+countTotalNumberOfOccurrencesByColumn <- function(dataFrameColumn, columnName) {
   occurrencesWithinColumn <- 0
   occurrenceData <- setNames(data.frame(matrix(ncol = 2)), c('Number', 'Occurrences'))
 
@@ -118,7 +118,7 @@ countTotalNumberOfOccurrencesByColumn <- function(dataFrameWithColumnName, colum
           number <- paste0('0', number)
         }
 
-        numberOfOccurrences <- countOccurrencesOfNumber(dataFrameWithColumnName, number)
+        numberOfOccurrences <- countOccurrencesOfNumber(dataFrameColumn, number)
         occurrenceData[number, ]  <- c(number, numberOfOccurrences)
       }
     }
@@ -134,7 +134,7 @@ countTotalNumberOfOccurrencesByColumn <- function(dataFrameWithColumnName, colum
           number <- paste0('0', number)
         }
 
-        numberOfOccurrences <- countOccurrencesOfNumber(dataFrameWithColumnName, number)
+        numberOfOccurrences <- countOccurrencesOfNumber(dataFrameColumn, number)
         occurrenceData[number, ]  <- c(number, numberOfOccurrences)
       }
     }
@@ -145,7 +145,7 @@ countTotalNumberOfOccurrencesByColumn <- function(dataFrameWithColumnName, colum
     multiplierRange <- seq(2, 5, +1)
     for (number in multiplierRange) {
       if (!is.na(number)) {
-        numberOfOccurrences <- countOccurrencesOfNumber(dataFrameWithColumnName, number)
+        numberOfOccurrences <- countOccurrencesOfNumber(dataFrameColumn, number)
         occurrenceData[number, ]  <- c(number, numberOfOccurrences)
       }
     }
@@ -165,23 +165,23 @@ countTotalNumberOfOccurrencesByColumn <- function(dataFrameWithColumnName, colum
 ```
 
 
-```{r, selectFrequentlyOccurringWinningNumbers}
+```{r, generateFrequencyBasedLotteryTickets}
 # TODO: FIX DOCUMENTATION HERE!!!!!!
 #' Selects the most frequently occurring winning lottery numbers from the training dataset.
 #'
 #' This function simulates s. 
 #'
-#' @param lotteryNumbersToPlay Dataframe: The dataframe column in which to count all indivdual number occurrences.
-#' Must be in the format "dataframe$columnname".
+#' @param trainingDataColumn Dataframe: The training data column from which to generate
+#' frequency based numbers. Must be in the format "dataframe$columnname".
 #'
-#' @param winningNumbersTestSet Dataframe: A test dataset of winning numbers to play against.
+#' @param columnName String: The name of the column from which to generate frequency based number.
 #'
 #' @return Dataframe: A dataframe of all the numbers within the given column and the number of times each
 #' number occurs (ordered by number of occurrences).
 #'
 #' @export
-simulateLotteryGame <- function(lotteryNumbersToPlay, winningNumbersTestSet) {
-  
+generateFrequencyBasedLotteryTickets <- function(trainingDataColumn, columnName) {
+  countTotalNumberOfOccurrencesByColumn(trainingDataColumn, columnName)
 }
 ```
 
