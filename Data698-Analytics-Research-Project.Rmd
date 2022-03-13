@@ -23,16 +23,20 @@ library(forcats)
 megaMillionsDataURL <- "https://data.ny.gov/resource/5xaw-6ayf.csv"
 megaMillionsWinningNumbers <- read.csv(textConnection(getURL(megaMillionsDataURL)))
 
+# Add leading zeros to Mega Ball numbers below 10 so we get accurate counts when counting occurrence frequencies.
+megaMillionsWinningNumbers$mega_ball <- formatC(x = megaMillionsWinningNumbers$mega_ball, digits = 1, flag = '0', format = 'd')
+
 # Split the data into train/test sets (70/30 split).
 dataSplit <- initial_split(megaMillionsWinningNumbers, prop = .70)
 trainingData <- training(dataSplit)
 testData <- testing(dataSplit)
 ```
 
+
 ```{r randomLotteryTicketGenerator}
 #' Simulates generating Mega Millions lottery tickets containing random numbers.
 #'
-#' This function returns a matrix of rows containing 5 unique numbers from 1 to 70,
+#' This function returns a dataframe of rows containing 5 unique numbers from 1 to 70,
 #` and 1 number from 1 to 25 in order to simulate a valid Mega Millions lottery ticket. If the
 #' "includeMultiplier" parameter is TRUE, a random multiplier number will also be included in the results.
 #'
@@ -51,6 +55,9 @@ generateRandomLotteryTickets <- function(numberOfTickets, includeMultiplier = FA
   # Add leading zeros to winning numbers below 10.
   uniqueNumbers <- formatC(x = uniqueNumbers, digits = 1, flag = '0', format = 'd')
 
+  # Add leading zeros to mega ball numbers below 10.
+  mega_ball <- formatC(x = mega_ball, digits = 1, flag = '0', format = 'd')
+  
   if (isTRUE(includeMultiplier)) {
     multiplier <- replicate(numberOfTickets, sample(2:5, 1, replace = FALSE))
     lotteryTickets <- cbind(uniqueNumbers, mega_ball, multiplier)
@@ -133,7 +140,7 @@ countTotalNumberOfOccurrencesByColumn <- function(dataFrameColumn, columnName) {
         if (between(number, 0, 9)) {
           number <- paste0('0', number)
         }
-
+        
         numberOfOccurrences <- countOccurrencesOfNumber(dataFrameColumn, number)
         occurrenceData[number, ]  <- c(number, numberOfOccurrences)
       }
@@ -165,7 +172,7 @@ countTotalNumberOfOccurrencesByColumn <- function(dataFrameColumn, columnName) {
 ```
 
 
-```{r, generateFrequencyBasedLotteryTickets}
+```{r, generateFrequencyBasedLotteryTicket}
 # TODO: FIX DOCUMENTATION HERE!!!!!!
 #' Selects the most frequently occurring winning lottery numbers from the training dataset.
 #'
@@ -180,8 +187,22 @@ countTotalNumberOfOccurrencesByColumn <- function(dataFrameColumn, columnName) {
 #' number occurs (ordered by number of occurrences).
 #'
 #' @export
-generateFrequencyBasedLotteryTickets <- function(trainingDataColumn, columnName) {
-  countTotalNumberOfOccurrencesByColumn(trainingDataColumn, columnName)
+generateFrequencyBasedLotteryTicket <- function(trainingDataColumn, columnName) {
+  lotteryNumbers <- NULL
+  numbers <- countTotalNumberOfOccurrencesByColumn(trainingDataColumn, columnName)
+
+  # Select the top five most frequently occuring winning numbers.
+  if (columnName == 'winning_numbers') {
+    lotteryNumbers <- numbers[1:5, ]$Number
+  }
+  
+  # Select the most frequently occuring Megaball.
+  if (columnName == 'mega_ball') {
+    #lotteryNumbers <- numbers[0:1, ]$Number
+    lotteryNumbers <- head(numbers$Number, 1)
+  }
+  
+  return (lotteryNumbers)
 }
 ```
 
@@ -218,7 +239,7 @@ gameSimulation <- function(ticketNumbers, testData, generationMethod) {
   # When "generationMethod" is "frequency", generate numbers based on their frequency
   # of occurence in the training set.
   if (generationMethod == 'frequency') {
-    lotteryNumbers <- generateFrequencyBasedLotteryTickets(ticketNumbers, rowCount)
+    lotteryNumbers <- generateFrequencyBasedLotteryTicket(ticketNumbers, rowCount)
   }
   
   # When "generationMethod" is "consistent", Validate that only one row of numbers is
@@ -255,15 +276,15 @@ gameSimulation <- function(ticketNumbers, testData, generationMethod) {
 
 
 
-```{r numberOfOccurrenceBarChart}
+```{r numberOfOccurrenceBarChart, echo = FALSE, message = FALSE, warning = FALSE}
 winningNumbersData <-countTotalNumberOfOccurrencesByColumn(trainingData$winning_numbers, 'winning_numbers')
-winningNumbersData
 
-winningNumbersOccurrenceChart <- winningNumbersData  %>%
+winningNumbersOccurrenceChart <- winningNumbersData %>%
   plot_ly(x = ~winningNumbersData$Number,
           y = winningNumbersData$Occurrences,
           type = 'bar',
-          color = '#A52A2A',
+          color = winningNumbersData$Number, colors = c('#FA8072'),
+          showlegend = FALSE,
           orientation = 'v') %>%
   layout(title = list(text = 'Occurrences Of Winning Numbers', font = list(size = 12)),
     xaxis = list(
@@ -277,3 +298,31 @@ winningNumbersOccurrenceChart <- winningNumbersData  %>%
 subplot(winningNumbersOccurrenceChart)   
 
 ```
+
+
+
+```{r megaBallOccurrenceBarChart, echo = FALSE, message = FALSE, warning = FALSE}
+megaBallData <-countTotalNumberOfOccurrencesByColumn(trainingData$mega_ball, 'mega_ball')
+
+megaBallOccurrenceChart <- megaBallData %>%
+  plot_ly(x = ~megaBallData$Number,
+          y = megaBallData$Occurrences,
+          type = 'bar',
+          color = megaBallData$Number, colors = c('#DC143C'),
+          showlegend = FALSE,
+          orientation = 'v') %>%
+  layout(title = list(text = 'Occurrences Of Mega Ball Numbers', font = list(size = 12)),
+    xaxis = list(
+      title = 'Mega Ball'
+    ),
+    yaxis = list(
+      title = 'Total Occurrences'
+    )
+  )
+
+subplot(megaBallOccurrenceChart)   
+
+```
+
+
+
