@@ -16,6 +16,7 @@ library(tidyr)
 library(plotly)
 library(ggplot2)
 library(forcats)
+library(caTools)
 ```
 
 
@@ -26,53 +27,14 @@ megaMillionsWinningNumbers <- read.csv(textConnection(getURL(megaMillionsDataURL
 # Add leading zeros to Mega Ball numbers below 10 so we get accurate counts when counting occurrence frequencies.
 megaMillionsWinningNumbers$mega_ball <- formatC(x = megaMillionsWinningNumbers$mega_ball, digits = 1, flag = '0', format = 'd')
 
-# Split the data into train/test sets (70/30 split).
-dataSplit <- initial_split(megaMillionsWinningNumbers, prop = .70)
-trainingData <- training(dataSplit)
-testData <- testing(dataSplit)
+# In order to acheive consistent results in our training data, we manually split the dataset into training and test sets (70/30 split). Using a training/test
+# split function such as "initial_split()"" results in inconsistent results everytime the program is run.
+trainingData <- megaMillionsWinningNumbers[row.names(megaMillionsWinningNumbers) %in% 1:700, ]
+testData <- megaMillionsWinningNumbers[row.names(megaMillionsWinningNumbers) %in% 300+1:nrow(megaMillionsWinningNumbers), ]
+
+
 ```
 
-
-```{r randomLotteryTicketGenerator}
-#' Simulates generating Mega Millions lottery tickets containing random numbers.
-#'
-#' This function returns a dataframe of rows containing 5 unique numbers from 1 to 70,
-#` and 1 number from 1 to 25 in order to simulate a valid Mega Millions lottery ticket. If the
-#' "includeMultiplier" parameter is TRUE, a random multiplier number will also be included in the results.
-#'
-#' @param numberOfTickets Integer: The number of lottery tickets to generate (number of repetitions).
-#'
-#' @param includeMultiplier Optional Boolean: Whether or not a multiplier number should be included in the results.
-#'
-#' @return Dataframe: A dataframe of rows containing 6 (7 if the multplier number is included) random numbers representing
-#' a Mega Millions lottery ticket.
-#'
-#' @export
-generateRandomLotteryTickets <- function(numberOfTickets, includeMultiplier = FALSE) {
-  uniqueNumbers <- t(replicate(numberOfTickets, sample(1:70, 5, replace = FALSE)))
-  mega_ball <- replicate(numberOfTickets, sample(1:25, 1, replace = FALSE))
-
-  # Add leading zeros to winning numbers below 10.
-  uniqueNumbers <- formatC(x = uniqueNumbers, digits = 1, flag = '0', format = 'd')
-
-  # Add leading zeros to mega ball numbers below 10.
-  mega_ball <- formatC(x = mega_ball, digits = 1, flag = '0', format = 'd')
-  
-  if (isTRUE(includeMultiplier)) {
-    multiplier <- replicate(numberOfTickets, sample(2:5, 1, replace = FALSE))
-    lotteryTickets <- cbind(uniqueNumbers, mega_ball, multiplier)
-  }
-  else {
-    lotteryTickets <- cbind(uniqueNumbers, mega_ball)
-  }
- 
-  # Combine individual number columns into one winning_numbers column.
-  lotteryTickets <- as.data.frame(lotteryTickets)
-  lotteryTickets <- unite(lotteryTickets, winning_numbers, c(V1, V2, V3, V4, V5), sep = ' ')
-  
-  return(lotteryTickets)
-}
-```
 
 
 ```{r countOccurrencesOfNumber}
@@ -91,10 +53,12 @@ generateRandomLotteryTickets <- function(numberOfTickets, includeMultiplier = FA
 #' @export
 countOccurrencesOfNumber <- function(dataFrameColumn, number) {
   occurrences <- length(grep(number, dataFrameColumn))
+  occurrences <- formatC(x = occurrences, digits = 1, flag = '0', format = 'd')
 
   return(occurrences)
 }
 ```
+
 
 
 ```{r countTotalNumberOfOccurrencesByColumn}
@@ -172,6 +136,50 @@ countTotalNumberOfOccurrencesByColumn <- function(dataFrameColumn, columnName) {
 ```
 
 
+
+```{r randomLotteryTicketGenerator}
+#' Simulates generating Mega Millions lottery tickets containing random numbers.
+#'
+#' This function returns a dataframe of rows containing 5 unique numbers from 1 to 70,
+#` and 1 number from 1 to 25 in order to simulate a valid Mega Millions lottery ticket. If the
+#' "includeMultiplier" parameter is TRUE, a random multiplier number will also be included in the results.
+#'
+#' @param numberOfTickets Integer: The number of lottery tickets to generate (number of repetitions).
+#'
+#' @param includeMultiplier Optional Boolean: Whether or not a multiplier number should be included in the results.
+#'
+#' @return Dataframe: A dataframe of rows containing 6 (7 if the multplier number is included) random numbers representing
+#' a Mega Millions lottery ticket.
+#'
+#' @export
+generateRandomLotteryTickets <- function(numberOfTickets, includeMultiplier = FALSE) {
+  uniqueNumbers <- t(replicate(numberOfTickets, sample(1:70, 5, replace = FALSE)))
+  mega_ball <- replicate(numberOfTickets, sample(1:25, 1, replace = FALSE))
+
+  # Add leading zeros to winning numbers below 10.
+  uniqueNumbers <- formatC(x = uniqueNumbers, digits = 1, flag = '0', format = 'd')
+
+  # Add leading zeros to mega ball numbers below 10.
+  mega_ball <- formatC(x = mega_ball, digits = 1, flag = '0', format = 'd')
+  
+  if (isTRUE(includeMultiplier)) {
+    multiplier <- replicate(numberOfTickets, sample(2:5, 1, replace = FALSE))
+    lotteryTickets <- cbind(uniqueNumbers, mega_ball, multiplier)
+  }
+  else {
+    lotteryTickets <- cbind(uniqueNumbers, mega_ball)
+  }
+ 
+  # Combine individual number columns into one winning_numbers column.
+  lotteryTickets <- as.data.frame(lotteryTickets)
+  lotteryTickets <- unite(lotteryTickets, winning_numbers, c(V1, V2, V3, V4, V5), sep = ' ')
+  
+  return(lotteryTickets)
+}
+```
+
+
+
 ```{r, generateFrequencyBasedLotteryTicket}
 # TODO: FIX DOCUMENTATION HERE!!!!!!
 #' Selects the most frequently occurring winning lottery numbers from the training dataset.
@@ -198,8 +206,7 @@ generateFrequencyBasedLotteryTicket <- function(trainingDataColumn, columnName) 
   
   # Select the most frequently occuring Megaball.
   if (columnName == 'mega_ball') {
-    #lotteryNumbers <- numbers[0:1, ]$Number
-    lotteryNumbers <- head(numbers$Number, 1)
+    lotteryNumbers <- numbers[which.max(numbers$Occurrences),]$Number
   }
   
   return (lotteryNumbers)
@@ -277,6 +284,7 @@ gameSimulation <- function(ticketNumbers, testData, generationMethod) {
 
 
 ```{r numberOfOccurrenceBarChart, echo = FALSE, message = FALSE, warning = FALSE}
+# TODO: Figure out why last 2 rows of DF do not show in bar chart. 
 winningNumbersData <-countTotalNumberOfOccurrencesByColumn(trainingData$winning_numbers, 'winning_numbers')
 
 winningNumbersOccurrenceChart <- winningNumbersData %>%
@@ -302,6 +310,7 @@ subplot(winningNumbersOccurrenceChart)
 
 
 ```{r megaBallOccurrenceBarChart, echo = FALSE, message = FALSE, warning = FALSE}
+# TODO: Figure out why last 2 rows of DF do not show in bar chart. 
 megaBallData <-countTotalNumberOfOccurrencesByColumn(trainingData$mega_ball, 'mega_ball')
 
 megaBallOccurrenceChart <- megaBallData %>%
