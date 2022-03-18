@@ -27,12 +27,10 @@ megaMillionsWinningNumbers <- read.csv(textConnection(getURL(megaMillionsDataURL
 # Add leading zeros to Mega Ball numbers below 10 so we get accurate counts when counting occurrence frequencies.
 megaMillionsWinningNumbers$mega_ball <- formatC(x = megaMillionsWinningNumbers$mega_ball, digits = 1, flag = '0', format = 'd')
 
-# In order to acheive consistent results in our training data, we manually split the dataset into training and test sets (70/30 split). Using a training/test
-# split function such as "initial_split()"" results in inconsistent results everytime the program is run.
+# In order to acheive consistent results in our training data, we manually split the dataset into training and test sets (70/30 split).
+# Using a training/test split function such as "initial_split()"" results in inconsistent results everytime the program is run.
 trainingData <- megaMillionsWinningNumbers[row.names(megaMillionsWinningNumbers) %in% 1:700, ]
 testData <- megaMillionsWinningNumbers[row.names(megaMillionsWinningNumbers) %in% 300+1:nrow(megaMillionsWinningNumbers), ]
-
-
 ```
 
 
@@ -176,6 +174,9 @@ generateRandomLotteryTickets <- function(numberOfTickets, includeMultiplier = FA
   
   return(lotteryTickets)
 }
+
+t <- generateRandomLotteryTickets(1)
+t
 ```
 
 
@@ -206,12 +207,19 @@ generateFrequencyBasedLotteryTicket <- function(trainingDataColumn, columnName) 
   
   # Select the most frequently occuring Megaball.
   if (columnName == 'mega_ball') {
-    lotteryNumbers <- numbers[which.max(numbers$Occurrences),]$Number
+    lotteryNumbers <- numbers[which.max(numbers$Occurrences), ]$Number
   }
-  
+
+  lotteryNumbers <- as.data.frame(lotteryNumbers)
   return (lotteryNumbers)
 }
+
+b <- generateFrequencyBasedLotteryTicket(trainingData, 'winning_numbers')
+b
+
 ```
+
+
 
 ```{r, simulateLotteryGame}
 # TODO: FIX DOCUMENTATION HERE!!!!!!
@@ -232,33 +240,35 @@ generateFrequencyBasedLotteryTicket <- function(trainingDataColumn, columnName) 
 #'
 #' @export
 gameSimulation <- function(ticketNumbers, testData, generationMethod) {
-  lotteryNumbers <- NULL
-  
   # Count the number of rows in the testData dataset so we can generate an equal
-  # number of lottery numbers to play agaist the test winning numbsers dataset.
-  rowCount <- rowCount = nrow(testData)
-  
-  # When "generationMethod" is "random", generate random lottery numbers.
-  if (generationMethod == 'random') {
-    lotteryNumbers <- generateRandomLotteryTickets(rowCount)
-  }
-  
-  # When "generationMethod" is "frequency", generate numbers based on their frequency
-  # of occurence in the training set.
-  if (generationMethod == 'frequency') {
-    lotteryNumbers <- generateFrequencyBasedLotteryTicket(ticketNumbers, rowCount)
-  }
-  
-  # When "generationMethod" is "consistent", Validate that only one row of numbers is
-  # passed into the function and set "lotteryNumbers" to the ticketNumbers parameter value.
-  if (generationMethod == ' consistent' &&  nrow(ticketNumbers) == 1) {
-     lotteryNumbers <- ticketNumbers    
-  }
-  
-  if (!is.null(lotteryNumbers)) {
+  # number of lottery numbers to play against the winning numbers dataset.
+  rowCount <- nrow(testData)
+  rowCount
+  i <- 1
+  while (i <= rowCount) {
+    # Increment iterator variable by 1 on each iteration. 
+    i <- i + 1
     
-  }
+    # When "generationMethod" is "random", generate random lottery numbers.
+    if (generationMethod == 'random') {
+      lotteryNumbers <- generateRandomLotteryTickets(rowCount)
+    }
   
+    # When "generationMethod" is "frequency", generate numbers based on their frequency
+    # of occurence in the training set.
+    if (generationMethod == 'frequency') {
+      lotteryNumbers <- generateFrequencyBasedLotteryTicket(ticketNumbers, rowCount)
+    }
+  
+    # When "generationMethod" is "consistent", Validate that only one row of numbers is
+    # passed into the function and set "lotteryNumbers" to the ticketNumbers parameter value.
+    if (generationMethod == ' consistent' &&  nrow(ticketNumbers) == 1) {
+      lotteryNumbers <- ticketNumbers
+    }
+    match <- setdiff(lotteryNumbers, testData$winning_numbers)
+    return(match)
+  }
+}  
   
   # Remove the draw_data and multiplier columns from the testData dataset
   # so we are left with the 2 columns we need - winning_numbers and mega_ball.
@@ -276,7 +286,37 @@ gameSimulation <- function(ticketNumbers, testData, generationMethod) {
   #}
   
   #eturn(payout)
+lotteryNumbers <- generateRandomLotteryTickets(1)
+lotteryNumbers
+sim <- gameSimulation(lotteryNumbers$winning_numbers, testData, 'consistent')
+sim
+
+testGameSimulation <- function(ticketNumbers, testData) {
+  if (!is.null(ticketNumbers) && !is.null(testData)) {
+    # Count the number of rows in the testData dataset so we can generate an equal
+    # number of lottery numbers to play against the winning numbers dataset.
+    rowCount <- nrow(testData)
+
+    i <- 1
+    while (i <= rowCount) {
+      # Increment iterator variable by 1 on each iteration. 
+      i <- i + 1
+
+      match <- setdiff(lotteryNumbers, testData$winning_numbers)
+      return(match)
+    }
+  }
+}  
+
+for (i in nrow(testData):1) {
+  lotteryNumbers <- generateRandomLotteryTickets(1)
+  number <- c(12, 23, 23, 23, 03)
+#lotteryNumbers <- generateRandomLotteryTickets(1)
+  test <- setdiff(number, testData$winning_numbers)
+  print(test)
 }
+    sim <- testGameSimulation(lotteryNumbers$winning_numbers, testData$winning_numbers)
+sim
 ```
 
 
