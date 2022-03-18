@@ -17,6 +17,7 @@ library(plotly)
 library(ggplot2)
 library(forcats)
 library(caTools)
+library(data.table)
 ```
 
 
@@ -174,49 +175,43 @@ generateRandomLotteryTickets <- function(numberOfTickets, includeMultiplier = FA
   
   return(lotteryTickets)
 }
-
-t <- generateRandomLotteryTickets(1)
-t
 ```
 
 
 
 ```{r, generateFrequencyBasedLotteryTicket}
-# TODO: FIX DOCUMENTATION HERE!!!!!!
+#' TODO FIX DOCUMENTATION!!!
 #' Selects the most frequently occurring winning lottery numbers from the training dataset.
 #'
 #' This function simulates s. 
 #'
-#' @param trainingDataColumn Dataframe: The training data column from which to generate
-#' frequency based numbers. Must be in the format "dataframe$columnname".
+#' @param trainingData Dataframe: The training data from which to generate frequency based numbers.
 #'
-#' @param columnName String: The name of the column from which to generate frequency based number.
-#'
-#' @return Dataframe: A dataframe of all the numbers within the given column and the number of times each
-#' number occurs (ordered by number of occurrences).
+#' @return Dataframe: A dataframe of the most frequently occuring winning numbers.
 #'
 #' @export
-generateFrequencyBasedLotteryTicket <- function(trainingDataColumn, columnName) {
+generateFrequencyBasedLotteryTicket <- function(trainingData) {
   lotteryNumbers <- NULL
-  numbers <- countTotalNumberOfOccurrencesByColumn(trainingDataColumn, columnName)
 
   # Select the top five most frequently occuring winning numbers.
-  if (columnName == 'winning_numbers') {
-    lotteryNumbers <- numbers[1:5, ]$Number
-  }
+  winningNumbers <- countTotalNumberOfOccurrencesByColumn(trainingData$winning_numbers, 'winning_numbers')
+  winningNumbers <- winningNumbers[1:5, ]$Number
+  winningNumbers <- t(winningNumbers)
+  winningNumbers <- as.data.frame(winningNumbers)
+  
+  # Combine winning numbers into one row. 
+  winningNumbers <- mutate(winningNumbers, winning_numbers = paste(V1, V2, V3, V4, V5), .keep = 'none')
   
   # Select the most frequently occuring Megaball.
-  if (columnName == 'mega_ball') {
-    lotteryNumbers <- numbers[which.max(numbers$Occurrences), ]$Number
-  }
+  megaBallNumbers <- countTotalNumberOfOccurrencesByColumn(trainingData$mega_ball, 'mega_ball')
+  megaBallNumbers <- megaBallNumbers[which.max(megaBallNumbers$Occurrences), ]$Number
 
+  lotteryNumbers <- cbind(winningNumbers, megaBallNumbers)
   lotteryNumbers <- as.data.frame(lotteryNumbers)
+  setnames(lotteryNumbers, 'megaBallNumbers', 'mega_ball')
+
   return (lotteryNumbers)
 }
-
-b <- generateFrequencyBasedLotteryTicket(trainingData, 'winning_numbers')
-b
-
 ```
 
 
