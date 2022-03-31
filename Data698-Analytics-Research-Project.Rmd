@@ -1,7 +1,7 @@
 ---
-title: "Data 698 Analaytics Master’s Research Project"
+title: "Data 698 Analytics Master’s Research Project"
 subtitle: "Predicting Winning New York Mega Millions Lottery Numbers"
-author: "Stephen Haslett, Richard Zheng"
+author: "Richard Zheng, Stephen Haslett"
 date: "2/7/2022"
 output: html_document
 ---
@@ -13,6 +13,7 @@ library(RCurl)
 library(rsample)
 library(dplyr)
 library(tidyr)
+library(lubridate)
 library(plotly)
 library(ggplot2)
 library(forcats)
@@ -29,7 +30,7 @@ megaMillionsWinningNumbers <- read.csv(textConnection(getURL(megaMillionsDataURL
 megaMillionsWinningNumbers$mega_ball <- formatC(x = megaMillionsWinningNumbers$mega_ball, digits = 1, flag = '0', format = 'd')
 
 # In order to acheive consistent results in our training data, we manually split the dataset into training and test sets (70/30 split).
-# Using a training/test split function such as "initial_split()"" results in inconsistent results everytime the program is run.
+# Using a training/test split function such as "initial_split()" results in inconsistent results everytime the program is run.
 trainingData <- megaMillionsWinningNumbers[row.names(megaMillionsWinningNumbers) %in% 1:700, ]
 testData <- megaMillionsWinningNumbers[row.names(megaMillionsWinningNumbers) %in% 300+1:nrow(megaMillionsWinningNumbers), ]
 ```
@@ -37,7 +38,7 @@ testData <- megaMillionsWinningNumbers[row.names(megaMillionsWinningNumbers) %in
 
 
 ```{r countOccurrencesOfNumber}
-#' Counts the number of times a given number occurs within a dataframe column.
+#' Helper function that counts the number of times a given number occurs within a dataframe column.
 #'
 #' This function takes a number and searches a dataframe column to establish how many
 #' occurrences of the provided number occur within the given dataframe column.
@@ -61,7 +62,7 @@ countOccurrencesOfNumber <- function(dataFrameColumn, number) {
 
 
 ```{r countTotalNumberOfOccurrencesByColumn}
-#' Counts the occurrences of individual numbers within a dataframe column.
+#' Helper function that counts the occurrences of individual numbers within a dataframe column.
 #'
 #' This function takes a dataframe column and counts the occurrences of all indivdual numbers within the column.
 #'
@@ -78,7 +79,7 @@ countTotalNumberOfOccurrencesByColumn <- function(dataFrameColumn, columnName) {
   occurrencesWithinColumn <- 0
   occurrenceData <- setNames(data.frame(matrix(ncol = 2)), c('Number', 'Occurrences'))
 
-  # Count occurrences of numbers within the "winning_numbers column (number range = 01 to 70).
+  # Count occurrences of numbers within the "winning_numbers"" column (number range = 01 to 70).
   if (columnName == 'winning_numbers') {
     winningNumbersRange <- seq(1, 70, +1)
     for (number in winningNumbersRange) {
@@ -136,6 +137,30 @@ countTotalNumberOfOccurrencesByColumn <- function(dataFrameColumn, columnName) {
 
 
 
+```{r, calculatePayout}
+#' TODO: NEED TO ADD MULTIPLIER PARAMETER AND LOGIC TO THIS FUNCTION.
+#'
+#' Helper function that calculates the payout for a lottery game based on the amount of matching numbers obtained.
+#'
+#' @param matchingNumberCount Integer: Total count of winning numbers that were matched in a lottery game.
+#'
+#' @param megaBallMatch Boolean: TRUE if a megaball was matched in a lottery game, FALSE otherwise.
+#'
+#' @return String: Total winning dollar amount based on numbers matched.
+#'
+#' @export
+calculateTotalPayout <- function(matchingNumberCount, megaBallMatch) {
+  payout = "$0"
+  if (matchingNumbers == 1) {
+    payout = ""
+  }
+  
+  return(payout)
+}
+```
+
+
+
 ```{r randomLotteryTicketGenerator}
 #' Simulates generating Mega Millions lottery tickets containing random numbers.
 #'
@@ -180,14 +205,15 @@ generateRandomLotteryTickets <- function(numberOfTickets, includeMultiplier = FA
 
 
 ```{r, generateFrequencyBasedLotteryTicket}
-#' TODO FIX DOCUMENTATION!!!
-#' Selects the most frequently occurring winning lottery numbers from the training dataset.
+#' Simulates generating a Mega Millions lottery ticket based on frequently occurring winning numbers.
 #'
-#' This function simulates s. 
+#' This function generates a lottery ticket consisting of the numbers that occur most frequently in
+#' the winning numbers result set.
 #'
 #' @param trainingData Dataframe: The training data from which to generate frequency based numbers.
 #'
-#' @return Dataframe: A dataframe of the most frequently occuring winning numbers.
+#' @return Dataframe: Dataframe consisting of the 5 most frequent winning numbers, and the most
+#' frequent winning MegaBall.
 #'
 #' @export
 generateFrequencyBasedLotteryTicket <- function(trainingData) {
@@ -217,12 +243,13 @@ generateFrequencyBasedLotteryTicket <- function(trainingData) {
 
 
 ```{r, simulateLotteryGame}
-# TODO: FIX DOCUMENTATION HERE!!!!!!
 #' Simulates playing a lottery game.
 #'
-#' This function simulates playing lottery numbers against the test dataset of winning numbers. 
+#' This function simulates playing lottery numbers against the winning numbers test dataset. 
 #'
-#' @param ticketNumbers Dataframe: The dataframe column in which to count all indivdual number occurrences.
+#' @param ticketNumbers Numeric: The lottery numbers to play  against the winning numbers test dataset.
+#'
+#' @param trainingData Dataframe: The training dataset column in which to count all indivdual number occurrences.
 #' Must be in the format "dataframe$columnname".
 #'
 #' @param testData Dataframe: A test dataset of winning numbers to play against.
@@ -230,90 +257,76 @@ generateFrequencyBasedLotteryTicket <- function(trainingData) {
 #' @param generationMethod String: Method to use for generating lottery ticket numbers.
 #' Options: random, frequency, consistent.
 #'
-#' @return Dataframe: A dataframe of all the numbers within the given column and the number of times each
-#' number occurs (ordered by number of occurrences).
+#' @return Dataframe: The testData dataframe with total winning number matches, payout, etc., columns attached. 
 #'
 #' @export
-gameSimulation <- function(ticketNumbers, testData, generationMethod) {
-  # Count the number of rows in the testData dataset so we can generate an equal
-  # number of lottery numbers to play against the winning numbers dataset.
-  rowCount <- nrow(testData)
-  rowCount
-  i <- 1
-  while (i <= rowCount) {
-    # Increment iterator variable by 1 on each iteration. 
-    i <- i + 1
-    
-    # When "generationMethod" is "random", generate random lottery numbers.
+lotteryGameSimulation <- function(ticketNumbers = NULL, trainingData = NULL, testData, generationMethod) {
+  # Define an empty vector to store the count of matching numbers we get per lottery game.
+  matchingNumbersCount <- c()
+  
+  # Count how many rows are in the testData set so we can generate an equal number
+  # of random lottery tickets when generationMethod is set to "random".
+  rowCount <-nrow(testData)
+  
+  # When "generationMethod" is "frequency", generate numbers based on their frequency
+  # of occurence in the training dataset.
+  if (generationMethod == 'frequency' && !is.null(trainingData)) {
+    # TODO: FIX THIS FOR FREQUENCY AND ALSO RANDOM - NOT WORKING.
+    lotteryNumbers <- data.frame()
+    lotteryNumbers <- colnames('winning_numbers')
+    frequencyNumbers <- generateFrequencyBasedLotteryTicket(trainingData)
+    lotteryNumbers$winning_numbers <- formatC(x = frequencyNumbers$winning_numbers, digits = 1, flag = '0', format = 'd')
+  }
+  
+  # When "generationMethod" is "consistent", Validate that the ticketNumbers parameter is
+  # passed into the function and set "lotteryNumbers" to the ticketNumbers parameter value.
+  if (generationMethod == 'consistent' && !is.null(ticketNumbers)) {
+    lotteryNumbers <- data.frame()
+    lotteryNumbers <- colnames('winning_numbers')
+    lotteryNumbers$winning_numbers <- formatC(x = ticketNumbers, digits = 1, flag = '0', format = 'd')
+  }
+
+  # Loop through the winning numbers column for each lottery game in the testData set. 
+  for (winningNumbersRow in testData$winning_numbers) {
+    # When "generationMethod" is "random", generate random lottery numbers. We do this inside of the
+    # for loop so that a random lottery ticket is geerated on each iteration. 
     if (generationMethod == 'random') {
       lotteryNumbers <- generateRandomLotteryTickets(rowCount)
     }
   
-    # When "generationMethod" is "frequency", generate numbers based on their frequency
-    # of occurence in the training set.
-    if (generationMethod == 'frequency') {
-      lotteryNumbers <- generateFrequencyBasedLotteryTicket(ticketNumbers, rowCount)
-    }
-  
-    # When "generationMethod" is "consistent", Validate that only one row of numbers is
-    # passed into the function and set "lotteryNumbers" to the ticketNumbers parameter value.
-    if (generationMethod == ' consistent' &&  nrow(ticketNumbers) == 1) {
-      lotteryNumbers <- ticketNumbers
-    }
-    match <- setdiff(lotteryNumbers, testData$winning_numbers)
-    return(match)
+    # Count how many matching winning numbers we get per lottery game. 
+    lotteryGame <- sapply(lotteryNumbers$winning_numbers, function(s) length(grep(s, winningNumbersRow)))
+    totalMatches <- sum(lotteryGame)
+
+    # Add winning number matches total to the empty matchingNumbersCount vector
+    # so we can add this as a new column to the testData dataset.
+    matchingNumbersCount <- append(matchingNumbersCount, totalMatches)
   }
+  
+  # Format the "draw_date" column into a human readable format, and append
+  # additional columns to the testData dataset.
+  testData$draw_date <- format(as.Date(testData$draw_date), "%B %d, %Y")
+  testData$winning_numbers_matched <- matchingNumbersCount
+
+  return(testData)
 }  
-  
-  # Remove the draw_data and multiplier columns from the testData dataset
-  # so we are left with the 2 columns we need - winning_numbers and mega_ball.
-  #winningNumbers <- subset(testData, select = c(winning_numbers, mega_ball))
-  
-  # Loop through testData winning numbers and check against numbersToPlay for matches.
-
-  # First check the winning_numbers column for matches.
-  #numberOfMatchingNumbers = apply(lotteryNumbersToPlay, 1, function(x)sum(x%in% winningNumbers))
-  #for (matchingNumbers in numberOfMatchingNumbers) {
-  #  payout = "$0"
-  #  if (matchingNumbers == 1) {
-  #    payout = "$10"
-  #  }
-  #}
-  
-  #eturn(payout)
-lotteryNumbers <- generateRandomLotteryTickets(1)
-lotteryNumbers
-sim <- gameSimulation(lotteryNumbers$winning_numbers, testData, 'consistent')
-sim
-
-testGameSimulation <- function(ticketNumbers, testData) {
-  if (!is.null(ticketNumbers) && !is.null(testData)) {
-    # Count the number of rows in the testData dataset so we can generate an equal
-    # number of lottery numbers to play against the winning numbers dataset.
-    rowCount <- nrow(testData)
-
-    i <- 1
-    while (i <= rowCount) {
-      # Increment iterator variable by 1 on each iteration. 
-      i <- i + 1
-
-      match <- setdiff(lotteryNumbers, testData$winning_numbers)
-      return(match)
-    }
-  }
-}  
-
-for (i in nrow(testData):1) {
-  lotteryNumbers <- generateRandomLotteryTickets(1)
-  number <- c(12, 23, 23, 23, 03)
-#lotteryNumbers <- generateRandomLotteryTickets(1)
-  test <- setdiff(number, testData$winning_numbers)
-  print(test)
-}
-    sim <- testGameSimulation(lotteryNumbers$winning_numbers, testData$winning_numbers)
-sim
 ```
 
+
+
+```{r}
+# TODO: THIS IS CODE FOR DEVELOPMENT PURPOSES ONLY SND SHOULD BE REMOVED ONE DEVELOPMENT IS COMPLETE!!! 
+head(testData)
+
+const <- c(07, 22, 36, 45, 47)
+freq <- generateFrequencyBasedLotteryTicket(trainingData)
+
+# TODO: FIGURE OUT WHY RANDOM AND FREQUENCY DO NOT GENERATE WINNING NUMBER MATCHES
+results <- lotteryGameSimulation(NULL, trainingData, testData, 'frequency')
+#results <- lotteryGameSimulation(NULL, NULL, testData, 'random')
+#results <- lotteryGameSimulation(const, NULL, testData, 'consistent')
+results
+```
 
 
 
@@ -339,7 +352,6 @@ winningNumbersOccurrenceChart <- winningNumbersData %>%
   )
 
 subplot(winningNumbersOccurrenceChart)   
-
 ```
 
 
@@ -364,8 +376,7 @@ megaBallOccurrenceChart <- megaBallData %>%
     )
   )
 
-subplot(megaBallOccurrenceChart)   
-
+subplot(megaBallOccurrenceChart)
 ```
 
 
