@@ -177,6 +177,7 @@ calculateTotalPayout <- function(matchingNumberCount, megaBallMatch) {
 #'
 #' @export
 generateRandomLotteryTickets <- function(numberOfTickets, includeMultiplier = FALSE) {
+  winning_numbers <- c()
   uniqueNumbers <- t(replicate(numberOfTickets, sample(1:70, 5, replace = FALSE)))
   mega_ball <- replicate(numberOfTickets, sample(1:25, 1, replace = FALSE))
 
@@ -196,10 +197,23 @@ generateRandomLotteryTickets <- function(numberOfTickets, includeMultiplier = FA
  
   # Combine individual number columns into one winning_numbers column.
   lotteryTickets <- as.data.frame(lotteryTickets)
-  lotteryTickets <- unite(lotteryTickets, winning_numbers, c(V1, V2, V3, V4, V5), sep = ' ')
-  
+  lotteryTickets <- unite(lotteryTickets, winning_numbers, c(V1, V2, V3, V4, V5), sep = '')
+
+  # Convert winning_numbers from character to numeric, and split them into the expected numeric 2 digit number sequence.
+  # Winning numbers must be numeric so we can count how often they occur in the winning numbers test dataset.
+  numericWinningNumbers <- as.numeric(regmatches(lotteryTickets$winning_numbers, gregexpr(".{2}", lotteryTickets$winning_numbers))[[1]])
+  winning_numbers <- append(winning_numbers, numericWinningNumbers)
+
+  # Remove the existing winning_numbers column form the dataframe so we can replace it with the reformatted version.
+  lotteryTickets <- select(lotteryTickets, -winning_numbers)
+
+  # TODO FIX THIS - GIVING "replacement has 5 rows, data has 1" ERROR.
+  #lotteryTickets$winning_numbers <- NA
+  lotteryTickets$winning_numbers <- winning_numbers
+
   return(lotteryTickets)
 }
+generateRandomLotteryTickets(1)
 ```
 
 
@@ -225,6 +239,7 @@ generateFrequencyBasedLotteryTicket <- function(trainingData) {
   winningNumbers <- t(winningNumbers)
   winningNumbers <- as.data.frame(winningNumbers)
   
+
   # Combine winning numbers into one row. 
   winningNumbers <- mutate(winningNumbers, winning_numbers = paste(V1, V2, V3, V4, V5), .keep = 'none')
   
@@ -234,6 +249,7 @@ generateFrequencyBasedLotteryTicket <- function(trainingData) {
 
   lotteryNumbers <- cbind(winningNumbers, megaBallNumbers)
   lotteryNumbers <- as.data.frame(lotteryNumbers)
+
   setnames(lotteryNumbers, 'megaBallNumbers', 'mega_ball')
 
   return (lotteryNumbers)
@@ -319,12 +335,14 @@ lotteryGameSimulation <- function(ticketNumbers = NULL, trainingData = NULL, tes
 head(testData)
 
 const <- c(07, 22, 36, 45, 47)
+class(const)
 freq <- generateFrequencyBasedLotteryTicket(trainingData)
 
 # TODO: FIGURE OUT WHY RANDOM AND FREQUENCY DO NOT GENERATE WINNING NUMBER MATCHES
-results <- lotteryGameSimulation(NULL, trainingData, testData, 'frequency')
+#results <- lotteryGameSimulation(NULL, trainingData, testData, 'frequency')
+
 #results <- lotteryGameSimulation(NULL, NULL, testData, 'random')
-#results <- lotteryGameSimulation(const, NULL, testData, 'consistent')
+results <- lotteryGameSimulation(const, NULL, testData, 'consistent')
 results
 ```
 
