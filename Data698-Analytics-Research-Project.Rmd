@@ -146,13 +146,57 @@ countTotalNumberOfOccurrencesByColumn <- function(dataFrameColumn, columnName) {
 #'
 #' @param megaBallMatch Boolean: TRUE if a megaball was matched in a lottery game, FALSE otherwise.
 #'
-#' @return String: Total winning dollar amount based on numbers matched.
+#' @return Numeric: Total winning dollar amount based on numbers matched.
 #'
 #' @export
 calculateTotalPayout <- function(matchingNumberCount, megaBallMatch) {
-  payout = "$0"
-  if (matchingNumbers == 1) {
-    payout = ""
+  # No matching numbers results in a zero dollar payout.
+  payout = 0
+  
+  # Jackpot payout - 75% of the total prize money. 5 matching numbers with the Mega Ball.
+  if (matchingNumberCount == 5 && isTRUE(megaBallMatch)) {
+    # TODO NEED TO ADD CODE TO CALCULATE THIS VALUE - SETTING TO LARGE NUMBER FOR NOW!!!!
+    payout = 1000000000000000
+  }
+
+  # Second prize - $1,000,000. 5 matching numbers.
+  if (matchingNumberCount == 5 && isFALSE(megaBallMatch)) {
+    payout = 1000000
+  }
+  
+  # Third prize - $10,000. 4 matching numbers with the Mega Ball.
+  if (matchingNumberCount == 4 && isTrue(megaBallMatch)) {
+    payout = 10000
+  }
+  
+  # Fourth prize - $500. 4 matching numbers.
+  if (matchingNumberCount == 4 && isFALSE(megaBallMatch)) {
+    payout = 500
+  }
+  
+  # Fifth prize - $200. 3 matching numbers with the Mega Ball.
+  if (matchingNumberCount == 3 && isTRUE(megaBallMatch)) {
+    payout = 200
+  }
+  
+  # Sixth prize - $10. 3 matching numbers.
+  if (matchingNumberCount == 3 && isFALSE(megaBallMatch)) {
+    payout = 10
+  }
+  
+  # Seventh prize - $10. 2 matching numbers with the Mega Ball.
+  if (matchingNumberCount == 2 && isTRUE(megaBallMatch)) {
+    payout = 10
+  }
+  
+  # Eighth prize - $4. 1 matching number with the Mega Ball.
+  if (matchingNumberCount == 1 && isTRUE(megaBallMatch)) {
+    payout = 4
+  }
+  
+  # Ninth prize - $2. No matching numbers with the Mega Ball.
+  if (matchingNumberCount == 0 && isTRUE(megaBallMatch)) {
+    payout = 2
   }
   
   return(payout)
