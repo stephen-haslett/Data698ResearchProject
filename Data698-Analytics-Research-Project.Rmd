@@ -164,56 +164,30 @@ calculateTotalPayout <- function(matchingNumberCount, megaBallMatch) {
 ```{r randomLotteryTicketGenerator}
 #' Simulates generating Mega Millions lottery tickets containing random numbers.
 #'
-#' This function returns a dataframe of rows containing 5 unique numbers from 1 to 70,
-#` and 1 number from 1 to 25 in order to simulate a valid Mega Millions lottery ticket. If the
-#' "includeMultiplier" parameter is TRUE, a random multiplier number will also be included in the results.
-#'
-#' @param numberOfTickets Integer: The number of lottery tickets to generate (number of repetitions).
+#' This function returns a list containing 5 unique numbers from 1 to 70, and 1 number from
+#' 1 to 25 in order to simulate a valid Mega Millions lottery ticket. If the "includeMultiplier"
+#' parameter is TRUE, a random multiplier number will also be included in the results.
 #'
 #' @param includeMultiplier Optional Boolean: Whether or not a multiplier number should be included in the results.
 #'
-#' @return Dataframe: A dataframe of rows containing 6 (7 if the multplier number is included) random numbers representing
+#' @return List: A list containing 6 (7 if the multplier number is included) random numbers representing
 #' a Mega Millions lottery ticket.
 #'
 #' @export
-generateRandomLotteryTickets <- function(numberOfTickets, includeMultiplier = FALSE) {
-  winning_numbers <- c()
-  uniqueNumbers <- t(replicate(numberOfTickets, sample(1:70, 5, replace = FALSE)))
-  mega_ball <- replicate(numberOfTickets, sample(1:25, 1, replace = FALSE))
+generateRandomLotteryTickets <- function(includeMultiplier = FALSE) {
+  uniqueNumbers <- sample(1:70, 5, replace = FALSE)
+  mega_ball <- sample(1:25, 1, replace = FALSE)
 
-  # Add leading zeros to winning numbers below 10.
-  uniqueNumbers <- formatC(x = uniqueNumbers, digits = 1, flag = '0', format = 'd')
-
-  # Add leading zeros to mega ball numbers below 10.
-  mega_ball <- formatC(x = mega_ball, digits = 1, flag = '0', format = 'd')
-  
   if (isTRUE(includeMultiplier)) {
-    multiplier <- replicate(numberOfTickets, sample(2:5, 1, replace = FALSE))
-    lotteryTickets <- cbind(uniqueNumbers, mega_ball, multiplier)
+    multiplier <- sample(2:5, 1, replace = FALSE)
+    lotteryTickets <- list(uniqueNumbers, mega_ball, multiplier)
   }
   else {
-    lotteryTickets <- cbind(uniqueNumbers, mega_ball)
+    lotteryTickets <- list(uniqueNumbers, mega_ball)
   }
  
-  # Combine individual number columns into one winning_numbers column.
-  lotteryTickets <- as.data.frame(lotteryTickets)
-  lotteryTickets <- unite(lotteryTickets, winning_numbers, c(V1, V2, V3, V4, V5), sep = '')
-
-  # Convert winning_numbers from character to numeric, and split them into the expected numeric 2 digit number sequence.
-  # Winning numbers must be numeric so we can count how often they occur in the winning numbers test dataset.
-  numericWinningNumbers <- as.numeric(regmatches(lotteryTickets$winning_numbers, gregexpr(".{2}", lotteryTickets$winning_numbers))[[1]])
-  winning_numbers <- append(winning_numbers, numericWinningNumbers)
-
-  # Remove the existing winning_numbers column form the dataframe so we can replace it with the reformatted version.
-  lotteryTickets <- select(lotteryTickets, -winning_numbers)
-
-  # TODO FIX THIS - GIVING "replacement has 5 rows, data has 1" ERROR.
-  #lotteryTickets$winning_numbers <- NA
-  lotteryTickets$winning_numbers <- winning_numbers
-
   return(lotteryTickets)
 }
-generateRandomLotteryTickets(1)
 ```
 
 
@@ -226,33 +200,25 @@ generateRandomLotteryTickets(1)
 #'
 #' @param trainingData Dataframe: The training data from which to generate frequency based numbers.
 #'
-#' @return Dataframe: Dataframe consisting of the 5 most frequent winning numbers, and the most
+#' @return List: A list consisting of the 5 most frequent winning numbers, and the most
 #' frequent winning MegaBall.
 #'
 #' @export
 generateFrequencyBasedLotteryTicket <- function(trainingData) {
-  lotteryNumbers <- NULL
-
   # Select the top five most frequently occuring winning numbers.
   winningNumbers <- countTotalNumberOfOccurrencesByColumn(trainingData$winning_numbers, 'winning_numbers')
-  winningNumbers <- winningNumbers[1:5, ]$Number
-  winningNumbers <- t(winningNumbers)
-  winningNumbers <- as.data.frame(winningNumbers)
-  
 
-  # Combine winning numbers into one row. 
-  winningNumbers <- mutate(winningNumbers, winning_numbers = paste(V1, V2, V3, V4, V5), .keep = 'none')
-  
+  winningNumbers <- winningNumbers[1:5, ]$Number
+  winningNumbers <- as.numeric(winningNumbers) 
+
   # Select the most frequently occuring Megaball.
   megaBallNumbers <- countTotalNumberOfOccurrencesByColumn(trainingData$mega_ball, 'mega_ball')
   megaBallNumbers <- megaBallNumbers[which.max(megaBallNumbers$Occurrences), ]$Number
+  megaBallNumbers <- as.numeric(megaBallNumbers)
+  
+  lotteryTickets <- list(winningNumbers, megaBallNumbers)
 
-  lotteryNumbers <- cbind(winningNumbers, megaBallNumbers)
-  lotteryNumbers <- as.data.frame(lotteryNumbers)
-
-  setnames(lotteryNumbers, 'megaBallNumbers', 'mega_ball')
-
-  return (lotteryNumbers)
+  return(lotteryTickets)
 }
 ```
 
@@ -263,7 +229,7 @@ generateFrequencyBasedLotteryTicket <- function(trainingData) {
 #'
 #' This function simulates playing lottery numbers against the winning numbers test dataset. 
 #'
-#' @param ticketNumbers Numeric: The lottery numbers to play  against the winning numbers test dataset.
+#' @param ticketNumbers Numeric: The lottery numbers to play against the winning numbers test dataset.
 #'
 #' @param trainingData Dataframe: The training dataset column in which to count all indivdual number occurrences.
 #' Must be in the format "dataframe$columnname".
@@ -279,19 +245,16 @@ generateFrequencyBasedLotteryTicket <- function(trainingData) {
 lotteryGameSimulation <- function(ticketNumbers = NULL, trainingData = NULL, testData, generationMethod) {
   # Define an empty vector to store the count of matching numbers we get per lottery game.
   matchingNumbersCount <- c()
-  
-  # Count how many rows are in the testData set so we can generate an equal number
-  # of random lottery tickets when generationMethod is set to "random".
-  rowCount <-nrow(testData)
-  
+
   # When "generationMethod" is "frequency", generate numbers based on their frequency
   # of occurence in the training dataset.
   if (generationMethod == 'frequency' && !is.null(trainingData)) {
-    # TODO: FIX THIS FOR FREQUENCY AND ALSO RANDOM - NOT WORKING.
     lotteryNumbers <- data.frame()
     lotteryNumbers <- colnames('winning_numbers')
     frequencyNumbers <- generateFrequencyBasedLotteryTicket(trainingData)
-    lotteryNumbers$winning_numbers <- formatC(x = frequencyNumbers$winning_numbers, digits = 1, flag = '0', format = 'd')
+    # Add leading zeros to mega ball numbers below 10.
+    lotteryNumbers$winning_numbers <- formatC(x = frequencyNumbers[[1]], digits = 1, flag = '0', format = 'd')
+
   }
   
   # When "generationMethod" is "consistent", Validate that the ticketNumbers parameter is
@@ -307,7 +270,10 @@ lotteryGameSimulation <- function(ticketNumbers = NULL, trainingData = NULL, tes
     # When "generationMethod" is "random", generate random lottery numbers. We do this inside of the
     # for loop so that a random lottery ticket is geerated on each iteration. 
     if (generationMethod == 'random') {
-      lotteryNumbers <- generateRandomLotteryTickets(rowCount)
+      lotteryNumbers <- data.frame()
+      lotteryNumbers <- colnames('winning_numbers')
+      random <- generateRandomLotteryTickets()
+      lotteryNumbers$winning_numbers <- formatC(x = random[[1]], digits = 1, flag = '0', format = 'd')
     }
   
     # Count how many matching winning numbers we get per lottery game. 
@@ -332,21 +298,14 @@ lotteryGameSimulation <- function(ticketNumbers = NULL, trainingData = NULL, tes
 
 ```{r}
 # TODO: THIS IS CODE FOR DEVELOPMENT PURPOSES ONLY SND SHOULD BE REMOVED ONE DEVELOPMENT IS COMPLETE!!! 
-head(testData)
 
 const <- c(07, 22, 36, 45, 47)
-class(const)
-freq <- generateFrequencyBasedLotteryTicket(trainingData)
-
-# TODO: FIGURE OUT WHY RANDOM AND FREQUENCY DO NOT GENERATE WINNING NUMBER MATCHES
-#results <- lotteryGameSimulation(NULL, trainingData, testData, 'frequency')
-
+results <- lotteryGameSimulation(NULL, trainingData, testData, 'frequency')
+#results <- lotteryGameSimulation(const, NULL, testData, 'consistent')
 #results <- lotteryGameSimulation(NULL, NULL, testData, 'random')
-results <- lotteryGameSimulation(const, NULL, testData, 'consistent')
+
 results
 ```
-
-
 
 
 ```{r numberOfOccurrenceBarChart, echo = FALSE, message = FALSE, warning = FALSE}
