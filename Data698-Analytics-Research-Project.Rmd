@@ -166,7 +166,7 @@ calculateTotalPayout <- function(matchingNumberCount, megaBallMatch) {
   }
   
   # Third prize - $10,000. 4 matching numbers with the Mega Ball.
-  if (matchingNumberCount == 4 && isTrue(megaBallMatch)) {
+  if (matchingNumberCount == 4 && isTRUE(megaBallMatch)) {
     payout <- 10000
   }
   
@@ -243,11 +243,11 @@ megaBallMatch <- function(ticketMegaBall, winningMegaBall) {
 #'
 #' @export
 generateRandomLotteryTickets <- function(includeMultiplier = FALSE) {
-  uniqueNumbers <- sample(1:70, 5, replace = FALSE)
-  mega_ball <- sample(1:25, 1, replace = FALSE)
+  uniqueNumbers <- as.numeric(sample(1:70, 5, replace = FALSE))
+  mega_ball <- as.numeric(sample(1:25, 1, replace = FALSE))
 
   if (isTRUE(includeMultiplier)) {
-    multiplier <- sample(2:5, 1, replace = FALSE)
+    multiplier <- as.numeric(sample(2:5, 1, replace = FALSE))
     lotteryTickets <- list(uniqueNumbers, mega_ball, multiplier)
   }
   else {
@@ -298,6 +298,7 @@ generateFrequencyBasedLotteryTicket <- function(trainingData) {
 #' This function simulates playing lottery numbers against the winning numbers test dataset. 
 #'
 #' @param ticketNumbers Numeric: The lottery numbers to play against the winning numbers test dataset.
+#' IMPORTANT - 6 numbers must be passed. The first 5 numbers are the winning numbers, the 6th is the mega ball. 
 #'
 #' @param trainingData Dataframe: The training dataset column in which to count all indivdual number occurrences.
 #' Must be in the format "dataframe$columnname".
@@ -325,6 +326,7 @@ lotteryGameSimulation <- function(ticketNumbers = NULL, trainingData = NULL, tes
     frequencyNumbers <- generateFrequencyBasedLotteryTicket(trainingData)
     # Add leading zeros to numbers below 10.
     lotteryNumbers$winning_numbers <- formatC(x = frequencyNumbers[[1]], digits = 1, flag = '0', format = 'd')
+    lotteryNumbers$mega_ball <- formatC(x = frequencyNumbers[[2]], digits = 1, flag = '0', format = 'd')
   }
   
   # When "generationMethod" is "consistent", Validate that the ticketNumbers parameter is
@@ -333,6 +335,7 @@ lotteryGameSimulation <- function(ticketNumbers = NULL, trainingData = NULL, tes
     lotteryNumbers <- data.frame()
     lotteryNumbers <- colnames('winning_numbers')
     lotteryNumbers$winning_numbers <- formatC(x = ticketNumbers, digits = 1, flag = '0', format = 'd')
+    lotteryNumbers$mega_ball <- formatC(x = ticketNumbers[6], digits = 1, flag = '0', format = 'd')
   }
 
   # Loop through the winning numbers column for each lottery game in the testData set. 
@@ -342,8 +345,9 @@ lotteryGameSimulation <- function(ticketNumbers = NULL, trainingData = NULL, tes
     if (generationMethod == 'random') {
       lotteryNumbers <- data.frame()
       lotteryNumbers <- colnames('winning_numbers')
-      random <- generateRandomLotteryTickets()
+      random <- generateRandomLotteryTickets(NULL)
       lotteryNumbers$winning_numbers <- formatC(x = random[[1]], digits = 1, flag = '0', format = 'd')
+      lotteryNumbers$mega_ball <- formatC(x = random[[2]], digits = 1, flag = '0', format = 'd')
     }
   
     # Count how many matching winning numbers we get per lottery game. 
@@ -356,7 +360,7 @@ lotteryGameSimulation <- function(ticketNumbers = NULL, trainingData = NULL, tes
     
     # TODO NEED TO ADD LOGIC HERE THAT SETS MEGABALL MATCH TO EITHER TRUE OR FALSE.
     # Do the same for payout data.
-    payoutAmount <- calculateTotalPayout(totalMatches, FALSE)
+    payoutAmount <- calculateTotalPayout(totalMatches, TRUE)
     payOut <- append(payOut,  payoutAmount)
   }
  
@@ -376,9 +380,10 @@ lotteryGameSimulation <- function(ticketNumbers = NULL, trainingData = NULL, tes
 ```{r}
 # TODO: THIS IS CODE FOR DEVELOPMENT PURPOSES ONLY AND SHOULD BE REMOVED ONE DEVELOPMENT IS COMPLETE!!! 
 
-const <- c(07, 22, 36, 45, 47)
-#results <- lotteryGameSimulation(NULL, trainingData, testData, 'frequency')
-results <- lotteryGameSimulation(const, NULL, testData, 'consistent')
+const <- c(07, 22, 36, 45, 46, 23)
+
+results <- lotteryGameSimulation(NULL, trainingData, testData, 'frequency')
+#results <- lotteryGameSimulation(const, NULL, testData, 'consistent')
 #results <- lotteryGameSimulation(NULL, NULL, testData, 'random')
 
 results
