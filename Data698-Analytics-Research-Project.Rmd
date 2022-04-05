@@ -211,7 +211,7 @@ calculateTotalPayout <- function(matchingNumberCount, megaBallMatch) {
 #'
 #' @param ticketMegaBall Numeric: The "Mega Ball" value contained within a simulated ticket.
 #'
-#' @param winningMegaBall Numeric: The "Mega Ball" value contained within the winning numbers test dataset.
+#' @param winningMegaBall Numeric: The "Mega Ball" value contained within the winning lottery numbers test dataset.
 #'
 #' @return Boolean: True if the numbers match, False otherwise.
 #'
@@ -297,10 +297,10 @@ generateFrequencyBasedLotteryTicket <- function(trainingData) {
 #'
 #' This function simulates playing lottery numbers against the winning numbers test dataset. 
 #'
-#' @param ticketNumbers Numeric: The lottery numbers to play against the winning numbers test dataset.
+#' @param ticketNumbers Optional Numeric: The lottery numbers to play against the winning lottery numbers test dataset.
 #' IMPORTANT - 6 numbers must be passed. The first 5 numbers are the winning numbers, the 6th is the mega ball. 
 #'
-#' @param trainingData Dataframe: The training dataset column in which to count all indivdual number occurrences.
+#' @param trainingData Optional Dataframe: The training dataset column in which to count all indivdual number occurrences.
 #' Must be in the format "dataframe$columnname".
 #'
 #' @param testData Dataframe: A test dataset of winning numbers to play against.
@@ -312,11 +312,10 @@ generateFrequencyBasedLotteryTicket <- function(trainingData) {
 #'
 #' @export
 lotteryGameSimulation <- function(ticketNumbers = NULL, trainingData = NULL, testData, generationMethod) {
-  # Define an empty vector to store the count of matching numbers we get per lottery game.
+  # Define empty vectors to store matching numbers per game count, payout amounts, and megaball match status.
   matchingNumbersCount <- c()
-  
-  # Define an empty vector to store payout amounts per lottery game.
   payOut <- c()
+  megaBallStatus <- c()
 
   # When "generationMethod" is "frequency", generate numbers based on their frequency
   # of occurence in the training dataset.
@@ -338,10 +337,10 @@ lotteryGameSimulation <- function(ticketNumbers = NULL, trainingData = NULL, tes
     lotteryNumbers$mega_ball <- formatC(x = ticketNumbers[6], digits = 1, flag = '0', format = 'd')
   }
 
-  # Loop through the winning numbers column for each lottery game in the testData set. 
-  for (winningNumbersRow in testData$winning_numbers) {
+  # Loop through the winning lottery numbers testData dataset. 
+  for (row in rownames(testData)) {
     # When "generationMethod" is "random", generate random lottery numbers. We do this inside of the
-    # for loop so that a random lottery ticket is geerated on each iteration. 
+    # for loop so that a random lottery ticket is generated on each iteration. 
     if (generationMethod == 'random') {
       lotteryNumbers <- data.frame()
       lotteryNumbers <- colnames('winning_numbers')
@@ -351,24 +350,27 @@ lotteryGameSimulation <- function(ticketNumbers = NULL, trainingData = NULL, tes
     }
   
     # Count how many matching winning numbers we get per lottery game. 
-    lotteryGame <- sapply(lotteryNumbers$winning_numbers, function(s) length(grep(s, winningNumbersRow)))
+    lotteryGame <- sapply(lotteryNumbers$winning_numbers, function(s) length(grep(s, testData[row, 'winning_numbers'])))
     totalMatches <- sum(lotteryGame)
 
-    # Add winning number matches total to the empty matchingNumbersCount vector
-    # so we can add this as a new column to the testData dataset.
-    matchingNumbersCount <- append(matchingNumbersCount, totalMatches)
+    # Check if a simulated lottery ticket mega ball value matches a mega ball value in the test dataset.
+    matchingMegaBall <- megaBallMatch(lotteryNumbers$mega_ball, testData[row, 'mega_ball'])
     
-    # TODO NEED TO ADD LOGIC HERE THAT SETS MEGABALL MATCH TO EITHER TRUE OR FALSE.
-    # Do the same for payout data.
-    payoutAmount <- calculateTotalPayout(totalMatches, TRUE)
+    # Calculate payout based on the amount of numbers matched.
+    payoutAmount <- calculateTotalPayout(totalMatches, matchingMegaBall)
+    
+    # Append matching numbers count, matching mega ball status, and payout values to empty vectors
+    # so we can append them to the testData dataframe as additional columns.
+    matchingNumbersCount <- append(matchingNumbersCount, totalMatches)
     payOut <- append(payOut,  payoutAmount)
+    megaBallStatus <- append(megaBallStatus, matchingMegaBall)
   }
  
-  
-  # Format the "draw_date" column into a human readable format, and append
+  # Convert the "draw_date" column into a human readable format, and append
   # additional columns to the testData dataset.
   testData$draw_date <- format(as.Date(testData$draw_date), "%B %d, %Y")
   testData$winning_numbers_matched <- matchingNumbersCount
+  testData$matching_mega_ball <- megaBallStatus
   testData$payout <- currency(payOut) 
 
   return(testData)
@@ -378,16 +380,15 @@ lotteryGameSimulation <- function(ticketNumbers = NULL, trainingData = NULL, tes
 
 
 ```{r}
-# TODO: THIS IS CODE FOR DEVELOPMENT PURPOSES ONLY AND SHOULD BE REMOVED ONE DEVELOPMENT IS COMPLETE!!! 
+# TODO: THIS IS CODE FOR DEVELOPMENT PURPOSES ONLY AND SHOULD BE REMOVED ONCE DEVELOPMENT IS COMPLETE!!! 
 
-const <- c(07, 22, 36, 45, 46, 23)
+const <- c(07, 22, 36, 45, 46, 12)
 
-results <- lotteryGameSimulation(NULL, trainingData, testData, 'frequency')
+#results <- lotteryGameSimulation(NULL, trainingData, testData, 'frequency')
 #results <- lotteryGameSimulation(const, NULL, testData, 'consistent')
-#results <- lotteryGameSimulation(NULL, NULL, testData, 'random')
+results <- lotteryGameSimulation(NULL, NULL, testData, 'random')
 
 results
-
 ```
 
 
