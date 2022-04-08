@@ -13,6 +13,7 @@ library(RCurl)
 library(rsample)
 library(dplyr)
 library(tidyr)
+library(readr)
 library(lubridate)
 library(plotly)
 library(ggplot2)
@@ -20,6 +21,7 @@ library(forcats)
 library(caTools)
 library(data.table)
 library(formattable)
+library(kableExtra)
 ```
 
 
@@ -206,6 +208,39 @@ calculateTotalPayout <- function(matchingNumberCount, megaBallMatch) {
 
 
 
+```{r, calculateColumnValuesTotal}
+#' Helper function that calculates total payouts, wins, megaball matches, and multplier
+#' number matches for a given strategy (Consistent, Frequency, and Random).
+#'
+#' @param columnName String: The name of the column to total. Accepted values are:
+#' "winning_numbers_matched", "matching_mega_ball", "matching_multiplier", "payout".
+#'
+#' @param columnValues Numeric/Boolean: The actual column values to total corresponding to
+#' the columnName parameter. Numeric for "winning_numbers_matched", and "payout" columns, boolean
+#' for "matching_mega_ball", and "matching_multiplier" columns. Must be in the format "dataframe$columnname".
+#'
+#' @return Numeric: Total sum of column values passed.
+#'
+#' @export
+calculateColumnValuesTotal <- function(columnName, columnValues) {
+  sumOfColumnValues <- 0
+  if (columnName == 'matching_multiplier' || columnName == 'matching_mega_ball') {
+    sumOfColumnValues <- length(columnValues[columnValues == TRUE])
+  }
+  else if (columnName == 'payout') {
+     payout <- parse_number(as.character(columnValues))
+     sumOfColumnValues <- sum(payout)
+  }
+  else {
+    sumOfColumnValues <- sum(columnValues)
+  }
+  
+  return(sumOfColumnValues)
+}
+```
+
+
+
 ```{r megaBallMatch}
 #' Checks if a simulated lottery ticket Mega Ball value matches the Mega Ball value in the winning numbers test dataset.
 #'
@@ -379,16 +414,36 @@ lotteryGameSimulation <- function(ticketNumbers = NULL, trainingData = NULL, tes
 
 
 
+```{r, consistentStrategyResultsTable, echo = FALSE, message = FALSE, warning = FALSE}
+consistentLotteryNumbers <- c(07, 22, 36, 45, 46, 12)
+consistentResults <- lotteryGameSimulation(consistentLotteryNumbers, NULL, testData, 'consistent')
+
+kable(consistentResults, "html", escape = F) %>% kable_styling("striped", full_width = T) %>% column_spec(1, bold = T)
+```
+
+
+
+
 ```{r}
 # TODO: THIS IS CODE FOR DEVELOPMENT PURPOSES ONLY AND SHOULD BE REMOVED ONCE DEVELOPMENT IS COMPLETE!!! 
 
 const <- c(07, 22, 36, 45, 46, 12)
-
 #results <- lotteryGameSimulation(NULL, trainingData, testData, 'frequency')
 #results <- lotteryGameSimulation(const, NULL, testData, 'consistent')
 results <- lotteryGameSimulation(NULL, NULL, testData, 'random')
 
+payout <- calculateColumnValuesTotal('payout', results$payout)
+payout <- currency(payout)
+payout
+
+winningNumbers <- calculateColumnValuesTotal('winning_numbers_matched', results$winning_numbers_matched)
+winningNumbers
+
+mega <- calculateColumnValuesTotal('matching_mega_ball', results$matching_mega_ball)
+mega
+
 results
+head(testData)
 ```
 
 
