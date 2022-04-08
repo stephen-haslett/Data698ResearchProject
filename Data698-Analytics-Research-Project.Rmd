@@ -25,7 +25,7 @@ library(kableExtra)
 ```
 
 
-```{r dataImport}
+```{r dataImport, echo = FALSE, message = FALSE, warning = FALSE}
 megaMillionsDataURL <- "https://data.ny.gov/resource/5xaw-6ayf.csv"
 megaMillionsWinningNumbers <- read.csv(textConnection(getURL(megaMillionsDataURL)))
 
@@ -40,7 +40,7 @@ testData <- megaMillionsWinningNumbers[row.names(megaMillionsWinningNumbers) %in
 
 
 
-```{r countOccurrencesOfNumber}
+```{r countOccurrencesOfNumber, echo = FALSE, message = FALSE, warning = FALSE}
 #' Helper function that counts the number of times a given number occurs within a dataframe column.
 #'
 #' This function takes a number and searches a dataframe column to establish how many
@@ -64,7 +64,7 @@ countOccurrencesOfNumber <- function(dataFrameColumn, number) {
 
 
 
-```{r countTotalNumberOfOccurrencesByColumn}
+```{r countTotalNumberOfOccurrencesByColumn, echo = FALSE, message = FALSE, warning = FALSE}
 #' Helper function that counts the occurrences of individual numbers within a dataframe column.
 #'
 #' This function takes a dataframe column and counts the occurrences of all indivdual numbers within the column.
@@ -140,19 +140,19 @@ countTotalNumberOfOccurrencesByColumn <- function(dataFrameColumn, columnName) {
 
 
 
-```{r, calculatePayout}
-#' TODO: NEED TO ADD MULTIPLIER PARAMETER AND LOGIC TO THIS FUNCTION.
-#'
+```{r, calculatePayout, echo = FALSE, message = FALSE, warning = FALSE}
 #' Helper function that calculates the payout for a lottery game based on the amount of matching numbers obtained.
 #'
 #' @param matchingNumberCount Integer: Total count of winning numbers that were matched in a lottery game.
 #'
 #' @param megaBallMatch Boolean: TRUE if a megaball was matched in a lottery game, FALSE otherwise.
 #'
+#' @param multiplierMatch Boolean: TRUE if a multiplier number was matched, FALSE otherwise.
+#'
 #' @return Numeric: Total winning dollar amount based on numbers matched.
 #'
 #' @export
-calculateTotalPayout <- function(matchingNumberCount, megaBallMatch) {
+calculateTotalPayout <- function(matchingNumberCount, megaBallMatch, multiplerMatch, multiplier) {
   # No matching numbers results in a zero dollar payout.
   payout <- 0
   
@@ -202,13 +202,21 @@ calculateTotalPayout <- function(matchingNumberCount, megaBallMatch) {
     payout <- 2
   }
   
+  # If the multiplier number was matched, multiply the total
+  # payout amount by the value of the multiplier number.
+  if (!missing(multiplier) && !missing(multiplerMatch)) {
+    if (isTRUE(multiplerMatch)) {
+      payout <- payout * multipler
+    }
+  }
+  
   return(payout)
 }
 ```
 
 
 
-```{r, calculateColumnValuesTotal}
+```{r, calculateColumnValuesTotal, echo = FALSE, message = FALSE, warning = FALSE}
 #' Helper function that calculates total payouts, wins, megaball matches, and multplier
 #' number matches for a given strategy (Consistent, Frequency, and Random).
 #'
@@ -241,12 +249,12 @@ calculateColumnValuesTotal <- function(columnName, columnValues) {
 
 
 
-```{r megaBallMatch}
-#' Checks if a simulated lottery ticket Mega Ball value matches the Mega Ball value in the winning numbers test dataset.
+```{r megaBallMatch, echo = FALSE, message = FALSE, warning = FALSE}
+#' Checks if a simulated lottery ticket Mega Ball value matches the Mega Ball value in the winning numbers dataset.
 #'
 #' @param ticketMegaBall Numeric: The "Mega Ball" value contained within a simulated ticket.
 #'
-#' @param winningMegaBall Numeric: The "Mega Ball" value contained within the winning lottery numbers test dataset.
+#' @param winningMegaBall Numeric: The "Mega Ball" value contained within the winning lottery numbers dataset.
 #'
 #' @return Boolean: True if the numbers match, False otherwise.
 #'
@@ -264,7 +272,30 @@ megaBallMatch <- function(ticketMegaBall, winningMegaBall) {
 
 
 
-```{r randomLotteryTicketGenerator}
+```{r multiplierMatch, echo = FALSE, message = FALSE, warning = FALSE}
+#' Checks if a simulated lottery ticket Multiplier value matches the Multiplier value in the winning lottery numbers dataset.
+#'
+#' @param ticketMultiplier Numeric: The "Multiplier" value contained within a simulated ticket.
+#'
+#' @param winningMultiplier Numeric: The "Multiplier" value contained within the winning lottery numbers dataset.
+#'
+#' @return Boolean: True if the numbers match, False otherwise.
+#'
+#' @export
+multiplierMatch <- function(ticketMultiplier, winningMultiplier) {
+  matchCheck <- match(ticketMultiplier, winningMultiplier)
+  if (!is.na(matchCheck)) {
+    return(TRUE)
+  }
+  else {
+    return(FALSE)
+  }
+}
+```
+
+
+
+```{r randomLotteryTicketGenerator, echo = FALSE, message = FALSE, warning = FALSE}
 #' Simulates generating Mega Millions lottery tickets containing random numbers.
 #'
 #' This function returns a list containing 5 unique numbers from 1 to 70, and 1 number from
@@ -295,7 +326,7 @@ generateRandomLotteryTickets <- function(includeMultiplier = FALSE) {
 
 
 
-```{r, generateFrequencyBasedLotteryTicket}
+```{r, generateFrequencyBasedLotteryTicket, echo = FALSE, message = FALSE, warning = FALSE}
 #' Simulates generating a Mega Millions lottery ticket based on frequently occurring winning numbers.
 #'
 #' This function generates a lottery ticket consisting of the numbers that occur most frequently in
@@ -327,7 +358,7 @@ generateFrequencyBasedLotteryTicket <- function(trainingData) {
 
 
 
-```{r, simulateLotteryGame}
+```{r, simulateLotteryGame, echo = FALSE, message = FALSE, warning = FALSE}
 #' Simulates playing a lottery game.
 #'
 #' This function simulates playing lottery numbers against the winning numbers test dataset. 
@@ -418,10 +449,17 @@ lotteryGameSimulation <- function(ticketNumbers = NULL, trainingData = NULL, tes
 consistentLotteryNumbers <- c(07, 22, 36, 45, 46, 12)
 consistentResults <- lotteryGameSimulation(consistentLotteryNumbers, NULL, testData, 'consistent')
 
-kable(consistentResults, 'html', escape = F) %>%
+# Remove row numbers for readability purposes.
+rownames(consistentResults) <- c()
+
+# Define table column names.
+columnNames <- c('Draw Date', 'Winning Numbers', 'Mega Ball', 'Multiplier', 'Numbers Matched', 'Mega Ball Match', 'Payout')
+
+# Output results table.
+kable(consistentResults, 'html', escape = F, caption = '<center><h3>Consistent Strategy Results</h3></center>', col.names = columnNames) %>%
   column_spec(1, bold = T) %>%
-  kable_styling('striped', full_width = T) %>%
   row_spec(which(parse_number(as.character(consistentResults$payout)) > 0), bold = T, color = 'white', background = 'green') %>%
+  kable_styling('striped') %>%
   scroll_box(width = '100%', height = '700px')
 ```
 
