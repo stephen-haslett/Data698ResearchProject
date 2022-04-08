@@ -147,12 +147,14 @@ countTotalNumberOfOccurrencesByColumn <- function(dataFrameColumn, columnName) {
 #'
 #' @param megaBallMatch Boolean: TRUE if a megaball was matched in a lottery game, FALSE otherwise.
 #'
-#' @param multiplierMatch Boolean: TRUE if a multiplier number was matched, FALSE otherwise.
+#' @param multiplierMatch Optional Boolean: TRUE if a multiplier number was matched, FALSE otherwise.
+#'
+#' @param multiplier Optional Integer: Multiplier number from a simulated lottery ticket.  
 #'
 #' @return Numeric: Total winning dollar amount based on numbers matched.
 #'
 #' @export
-calculateTotalPayout <- function(matchingNumberCount, megaBallMatch, multiplerMatch, multiplier) {
+calculateTotalPayout <- function(matchingNumberCount, megaBallMatch, multiplierMatch, multiplier) {
   # No matching numbers results in a zero dollar payout.
   payout <- 0
   
@@ -202,11 +204,12 @@ calculateTotalPayout <- function(matchingNumberCount, megaBallMatch, multiplerMa
     payout <- 2
   }
   
+  # TODO: ENSURE LOGIC TO EXCLUDE THE JACKPOT FROM THE MULTIPLIER PAYOUT HERE WORKS - !(matchingNumberCount == 5 && isTRUE(megaBallMatch))!!!!!!!.
   # If the multiplier number was matched, multiply the total
   # payout amount by the value of the multiplier number.
-  if (!missing(multiplier) && !missing(multiplerMatch)) {
-    if (isTRUE(multiplerMatch)) {
-      payout <- payout * multipler
+  if (!missing(multiplier) && !missing(multiplierMatch)) {
+    if (isTRUE(multiplierMatch) && !(matchingNumberCount == 5 && isTRUE(megaBallMatch))) {
+      payout <- payout * multiplier
     }
   }
   
@@ -359,6 +362,7 @@ generateFrequencyBasedLotteryTicket <- function(trainingData) {
 
 
 ```{r, simulateLotteryGame, echo = FALSE, message = FALSE, warning = FALSE}
+#' TODO: ADD MULTIPLIER NUMBER LOGIC TO THIS FUNCTION!!
 #' Simulates playing a lottery game.
 #'
 #' This function simulates playing lottery numbers against the winning numbers test dataset. 
