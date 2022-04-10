@@ -238,7 +238,7 @@ calculateTotalPayout <- function(matchingNumberCount, megaBallMatch, multiplierM
 #' @export
 calculateColumnValuesTotal <- function(columnName, columnValues) {
   sumOfColumnValues <- 0
-  if (columnName == 'matching_multiplier' || columnName == 'matching_mega_ball' || columnName == 'multiplier') {
+  if (columnName == 'matching_multiplier' || columnName == 'matching_mega_ball') {
     sumOfColumnValues <- length(columnValues[columnValues == TRUE])
   }
   else if (columnName == 'payout') {
