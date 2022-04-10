@@ -96,7 +96,7 @@ countTotalNumberOfOccurrencesByColumn <- function(dataFrameColumn, columnName) {
         }
 
         numberOfOccurrences <- countOccurrencesOfNumber(dataFrameColumn, number)
-        occurrenceData[number, ]  <- c(number, numberOfOccurrences)
+        occurrenceData[number, ] <- c(number, numberOfOccurrences)
       }
     }
   }
@@ -207,9 +207,8 @@ calculateTotalPayout <- function(matchingNumberCount, megaBallMatch, multiplierM
     payout <- 2
   }
   
-  # TODO: ENSURE LOGIC TO EXCLUDE THE JACKPOT FROM THE MULTIPLIER PAYOUT HERE WORKS - !(matchingNumberCount == 5 && isTRUE(megaBallMatch))!!!!!!!.
-  # If the multiplier number was matched, multiply the total
-  # payout amount by the value of the multiplier number.
+  # If the multiplier number was matched, multiply the total payout amount by the value of the multiplier number.
+  # The multiplier does not apply to jackpots, so we check to ensure the payout is not a jackpot payout.
   if (!missing(multiplier) && !missing(multiplierMatch)) {
     if (isTRUE(multiplierMatch) && !(matchingNumberCount == 5 && isTRUE(megaBallMatch))) {
       payout <- payout * multiplier
@@ -465,8 +464,13 @@ lotteryGameSimulation <- function(ticketNumbers = NULL, trainingData = NULL, tes
 ### Consistent Numbers Strategry
 
 ```{r, consistentStrategyResultsTable, echo = FALSE, message = FALSE, warning = FALSE}
-consistentLotteryNumbers <- c(07, 22, 36, 45, 46, 12, 2)
+# Define the consistent lottery numbers to play - first 5 numbers are the numbers to play,
+# 6th number is the Mega Ball, and the final number is the Multiplier.
+consistentLotteryNumbers <- c(26, 05, 25, 34, 11, 15, 4)
 consistentResults <- lotteryGameSimulation(consistentLotteryNumbers, NULL, testData, 'consistent')
+
+# Calculate the largest individual payout.
+largest_individual_payout <- consistentResults[which.max(as.numeric(consistentResults$payout)), ]$payout
 
 # Calculate totals starting with total winnings.
 total_winnings <- calculateColumnValuesTotal('payout', consistentResults$payout)
@@ -482,14 +486,14 @@ total_mega_ball_matches <- calculateColumnValuesTotal('matching_mega_ball', cons
 total_multiplier_matches <- calculateColumnValuesTotal('matching_multiplier', consistentResults$matching_multiplier)
 
 # Add totals to a results summary dataframe.
-consistentResultsSummary <- data.frame(total_winning_numbers_matched, total_mega_ball_matches, total_multiplier_matches, total_winnings)
+consistentResultsSummary <- data.frame(total_winning_numbers_matched, total_mega_ball_matches, total_multiplier_matches, total_winnings, largest_individual_payout)
 
 # Output results summary as a table.
 rownames(consistentResultsSummary) <- c()
-columnNames <- c('Total Winning Numbers Matched', 'Total Mega Ball Matches', 'Total Multiplier Number Matches', 'Total Winnings')
+columnNames <- c('Winning Numbers Matched', 'Mega Ball Matches', 'Multiplier Matches', 'Total Winnings', 'Largest Individual Payout')
 kable(consistentResultsSummary, 'html', table.attr = "class=\'consistent-totals-table\'", escape = F,
-      caption = '<center><h3>Consistent Numbers Strategy Totals</h3></center>', col.names = columnNames) %>%
-  column_spec(1:4, bold = T) %>%
+      caption = '<center><h3>Consistent Numbers Strategy Results Summary</h3></center>', col.names = columnNames) %>%
+  column_spec(1:5, bold = T) %>%
   kable_styling('striped') %>%
   scroll_box(width = '100%', height = 'auto')
 
@@ -524,18 +528,20 @@ total_winnings <- currency(total_winnings)
 total_winning_numbers_matched <- calculateColumnValuesTotal('winning_numbers_matched', randomResults$winning_numbers_matched)
 total_mega_ball_matches <- calculateColumnValuesTotal('matching_mega_ball', randomResults$matching_mega_ball)
 
+largest_individual_payout <- randomResults[which.max(as.numeric(randomResults$payout)), ]$payout
+
 # Total Multiplier numbers matched.
 total_multiplier_matches <- calculateColumnValuesTotal('matching_multiplier', randomResults$matching_multiplier)
 
 # Add totals to a results summary dataframe.
-randomResultsSummary <- data.frame(total_winning_numbers_matched, total_mega_ball_matches, total_multiplier_matches, total_winnings)
+randomResultsSummary <- data.frame(total_winning_numbers_matched, total_mega_ball_matches, total_multiplier_matches, total_winnings, largest_individual_payout)
 
 # Output results summary as a table.
 rownames(randomResultsSummary) <- c()
-columnNames <- c('Total Winning Numbers Matched', 'Total Mega Ball Matches', 'Total Multiplier Number Matches', 'Total Winnings')
+columnNames <- c('Winning Numbers Matched', 'Mega Ball Matches', 'Multiplier Matches', 'Total Winnings', 'Largest Individual Payout')
 kable(randomResultsSummary, 'html', table.attr = "class=\'random-totals-table\'", escape = F,
-      caption = '<center><h3>Random Numbers Strategy Totals</h3></center>', col.names = columnNames) %>%
-  column_spec(1:4, bold = T) %>%
+      caption = '<center><h3>Random Numbers Strategy Results Summary</h3></center>', col.names = columnNames) %>%
+  column_spec(1:5, bold = T) %>%
   kable_styling('striped') %>%
   scroll_box(width = '100%', height = 'auto')
 
@@ -566,22 +572,25 @@ frequentResults <- lotteryGameSimulation(NULL, trainingData, testData, 'frequenc
 
 # Totals summary for Random Numbers strategy.
 total_winnings <- calculateColumnValuesTotal('payout', frequentResults$payout)
+
 total_winnings <- currency(total_winnings)
 total_winning_numbers_matched <- calculateColumnValuesTotal('winning_numbers_matched', frequentResults$winning_numbers_matched)
 total_mega_ball_matches <- calculateColumnValuesTotal('matching_mega_ball', frequentResults$matching_mega_ball)
+
+largest_individual_payout <- frequentResults[which.max(as.numeric(frequentResults$payout)), ]$payout
 
 # Total Multiplier numbers matched.
 total_multiplier_matches <- calculateColumnValuesTotal('matching_multiplier', frequentResults$matching_multiplier)
 
 # Add totals to a results summary dataframe.
-frequentResultsSummary <- data.frame(total_winning_numbers_matched, total_mega_ball_matches, total_multiplier_matches, total_winnings)
+frequentResultsSummary <- data.frame(total_winning_numbers_matched, total_mega_ball_matches, total_multiplier_matches, total_winnings, largest_individual_payout)
 
 # Output results summary as a table.
 rownames(frequentResultsSummary) <- c()
-columnNames <- c('Total Winning Numbers Matched', 'Total Mega Ball Matches', 'Total Multiplier Number Matches', 'Total Winnings')
+columnNames <- c('Winning Numbers Matched', 'Mega Ball Matches', 'Multiplier Matches', 'Total Winnings', 'Largest Individual Payout')
 kable(frequentResultsSummary, 'html', table.attr = "class=\'frequent-totals-table\'", escape = F,
-      caption = '<center><h3>Most Frequent Numbers Strategy Totals</h3></center>', col.names = columnNames) %>%
-  column_spec(1:4, bold = T) %>%
+      caption = '<center><h3>Most Frequent Numbers Strategy Results Summary</h3></center>', col.names = columnNames) %>%
+  column_spec(1:5, bold = T) %>%
   kable_styling('striped') %>%
   scroll_box(width = '100%', height = 'auto')
 
@@ -609,6 +618,7 @@ kable(frequentResults, 'html', table.attr = "class=\'frequent-results-table\'", 
 
 ```{r, strategyResultsComparisonTable, echo = FALSE, message = FALSE, warning = FALSE}
 # Totals summary for Consistent Numbers strategy.
+consistent_largest_payout <- consistentResults[which.max(as.numeric(consistentResults$payout)), ]$payout
 total_consistent_winnings <- calculateColumnValuesTotal('payout', consistentResults$payout)
 total_consistent_winnings <- currency(total_consistent_winnings)
 total_consistent_winning_numbers_matched <- calculateColumnValuesTotal('winning_numbers_matched', consistentResults$winning_numbers_matched)
@@ -616,10 +626,11 @@ total_consistent_mega_ball_matches <- calculateColumnValuesTotal('matching_mega_
 total_consistent_multiplier_matches <- calculateColumnValuesTotal('matching_multiplier', consistentResults$matching_multiplier)
 consistent_strategy <- 'Consistent Numbers Strategy'
 consistentResultsSummary <- data.frame(consistent_strategy, total_consistent_winning_numbers_matched, total_consistent_mega_ball_matches,
-                                       total_consistent_multiplier_matches, total_consistent_winnings)
-colnames(consistentResultsSummary) <- c('Strategy', 'Total Winning Numbers Matched', 'Total Mega Ball Matches', 'Total Multiplier Number Matches', 'Total Winnings')
+                                       total_consistent_multiplier_matches, total_consistent_winnings, consistent_largest_payout)
+colnames(consistentResultsSummary) <- c('Strategy', 'Winning Numbers Matched', 'Mega Ball Matches', 'Multiplier Matches', 'Total Winnings', 'Largest Individual Payout')
 
 # Totals summary for Random Numbers strategy.
+random_largest_payout <- randomResults[which.max(as.numeric(randomResults$payout)), ]$payout
 total_random_winnings <- calculateColumnValuesTotal('payout', randomResults$payout)
 total_random_winnings <- currency(total_random_winnings)
 total_random_winning_numbers_matched <- calculateColumnValuesTotal('winning_numbers_matched', randomResults$winning_numbers_matched)
@@ -627,10 +638,11 @@ total_random_mega_ball_matches <- calculateColumnValuesTotal('matching_mega_ball
 total_random_multiplier_matches <- calculateColumnValuesTotal('matching_multiplier', randomResults$matching_multiplier)
 random_strategy <- 'Random Numbers Strategy'
 randomResultsSummary <- data.frame(random_strategy, total_random_winning_numbers_matched, total_random_mega_ball_matches,
-                                   total_random_multiplier_matches, total_random_winnings)
-colnames(randomResultsSummary) <- c('Strategy', 'Total Winning Numbers Matched', 'Total Mega Ball Matches', 'Total Multiplier Number Matches', 'Total Winnings')
+                                   total_random_multiplier_matches, total_random_winnings, random_largest_payout)
+colnames(randomResultsSummary) <- c('Strategy', 'Winning Numbers Matched', 'Mega Ball Matches', 'Multiplier Matches', 'Total Winnings', 'Largest Individual Payout')
 
 # Totals summary for Frequent Numbers strategy.
+frequent_largest_payout <- frequentResults[which.max(as.numeric(frequentResults$payout)), ]$payout
 total_frequent_winnings <- calculateColumnValuesTotal('payout', frequentResults$payout)
 total_frequent_winnings <- currency(total_frequent_winnings)
 total_frequent_winning_numbers_matched <- calculateColumnValuesTotal('winning_numbers_matched', frequentResults$winning_numbers_matched)
@@ -638,18 +650,18 @@ total_frequent_mega_ball_matches <- calculateColumnValuesTotal('matching_mega_ba
 total_frequent_multiplier_matches <- calculateColumnValuesTotal('matching_multiplier', frequentResults$matching_multiplier)
 frequent_strategy <- 'Most Frequent Numbers Strategy'
 frequentResultsSummary <- data.frame(frequent_strategy, total_frequent_winning_numbers_matched, total_frequent_mega_ball_matches,
-                                     total_frequent_multiplier_matches, total_frequent_winnings)
+                                     total_frequent_multiplier_matches, total_frequent_winnings, frequent_largest_payout)
 
-colnames(frequentResultsSummary) <- c('Strategy', 'Total Winning Numbers Matched', 'Total Mega Ball Matches', 'Total Multiplier Number Matches', 'Total Winnings')
+colnames(frequentResultsSummary) <- c('Strategy', 'Winning Numbers Matched', 'Mega Ball Matches', 'Multiplier Matches', 'Total Winnings', 'Largest Individual Payout')
 
 strategyResultsComparison <- tibble()
 strategyResultsComparison <- bind_rows(consistentResultsSummary, randomResultsSummary, frequentResultsSummary)
 
 # Output results comparison as a table.
-columnNames <- c('Strategy', 'Total Winning Numbers Matched', 'Total Mega Ball Matches', 'Total Multiplier Number Matches', 'Total Winnings')
-kable(strategyResultsComparison %>% arrange(desc(`Total Winning Numbers Matched`)), 'html', table.attr = "class=\'strategy-results-comparision-table\'", escape = F,
+columnNames <- c('Strategy', 'Winning Numbers Matched', 'Mega Ball Matches', 'Multiplier Matches', 'Total Winnings', 'Largest Individual Payout')
+kable(strategyResultsComparison %>% arrange(desc(`Winning Numbers Matched`)), 'html', table.attr = "class=\'strategy-results-comparision-table\'", escape = F,
       caption = '<center><h3>Strategy Results Comparison</h3></center>', col.names = columnNames) %>%
-  column_spec(1:5, bold = T) %>%
+  column_spec(1:6, bold = T) %>%
   kable_styling('striped')
 ```
 
@@ -662,7 +674,7 @@ kable(strategyResultsComparison %>% arrange(desc(`Total Winning Numbers Matched`
 # TODO: THIS IS CODE FOR DEVELOPMENT PURPOSES ONLY AND SHOULD BE REMOVED ONCE DEVELOPMENT IS COMPLETE!!! 
 
 #const <- c(07, 22, 36, 45, 46, 12, 2)
-#const <- c(07, 22, 36, 43, 47, 11, 2)
+#const <- c(08, 11, 29, 32, 40, 02, 3)
 #results <- lotteryGameSimulation(NULL, trainingData, testData, 'frequency')
 #results <- lotteryGameSimulation(const, NULL, testData, 'consistent')
 #results <- lotteryGameSimulation(NULL, NULL, testData, 'random')
