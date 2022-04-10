@@ -96,7 +96,7 @@ countTotalNumberOfOccurrencesByColumn <- function(dataFrameColumn, columnName) {
         }
 
         numberOfOccurrences <- countOccurrencesOfNumber(dataFrameColumn, number)
-        occurrenceData[number, ]  <- c(number, numberOfOccurrences)
+        occurrenceData[number, ] <- c(number, numberOfOccurrences)
       }
     }
   }
@@ -207,8 +207,8 @@ calculateTotalPayout <- function(matchingNumberCount, megaBallMatch, multiplierM
     payout <- 2
   }
   
-  # If the multiplier number was matched, multiply the total payout amount by
-  # the value of the multiplier number.
+  # If the multiplier number was matched, multiply the total payout amount by the value of the multiplier number.
+  # The multiplier does not apply to jackpots, so we check to ensure the payout is not a jackpot payout.
   if (!missing(multiplier) && !missing(multiplierMatch)) {
     if (isTRUE(multiplierMatch) && !(matchingNumberCount == 5 && isTRUE(megaBallMatch))) {
       payout <- payout * multiplier
