@@ -607,7 +607,52 @@ kable(frequentResults, 'html', table.attr = "class=\'frequent-results-table\'", 
 
 ### Strategy Results Comparison
 
+```{r, strategyResultsComparisonTable, echo = FALSE, message = FALSE, warning = FALSE}
+# Totals summary for Consistent Numbers strategy.
+total_consistent_winnings <- calculateColumnValuesTotal('payout', consistentResults$payout)
+total_consistent_winnings <- currency(total_consistent_winnings)
+total_consistent_winning_numbers_matched <- calculateColumnValuesTotal('winning_numbers_matched', consistentResults$winning_numbers_matched)
+total_consistent_mega_ball_matches <- calculateColumnValuesTotal('matching_mega_ball', consistentResults$matching_mega_ball)
+total_consistent_multiplier_matches <- calculateColumnValuesTotal('matching_multiplier', consistentResults$matching_multiplier)
+consistent_strategy <- 'Consistent Numbers Strategy'
+consistentResultsSummary <- data.frame(consistent_strategy, total_consistent_winning_numbers_matched, total_consistent_mega_ball_matches,
+                                       total_consistent_multiplier_matches, total_consistent_winnings)
+colnames(consistentResultsSummary) <- c('Strategy', 'Total Winning Numbers Matched', 'Total Mega Ball Matches', 'Total Multiplier Number Matches', 'Total Winnings')
 
+# Totals summary for Random Numbers strategy.
+total_random_winnings <- calculateColumnValuesTotal('payout', randomResults$payout)
+total_random_winnings <- currency(total_random_winnings)
+total_random_winning_numbers_matched <- calculateColumnValuesTotal('winning_numbers_matched', randomResults$winning_numbers_matched)
+total_random_mega_ball_matches <- calculateColumnValuesTotal('matching_mega_ball', randomResults$matching_mega_ball)
+total_random_multiplier_matches <- calculateColumnValuesTotal('matching_multiplier', randomResults$matching_multiplier)
+random_strategy <- 'Random Numbers Strategy'
+randomResultsSummary <- data.frame(random_strategy, total_random_winning_numbers_matched, total_random_mega_ball_matches,
+                                   total_random_multiplier_matches, total_random_winnings)
+colnames(randomResultsSummary) <- c('Strategy', 'Total Winning Numbers Matched', 'Total Mega Ball Matches', 'Total Multiplier Number Matches', 'Total Winnings')
+
+# Totals summary for Frequent Numbers strategy.
+total_frequent_winnings <- calculateColumnValuesTotal('payout', frequentResults$payout)
+total_frequent_winnings <- currency(total_frequent_winnings)
+total_frequent_winning_numbers_matched <- calculateColumnValuesTotal('winning_numbers_matched', frequentResults$winning_numbers_matched)
+total_frequent_mega_ball_matches <- calculateColumnValuesTotal('matching_mega_ball', frequentResults$matching_mega_ball)
+total_frequent_multiplier_matches <- calculateColumnValuesTotal('matching_multiplier', frequentResults$matching_multiplier)
+frequent_strategy <- 'Most Frequent Numbers Strategy'
+frequentResultsSummary <- data.frame(frequent_strategy, total_frequent_winning_numbers_matched, total_frequent_mega_ball_matches,
+                                     total_frequent_multiplier_matches, total_frequent_winnings)
+
+colnames(frequentResultsSummary) <- c('Strategy', 'Total Winning Numbers Matched', 'Total Mega Ball Matches', 'Total Multiplier Number Matches', 'Total Winnings')
+
+strategyResultsComparison <- tibble()
+strategyResultsComparison <- bind_rows(consistentResultsSummary, randomResultsSummary, frequentResultsSummary)
+
+# Output results summary as a table.
+columnNames <- c('Strategy', 'Total Winning Numbers Matched', 'Total Mega Ball Matches', 'Total Multiplier Number Matches', 'Total Winnings')
+kable(strategyResultsComparison, 'html', table.attr = "class=\'strategy-results-comparision-table\'", escape = F,
+      caption = '<center><h3>Strategy Results Comparison</h3></center>', col.names = columnNames) %>%
+  column_spec(1:5, bold = T) %>%
+  kable_styling('striped') %>%
+  scroll_box(width = '100%', height = 'auto')
+```
 
 
 
