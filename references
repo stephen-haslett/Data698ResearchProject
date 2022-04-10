@@ -1,18 +1,8 @@
-Literature Review:
-
-Based on previous studies of the lottery we know that there are no ways to increase the probability of a ticket, but there are methods to maximize your winnings (Modeling of how lotto players select their number combinations dynamically,Predicting Lotto Numbers). These studies show that previous results have no impact on future results (gamblers fallacy) and numbers that are frequently chosen are due to mere coincidence (hot hand fallacy). However, these studies also point out that following these gambling ideologies could actually be detrimental as picking popular numbers could increase the risk of having to split winnings with others (Predicting Lotto Numbers)
-
-In a study against selected lotteries, it was found out that numbers with single digits (especially 1 and 9) and numbers with repeating digits, excluding numbers containing 7 and multiples of 7 (except for 7 and 77), were preferred by players (Number preferences in selected Nigerian lottery games). The same study also found that players often chose numbers that were spread out and thus appeared to be random. This desire to pick numbers that appeared to be random was also seen in another where it was seen that combinations with greater variance between numbers were more attractive (The representativeness heuristic and the choice of lottery tickets: A
-field experiment)
-
-The consensus among all of these studies is that all individual combinations are equally likely. Despite this, one could potentially increase their odds of winning by picking numbers in specific "behavior patterns" as these patterns obey different probabilities  (THE GEOMETRY OF CHANCE:LOTTO NUMBERS FOLLOW A PREDICTED PATTERN). This study compared theoretical and observed probabilities of winning combinations and found that there were certain patterns that appeared more often than others. 
-
-
-
 Papers:
 - [Predicting Lotto Numbers](https://www.parisschoolofeconomics.eu/IMG/pdf/suetens_paper.pdf)
                              (https://www.economics.ku.dk/research/publications/wp/dp_2011/1110.pdf)
-                             (http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.968.7286&rep=rep1&type=pdf) 
+                             (http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.968.7286&rep=rep1&type=pdf)
+- [THE GAMBLER’S FALLACY AND GENDER](https://deliverypdf.ssrn.com/delivery.php?ID=403118115089089088013024071084110018098035091034011074117080028026114022126073093028033027032044109027040107086090009073082118103082007012011083097005001114107077050019013124089101087103027089102124081083109118004079071087020073074103015021066072091&EXT=pdf&INDEX=TRUE)
 - [Modelling of how lotto players select their number combinations dynamically](https://www.researchgate.net/profile/Shih-Chin-Lee-2/publication/328269835_Modelling_of_how_lotto_players_select_their_number_combinations_dynamically/links/5f695d49a6fdcc0086342140/Modelling-of-how-lotto-players-select-their-number-combinations-dynamically.pdf)
 - [The representativeness heuristic and the choice of lottery tickets: A field experiment](http://journal.sjdm.org/18/18318/jdm18318.pdf)
 - [THE GEOMETRY OF CHANCE:LOTTO NUMBERS FOLLOW A PREDICTED PATTERN](http://jaguar.fcav.unesp.br/RME/fasciculos/v31/v31_n4/A7_RGiarelli.pdf)
