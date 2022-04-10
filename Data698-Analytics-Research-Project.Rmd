@@ -645,13 +645,12 @@ colnames(frequentResultsSummary) <- c('Strategy', 'Total Winning Numbers Matched
 strategyResultsComparison <- tibble()
 strategyResultsComparison <- bind_rows(consistentResultsSummary, randomResultsSummary, frequentResultsSummary)
 
-# Output results summary as a table.
+# Output results comparison as a table.
 columnNames <- c('Strategy', 'Total Winning Numbers Matched', 'Total Mega Ball Matches', 'Total Multiplier Number Matches', 'Total Winnings')
-kable(strategyResultsComparison, 'html', table.attr = "class=\'strategy-results-comparision-table\'", escape = F,
+kable(strategyResultsComparison %>% arrange(desc(`Total Winning Numbers Matched`)), 'html', table.attr = "class=\'strategy-results-comparision-table\'", escape = F,
       caption = '<center><h3>Strategy Results Comparison</h3></center>', col.names = columnNames) %>%
   column_spec(1:5, bold = T) %>%
-  kable_styling('striped') %>%
-  scroll_box(width = '100%', height = 'auto')
+  kable_styling('striped')
 ```
 
 
