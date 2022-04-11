@@ -670,11 +670,20 @@ kable(strategyResultsComparison %>% arrange(desc(`Winning Numbers Matched`)), 'h
 
 
 
-```{r}
-# TODO: THIS IS CODE FOR DEVELOPMENT PURPOSES ONLY AND SHOULD BE REMOVED ONCE DEVELOPMENT IS COMPLETE!!! 
 
+
+
+
+```{r}
+# TODO: THIS IS CODE FOR DEVELOPMENT PURPOSES ONLY AND SHOULD BE REMOVED ONCE DEVELOPMENT IS COMPLETE!!!
+
+# https://lotterycodex.com/how-to-win-the-lottery-mathematically/
+
+#frequencyNumbers <- generateFrequencyBasedLotteryTicket(trainingData)
+#frequencyNumbers
 #const <- c(07, 22, 36, 45, 46, 12, 2)
 #const <- c(08, 11, 29, 32, 40, 02, 3)
+#const <- c(17, 31, 20, 28, 14, 10, 3)
 #results <- lotteryGameSimulation(NULL, trainingData, testData, 'frequency')
 #results <- lotteryGameSimulation(const, NULL, testData, 'consistent')
 #results <- lotteryGameSimulation(NULL, NULL, testData, 'random')
@@ -697,6 +706,57 @@ kable(strategyResultsComparison %>% arrange(desc(`Winning Numbers Matched`)), 'h
 #results
 #head(testData)
 ```
+
+
+```{r calculateNumberOfRandomGamesRequiredToWinJackpot, echo = FALSE, message = FALSE, warning = FALSE}
+calculateRandomTicketsNeededToWin <- function() {
+  games <- 0
+  ticketCost <- 0
+  jackpot = FALSE
+  results <- list()
+  while (isFALSE(jackpot)) {
+    for (row in rownames(testData)) {
+      games <- games + 1
+      ticketCost <- ticketCost + 3
+      # Generate the random lottery numbers to play against the test data set.
+      lotteryNumbers <- data.frame()
+      lotteryNumbers <- colnames('winning_numbers')
+      random <- generateRandomLotteryTickets()
+      lotteryNumbers$winning_numbers <- formatC(x = random[[1]], digits = 1, flag = '0', format = 'd')
+      lotteryNumbers$mega_ball <- formatC(x = random[[2]], digits = 1, flag = '0', format = 'd')
+      lotteryNumbers$multiplier <- random[[3]]
+
+      # Count how many matching winning numbers we get per game. 
+      lotteryGame <- sapply(lotteryNumbers$winning_numbers, function(s) length(grep(s, testData[row, 'winning_numbers'])))
+      totalMatches <- sum(lotteryGame)
+
+      # Check if we get a Mega Ball match.
+      matchingMegaBall <- megaBallMatch(lotteryNumbers$mega_ball, testData[row, 'mega_ball'])
+
+      # When the amount of matching numbers required to win the jackpot is met, exit the loop by seting
+      # the "jackpot" variable to TRUE.
+      if (totalMatches == 3 && isTRUE(matchingMegaBall)) {
+        jackpot = TRUE
+      }
+    }
+  }
+  
+  if (isTRUE(jackpot)) {
+    # Populate the results list so we can return the results.
+    ticketCost <- currency(ticketCost)
+    results <- append(games, ticketCost)
+  }
+  
+  return(results)
+}
+
+gameResults <- calculateRandomTicketsNeededToWin()
+games <- gameResults[[1]]
+cost <- currency(gameResults[[2]])
+games
+cost
+```
+
 
 
 ```{r numberOfOccurrenceBarChart, echo = FALSE, message = FALSE, warning = FALSE}
