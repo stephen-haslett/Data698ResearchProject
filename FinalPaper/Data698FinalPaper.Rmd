@@ -1,7 +1,7 @@
 ---
-title: "Data 698 - Final Project Proposal"
+title: "Data 698 - Final Project"
 subtitle: "Predicting Winning New York Mega Millions Lottery Numbers"
-author: "Stephen Haslett, Richard Zheng"
+author: "Richard Zheng, Stephen Haslett"
 date: "2/13/2022"
 output:
  html_document:
@@ -16,10 +16,38 @@ knitr::opts_chunk$set(echo = TRUE)
 library(kableExtra)
 ```
 
-
 ![](./images/MegaMillionsLogo.png)
 
+## Abstract
+Abstract: use 250 words or less to summarize your problem, methodology, and major outcomes.
+
+## Keywords
+select a few keywords (up to five) related to your work.
+
 ## Introduction
+
+
+## Literature Review
+discuss how other researchers have addressed similar problems, what their achievements are, and what the advantage and drawbacks of each reviewed approach are.  Explain how your investigation is similar or different from the state-of-the-art. Please do not discuss paper one at a time, instead, identify key characteristics of your topic, and discuss them as a whole. Please cite the relevant papers where appropriate. 
+
+## Methodology
+discuss the key aspects of your model/problem. If you work on real data, explain how you verified your model. If you work on theoretical aspects of data science advancement, explain your method with details (you can put the theory and proof in the appendix if you see fit).
+
+## Results
+describe what you did (validation, experimental design, the study of the theories, etc.), and what you found out (statistical analysis, comparison of various approaches, system performance improvement, optimization, new algorithm development, etc.).
+
+## Summary
+conclude your findings, suggest areas for future work.
+
+## Appendices
+(put your detailed code here.)
+
+
+
+
+
+
+
 
 The purpose of this investigation is to establish whether or not it is possible to predict future winning lottery numbers based on past winning results.
 To do this, we will analyze the past 20 years of winning numbers for the [Mega Millions](https://nylottery.ny.gov/draw-game/?game=megamillions) lottery to answer the following questions:

@@ -43,7 +43,7 @@ trainingData <- megaMillionsWinningNumbers[row.names(megaMillionsWinningNumbers)
 testData <- megaMillionsWinningNumbers[row.names(megaMillionsWinningNumbers) %in% 300+1:nrow(megaMillionsWinningNumbers), ]
 ```
 
-
+## {.tabset}
 
 ```{r countOccurrencesOfNumber, echo = FALSE, message = FALSE, warning = FALSE}
 #' Helper function that counts the number of times a given number occurs within a dataframe column.
@@ -685,8 +685,21 @@ strategyResultsComparison %>%
 ```
 
 
-
-
+```{r, strategyResultsComparisonMultiplierMatchesGraph, echo = FALSE, message = FALSE, warning = FALSE}
+strategyResultsComparison
+strategyResultsComparison %>%
+  ggplot( aes(x = reorder(Strategy, - `Winning Numbers Matched`), fill = Strategy, y = `Winning Numbers Matched`)) +
+    ggtitle('Winning Numbers Matched') +
+    labs(y = 'Numbers Matched', x = '') +
+    geom_bar(stat = 'identity') +
+    scale_fill_manual(values = c('#FFA500', "#DC143C", '#006400')) +
+    scale_y_continuous(limits = c(0, 550), breaks = seq(0, 550, by = 50)) +
+    theme(legend.position = 'right',
+          legend.justification = 'top',
+          panel.background = element_blank(),
+          axis.text.x = element_blank(),
+          axis.ticks.x = element_blank())
+```
 
 
 ```{r}
