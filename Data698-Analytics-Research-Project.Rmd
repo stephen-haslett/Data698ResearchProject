@@ -25,6 +25,8 @@ library(caTools)
 library(data.table)
 library(formattable)
 library(kableExtra)
+library(hrbrthemes)
+library(viridis)
 ```
 
 
@@ -461,7 +463,7 @@ lotteryGameSimulation <- function(ticketNumbers = NULL, trainingData = NULL, tes
 
 
 
-### Consistent Numbers Strategry
+### Consistent Numbers Strategy
 
 ```{r, consistentStrategyResultsTable, echo = FALSE, message = FALSE, warning = FALSE}
 # Define the consistent lottery numbers to play - first 5 numbers are the numbers to play,
@@ -667,14 +669,36 @@ kable(strategyResultsComparison %>% arrange(desc(`Winning Numbers Matched`)), 'h
 
 
 
+```{r, strategyResultsComparisonMegaballMatchesGraph, echo = FALSE, message = FALSE, warning = FALSE}
+strategyResultsComparison %>%
+  ggplot( aes(x = reorder(Strategy, - `Mega Ball Matches`), fill = Strategy, y = `Mega Ball Matches`)) +
+    ggtitle('Mega Ball Matches') +
+    labs(y = 'Number of Matches', x = '') +
+    geom_bar(stat = 'identity') +
+    scale_fill_manual(values = c('#FFA500', "#DC143C", '#006400')) +
+    scale_y_continuous(limits = c(0, 60), breaks = seq(0, 60, by = 5)) +
+    theme(legend.position = 'right',
+          legend.justification = 'top',
+          panel.background = element_blank(),
+          axis.text.x = element_blank(),
+          axis.ticks.x = element_blank())
+```
+
+
+
 
 
 
 ```{r}
-# TODO: THIS IS CODE FOR DEVELOPMENT PURPOSES ONLY AND SHOULD BE REMOVED ONCE DEVELOPMENT IS COMPLETE!!! 
+# TODO: THIS IS CODE FOR DEVELOPMENT PURPOSES ONLY AND SHOULD BE REMOVED ONCE DEVELOPMENT IS COMPLETE!!!
 
+# https://lotterycodex.com/how-to-win-the-lottery-mathematically/
+
+#frequencyNumbers <- generateFrequencyBasedLotteryTicket(trainingData)
+#frequencyNumbers
 #const <- c(07, 22, 36, 45, 46, 12, 2)
 #const <- c(08, 11, 29, 32, 40, 02, 3)
+#const <- c(17, 31, 20, 28, 14, 10, 3)
 #results <- lotteryGameSimulation(NULL, trainingData, testData, 'frequency')
 #results <- lotteryGameSimulation(const, NULL, testData, 'consistent')
 #results <- lotteryGameSimulation(NULL, NULL, testData, 'random')
@@ -697,6 +721,10 @@ kable(strategyResultsComparison %>% arrange(desc(`Winning Numbers Matched`)), 'h
 #results
 #head(testData)
 ```
+
+
+
+
 
 
 ```{r numberOfOccurrenceBarChart, echo = FALSE, message = FALSE, warning = FALSE}

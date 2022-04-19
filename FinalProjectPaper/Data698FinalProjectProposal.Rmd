@@ -1,0 +1,147 @@
+---
+title: "Data 698 - Final Project Proposal"
+subtitle: "Predicting Winning New York Mega Millions Lottery Numbers"
+author: "Stephen Haslett, Richard Zheng"
+date: "2/13/2022"
+output:
+ html_document:
+    toc: true
+    toc_float: true
+    theme: flatly
+    highlight: tango
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(kableExtra)
+```
+
+
+![](./images/MegaMillionsLogo.png)
+
+## Introduction
+
+The purpose of this investigation is to establish whether or not it is possible to predict future winning lottery numbers based on past winning results.
+To do this, we will analyze the past 20 years of winning numbers for the [Mega Millions](https://nylottery.ny.gov/draw-game/?game=megamillions) lottery to answer the following questions:
+
+- Is it possible to predict future winning lottery numbers based on previous results?
+
+- Can a pattern be identified regarding which winning numbers are drawn most often per game over time?
+
+- Does using these numbers increase our chances of winning?
+
+- In terms of winning, is it better to play the same numbers, or pick different numbers every game?
+
+- What strategies can be applied to ensure our chances of winning are increased (if any)?
+
+- How do winning numbers correlate to payout amounts?
+
+- What statistical theories are applicable to our goal, and which theories can benefit us (if any):
+
+    - [Law of Large Numbers](https://en.wikipedia.org/wiki/Law_of_large_numbers)
+    - [Monty Hall Problem](https://en.wikipedia.org/wiki/Monty_Hall_problem)
+    - [Gambler's Fallacy](https://en.wikipedia.org/wiki/Gambler%27s_fallacy)
+    - [Hot Hand Fallacy](https://www.investopedia.com/terms/h/hot-hand.asp#:~:text=The%20hot%20hand%20fallacy%20is,rolled%20it%20in%20the%20past)
+
+Similar to previous studies, we want to understand whether or not it is possible to obtain an edge when playing the lottery. With the Data that we have gathered
+(_From the nylottery and megamillions websites_), we will identify data trends and use simulations to answer the aforementioned questions. 
+In addition to testing various "winning strategies", we also want to explore lottery payout amounts, as jackpot numbers change, and prize money expections.
+
+### Mega Millions Lottery Game
+
+Mega Millions is a US multi-state lottery game that is drawn twice a week on Tuesdays and Fridays.
+To participate in the game, players purchase one or more lottery tickets at a cost of $2 per ticket.
+Players must pick **5** _unique numbers_ from **1** to **70**, and **1** number from **1** to **25** for the _Mega Ball_.
+Optionally, players can opt for randomly selected numbers at the time of ticket purchase.
+
+### Game Rules
+
+Lottery numbers are drawn randomly **twice** a week on _Tuesdays_ and _Fridays_ at 11PM (EST). 
+50% of lottery ticket sales is allocated as prize money (_75% of which is__used for the jackpot payout_). 
+If all of the numbers selected by the player (_including the Mega Ball_) are drawn, then the player wins the jackpot. 
+If multiple players win the jackpot, then the jackpot is divided equally among the winning players. 
+If no one wins the jackpot for a particular drawing, then the jackpot amount rolls over to the next drawing. 
+The remaining 25% of the prize money is then allocated to lower tiered prizes.
+
+**Mega Millions Prize Tiers**
+
+```{r, prizeTiers, echo=FALSE, message=FALSE, warning=FALSE}
+tableData <- data.frame(c("Jackpot", "Second Prize", "Third Prize", "Fourth Prize", "Fifth Prize",  "Sixth Prize", "Seventh Prize", "Eighth Prize", "Ninth Prize"),
+                        c("5 matching numbers with the Mega Ball", "5 matching numbers", "4 matching numbers with the Mega Ball",
+                          "4 matching numbers", "3 matching numbers with the Mega Ball", "3 matching numbers", "2 matching numbers with the Mega Ball",
+                          "1 matching number with the Mega Ball", "No matching numbers with the Mega Ball"),
+                        c("75% of the total prize money", "$1,000,000", "$10,000", "$500", "$200", "$10", "$10", "$4", "$2"),
+                        c("1 in 302,575,350", "1 in 12,607,306", "1 in 931,001", "1 in 38,792", "1 in 14,547", "1 in 606", "1 in 693", "1 in 89", "1 in 37"))
+                          
+colnames(tableData) <- c("Prize", "Winning Criterion", "Payout", "Odds of Winning")
+
+kable(tableData, caption = 'Prize Tiers and Payouts') %>%
+      kable_styling(bootstrap_options = c('striped', 'hover', 'condensed', 'responsive')) %>% 
+      scroll_box(width = '100%')
+```
+
+\ 
+
+Additionally, Players can pay an extra dollar to purchase a multiplier number. 
+Multiplier numbers range from **2** to **5**. 
+
+If a player picks a winning multiplier number and also winning lottery numbers, 
+then the payout for the winning lottery numbers will be multiplied by the winning multiplier number. 
+
+
+### Relevant Academic Papers and Articles
+
+- [Predicting Lotto Numbers](https://www.parisschoolofeconomics.eu/IMG/pdf/suetens_paper.pdf)
+
+- [Math Explains Likely Long Shots, Miracles and Winning the Lottery](https://www.scientificamerican.com/article/math-explains-likely-long-shots-miracles-and-winning-the-lottery/#:~:text=One%20of%20the%20key%20strands,may%20be%20at%20each%20opportunity.)
+
+- [The Lottery: Is It Ever Worth Playing?](https://www.investopedia.com/managing-wealth/worth-playing-lottery/)
+
+- [Basic Probability Theory and Statistics](https://towardsdatascience.com/basic-probability-theory-and-statistics-3105ab637213)
+
+Most of these papers agree that trying to predict next weeks lottery numbers is absurd. Despite popular beliefs and fallacies, there is no reliable way to predict the lottery. If the odds of winning the lottery are so small, someone may ask: "how come people win all the time?".
+
+Although the odds of winning the Mega Millions are about one in 300 million, people win all the time because millions of people play weekly.
+While we agree with the overall consensus, that the lottery is unpredictable, we still want to see if there are any strategies to even get a slight edge when playing.
+
+## Data Source
+
+The main dataset that will be used for this project can be found on the [NY Open Data](https://data.ny.gov/) website,
+and contains biweekly winning Mega Millions lottery numbers from 2002, through the current week. 
+The dataset is in CSV format and can be accessed here:
+
+[Lottery Mega Millions Winning Numbers: Beginning 2002](https://data.ny.gov/Government-Finance/Lottery-Mega-Millions-Winning-Numbers-Beginning-20/5xaw-6ayf/data). 
+
+**Winning history**: https://www.megamillions.com/jackpot-history
+
+**Drawing history**: https://www.megamillions.com/Winning-Numbers/Previous-Drawings.aspx
+
+As of writing, the set consists of 2058 observations broken into 4 columns:
+
+- **Draw Date**: _The date on which the lottery draw took place_.
+- **Winning Numbers**: _The winning numbers for the given lottery draw_.
+- **Mega Ball**: _The winning Mega Ball for the draw_.
+- **Multiplier**: _The winning multiplier number for the draw_.
+
+## Approach
+
+It is impossible to evaluate our predictions against future winning lottery numbers so we will split the dataset into separate training, and test sets. 
+The training set will be used to identify winning number patterns, and the test set will be used to establish if our predictions influence the winning numbers.
+
+### Lottery Number Selection Strategies
+
+There are several lottery number selection strategies that we need to simulate:\
+      
+**Same Number Selection**\
+This is the simplist selection strategy. We will pick the 6 numbers required by the game (_5 unique numbers, and 1 Mega Ball number_) within the required range
+(_1 to 70_ for unique numbers, and _1 to 25_ for the Mega Ball), and a **Multiplier** number within the required range of _2 to 5_.
+       
+**Random Number Selection**\
+To simulate picking random lottery numbers, we will write a number generator in R that randomly generates the required 6 numbers and optional Multiplier number.
+
+**Most Frequent Winning Numbers Selection**\
+To generate number selections based on the most frequent winning numbers, we will write an R program that mines the training data and counts how often specific winning numbers occur. We will then rank these numbers and based on how high specific numbers rank, we will include them in our selection.
+
+### Selection Strategy Evaluation
+
+In order to evaluate which selection strategy (_if any_) is most effective, we will compare the strategy selections against the test data to evaluate which strategy results in winning selections most often. This will entail writing an R program that runs each individual strategy against the test data. The program will count the amount of times each strategy results in winning results, and rank them accordingly. Whichever strategy ranks highest, will tell us which strategy is most effective at predicting winning lottery results.
