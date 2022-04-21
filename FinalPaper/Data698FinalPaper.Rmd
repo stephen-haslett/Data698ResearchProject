@@ -24,22 +24,24 @@ The goal of this study is to establish if it is possible to strategically play t
 
 Abstract: use 250 words or less to summarize your problem, methodology, and major outcomes.
 
-**Keywords**: _Probability_, _Lottery Strategy_, _Gambler's Fallacy_, _Hot Hand Fallacy_.
+**Keywords**: _probability_, _lottery strategy_, _gambler's fallacy_, _hot hand fallacy_.
 
-select a few keywords (up to five) related to your work.
 
 ## Introduction
 
 
 ## Literature Review
 
-Similiar studies have suggested that while it is not possible to increase your chances of winning the lottery, it is possible to to maximize your winnings (1). These studies show that previous results have no impact on future results (gamblers fallacy) and numbers that are frequently chosen are due to mere coincidence (hot hand fallacy). However, these studies also point out that following these gambling ideologies could actually be detrimental as picking popular numbers could increase the risk of having to split winnings with others (Sutens)
+Similiar studies have suggested that while it is not possible to increase your chances of winning the lottery, it is possible to maximize your winnings. These studies show that previous results have no impact on future results (_gambler's fallacy_) and numbers that are frequently chosen are due to mere coincidence (_hot hand fallacy_). They go further to suggest that following these gambling ideologies could infact be detrimental as picking popular numbers increases the risk of having to split winnings with others due to the [Parimutuel](https://en.wikipedia.org/wiki/Parimutuel_betting) nature of lottery games [(1)](#references).
 
 
-In a study against selected lotteries, it was found out that numbers with single digits (especially 1 and 9) and numbers with repeating digits, excluding numbers containing 7 and multiples of 7 (except for 7 and 77), were preferred by players (Otekunrin). The same study also found that players often chose numbers that were spread out and thus appeared to be random. This desire to pick numbers that appeared to be random was also seen in another where it was seen that combinations with greater variance between numbers were more attractive (Krawczyk)
+In a study focusing on lottery strategies and player's behavioral biases, it was found that numbers with single digits (especially 1 and 9) and numbers with repeating digits, excluding numbers containing 7 and multiples of 7 (except for 7 and 77), were preferred by players (Otekunrin). The same study also found that players often chose numbers that were spread out and thus appeared to be random. This desire to pick numbers that appeared to be random was also seen in another where it was seen that combinations with greater variance between numbers were more attractive [(2)](#references).
 
 
 The consensus among all of these studies is that all individual combinations are equally likely. Despite this, one could potentially increase their odds of winning by picking numbers in specific "behavior patterns" as these patterns obey different probabilities (Gianella). This study compared theoretical and observed probabilities of winning combinations and found that there were certain patterns that appeared more often than other
+
+
+
 
 discuss how other researchers have addressed similar problems, what their achievements are, and what the advantage and drawbacks of each reviewed approach are.  Explain how your investigation is similar or different from the state-of-the-art. Please do not discuss paper one at a time, instead, identify key characteristics of your topic, and discuss them as a whole. Please cite the relevant papers where appropriate. 
 
@@ -189,12 +191,14 @@ In order to evaluate which selection strategy (_if any_) is most effective, we w
 
 
 
-## References
+## References  {#references}
 
-1. Galbo-Jørgensen, Claus B., Suetens, Sigrid., Tyran, Jean-Robert. (2012). Predicting Lotto Numbers - A natural experiment on the gambler’s fallacy and the hot hand fallacy
-   https://www.parisschoolofeconomics.eu/IMG/pdf/suetens_paper.pdf
+1. **_Galbo-Jørgensen, Claus B., Suetens, Sigrid., Tyran, Jean-Robert. (2012)_**. [Predicting Lotto Numbers - A natural experiment on
+the gambler’s fallacy and the hot hand fallacy](https://www.parisschoolofeconomics.eu/IMG/pdf/suetens_paper.pdf).
     
-2. 
+2. **_Kachurka Raman., Krawczyk Michal. (2020)_**. [Lottery "Strategies": Monetizing Players' Behavioral Biases](https://www.wne.uw.edu.pl/application/files/1616/3609/7214/WNE_WP335.pdf). 
+
+
 
 
 
