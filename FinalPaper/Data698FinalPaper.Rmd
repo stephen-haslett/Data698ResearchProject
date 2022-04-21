@@ -1,7 +1,7 @@
 ---
-title: "Data 698 - Final Project Proposal"
+title: "Data 698 - Final Project"
 subtitle: "Predicting Winning New York Mega Millions Lottery Numbers"
-author: "Stephen Haslett, Richard Zheng"
+author: "Richard Zheng, Stephen Haslett"
 date: "2/13/2022"
 output:
  html_document:
@@ -16,10 +16,53 @@ knitr::opts_chunk$set(echo = TRUE)
 library(kableExtra)
 ```
 
-
 ![](./images/MegaMillionsLogo.png)
 
+## Abstract
+
+The goal of this study is to establish if it is possible to strategically play the lottery in order to increase both prize money, and the chances of winning.
+
+Abstract: use 250 words or less to summarize your problem, methodology, and major outcomes.
+
+**Keywords**: _probability_, _lottery strategy_, _gambler's fallacy_, _hot hand fallacy_.
+
+
 ## Introduction
+
+
+## Literature Review
+
+Similiar studies have suggested that while it is not possible to increase your chances of winning the lottery, it is possible to maximize your winnings. These studies show that previous results have no impact on future results (_gambler's fallacy_) and numbers that are frequently chosen are due to mere coincidence (_hot hand fallacy_). They go further to suggest that following these gambling ideologies could infact be detrimental as picking popular numbers increases the risk of having to split winnings with others due to the [Parimutuel](https://en.wikipedia.org/wiki/Parimutuel_betting) nature of lottery games [(1)](#references).
+
+
+In a study focusing on lottery strategies and player's behavioral biases, it was found that numbers with single digits (especially 1 and 9) and numbers with repeating digits, excluding numbers containing 7 and multiples of 7 (except for 7 and 77), were preferred by players (Otekunrin). The same study also found that players often chose numbers that were spread out and thus appeared to be random. This desire to pick numbers that appeared to be random was also seen in another where it was seen that combinations with greater variance between numbers were more attractive [(2)](#references).
+
+
+The consensus among all of these studies is that all individual combinations are equally likely. Despite this, one could potentially increase their odds of winning by picking numbers in specific "behavior patterns" as these patterns obey different probabilities (Gianella). This study compared theoretical and observed probabilities of winning combinations and found that there were certain patterns that appeared more often than other
+
+
+
+
+discuss how other researchers have addressed similar problems, what their achievements are, and what the advantage and drawbacks of each reviewed approach are.  Explain how your investigation is similar or different from the state-of-the-art. Please do not discuss paper one at a time, instead, identify key characteristics of your topic, and discuss them as a whole. Please cite the relevant papers where appropriate. 
+
+## Methodology
+discuss the key aspects of your model/problem. If you work on real data, explain how you verified your model. If you work on theoretical aspects of data science advancement, explain your method with details (you can put the theory and proof in the appendix if you see fit).
+
+## Results
+describe what you did (validation, experimental design, the study of the theories, etc.), and what you found out (statistical analysis, comparison of various approaches, system performance improvement, optimization, new algorithm development, etc.).
+
+## Summary
+conclude your findings, suggest areas for future work.
+
+## Appendices
+(put your detailed code here.)
+
+
+
+
+
+
+
 
 The purpose of this investigation is to establish whether or not it is possible to predict future winning lottery numbers based on past winning results.
 To do this, we will analyze the past 20 years of winning numbers for the [Mega Millions](https://nylottery.ny.gov/draw-game/?game=megamillions) lottery to answer the following questions:
@@ -145,3 +188,17 @@ To generate number selections based on the most frequent winning numbers, we wil
 ### Selection Strategy Evaluation
 
 In order to evaluate which selection strategy (_if any_) is most effective, we will compare the strategy selections against the test data to evaluate which strategy results in winning selections most often. This will entail writing an R program that runs each individual strategy against the test data. The program will count the amount of times each strategy results in winning results, and rank them accordingly. Whichever strategy ranks highest, will tell us which strategy is most effective at predicting winning lottery results.
+
+
+
+## References  {#references}
+
+1. **_Galbo-Jørgensen, Claus B., Suetens, Sigrid., Tyran, Jean-Robert. (2012)_**. [Predicting Lotto Numbers - A natural experiment on
+the gambler’s fallacy and the hot hand fallacy](https://www.parisschoolofeconomics.eu/IMG/pdf/suetens_paper.pdf).
+    
+2. **_Kachurka Raman., Krawczyk Michal. (2020)_**. [Lottery "Strategies": Monetizing Players' Behavioral Biases](https://www.wne.uw.edu.pl/application/files/1616/3609/7214/WNE_WP335.pdf). 
+
+
+
+
+
