@@ -27,42 +27,22 @@ Abstract: use 250 words or less to summarize your problem, methodology, and majo
 **Keywords**: _probability_, _lottery strategy_, _gambler's fallacy_, _hot hand fallacy_.
 
 
-## Introduction
-
-
 ## Literature Review
 
-Similiar studies have suggested that while it is not possible to increase your chances of winning the lottery, it is possible to maximize your winnings. These studies show that previous results have no impact on future results (_gambler's fallacy_) and numbers that are frequently chosen are due to mere coincidence (_hot hand fallacy_). They go further to suggest that following these gambling ideologies could infact be detrimental as picking popular numbers increases the probability of having to split winnings with others due to the [Parimutuel](https://en.wikipedia.org/wiki/Parimutuel_betting) nature of lottery games [(1)](#references).
+In a 2012 study on predicting lottery numbers (_Galbo-Jørgensen, Claus B., Suetens, Sigrid., Tyran, Jean-Robert. 2012_), it was observed that many lottery players fall prey to the [gambler's fallacy](https://en.wikipedia.org/wiki/Gambler%27s_fallacy) when picking lottery numbers. According to the gambler's fallacy, players tend to avoid picking numbers that were recently included in the winning numbers set under the believe that if an event occurred recently, it is less likely to occur again. Contrary to this, other players pick numbers in accordance with the [hot hand fallacy](https://en.wikipedia.org/wiki/Hot_hand) which is the believe in a continuation of a trend, i.e. if specific numbers were recently included in the winning numbers set, then they are more likely to occur in future drawings [(1)](#references).
+
+Otekunrin and Folorunso (_2021_) observed that some players will select lottery numbers based on personally significant numbers such as birthdays, house numbers, anniversary dates etc., whilst others heuristically choose numbers based on their frequency of occurrence in previous drawings. When a heuristic approach is applied to lottery number selection, it was observed that players tend to believe that well-spread out numbers are better than distinctive ones even though both have the same probability of occurrence [(2)](#references).
+
+While the aforementioned studies are more concerned with the psychology behind picking lottery numbers, this study focuses on whether or not these selection techniques increase one's chances of selecting winning lottery numbers. We are more concerned with proving these techniques to be either effective or ineffective through the application of mathematics, than with why people believe them to be so.
+
+This approach is in the same vein as Renato Gianella's approach to this subject. Gianella (_2014_) observed that winning lottery number combinations follow a predictable pattern. By applying probability theory to lottery drawings, Gianella established that the results of a lottery draw follow the same behavior pattern as predicted by the Law of Large Numbers - _When an event is repeated many times, the average of the results from all events should be close to the expected result_ [(3)](#references).
+
+Gianella's method is based on groups of number combinations built from previous lottery results. When tested, his method demonstrated that the probability that a given number combination occurs is not the same for all groups, and that certain groups display a higher probability of winning.
+
+This study does not assume that that Gianella's method is effective, rather it sets out to adopt similar strategies to prove that it, and other strategies are either effective or ineffective in increasing one's chances of winning the lottery.
 
 
-In a study focusing on lottery number preferences, it was found that most players have a preference for small numbers (_especially 1 and 9_). Numbers with repeating digits, excluding numbers containing 7 and multiples of 7 (_except for 7 and 77_), are also preferred. The same study also found that players often chose numbers that are spread out and thus appear to be random [(2)](#references). In an additional study, numbers that appear to be random, and combinations with greater variance, were found to be more attractive [(3)](#references).
-
-
-The consensus among all of these studies is that all individual combinations are equally likely. Despite this, one could potentially increase their odds of winning by picking numbers in specific "behavior patterns" as these patterns obey different probabilities (Gianella). This study compared theoretical and observed probabilities of winning combinations and found that there were certain patterns that appeared more often than other
-
-
-
-
-discuss how other researchers have addressed similar problems, what their achievements are, and what the advantage and drawbacks of each reviewed approach are.  Explain how your investigation is similar or different from the state-of-the-art. Please do not discuss paper one at a time, instead, identify key characteristics of your topic, and discuss them as a whole. Please cite the relevant papers where appropriate. 
-
-## Methodology
-discuss the key aspects of your model/problem. If you work on real data, explain how you verified your model. If you work on theoretical aspects of data science advancement, explain your method with details (you can put the theory and proof in the appendix if you see fit).
-
-## Results
-describe what you did (validation, experimental design, the study of the theories, etc.), and what you found out (statistical analysis, comparison of various approaches, system performance improvement, optimization, new algorithm development, etc.).
-
-## Summary
-conclude your findings, suggest areas for future work.
-
-## Appendices
-(put your detailed code here.)
-
-
-
-
-
-
-
+## Introduction
 
 The purpose of this investigation is to establish whether or not it is possible to predict future winning lottery numbers based on past winning results.
 To do this, we will analyze the past 20 years of winning numbers for the [Mega Millions](https://nylottery.ny.gov/draw-game/?game=megamillions) lottery to answer the following questions:
@@ -88,7 +68,7 @@ To do this, we will analyze the past 20 years of winning numbers for the [Mega M
 
 Similar to previous studies, we want to understand whether or not it is possible to obtain an edge when playing the lottery. With the Data that we have gathered
 (_From the nylottery and megamillions websites_), we will identify data trends and use simulations to answer the aforementioned questions. 
-In addition to testing various "winning strategies", we also want to explore lottery payout amounts, as jackpot numbers change, and prize money expections.
+In addition to testing various "winning strategies", we also want to explore lottery payout amounts, as jackpot numbers change, and prize money expectations.
 
 ### Mega Millions Lottery Game
 
@@ -132,15 +112,22 @@ If a player picks a winning multiplier number and also winning lottery numbers,
 then the payout for the winning lottery numbers will be multiplied by the winning multiplier number. 
 
 
-### Relevant Academic Papers and Articles
+## Methodology
+discuss the key aspects of your model/problem. If you work on real data, explain how you verified your model. If you work on theoretical aspects of data science advancement, explain your method with details (you can put the theory and proof in the appendix if you see fit).
 
-- [Predicting Lotto Numbers](https://www.parisschoolofeconomics.eu/IMG/pdf/suetens_paper.pdf)
+## Results
+describe what you did (validation, experimental design, the study of the theories, etc.), and what you found out (statistical analysis, comparison of various approaches, system performance improvement, optimization, new algorithm development, etc.).
 
-- [Math Explains Likely Long Shots, Miracles and Winning the Lottery](https://www.scientificamerican.com/article/math-explains-likely-long-shots-miracles-and-winning-the-lottery/#:~:text=One%20of%20the%20key%20strands,may%20be%20at%20each%20opportunity.)
+## Summary
+conclude your findings, suggest areas for future work.
 
-- [The Lottery: Is It Ever Worth Playing?](https://www.investopedia.com/managing-wealth/worth-playing-lottery/)
+## Appendices
+(put your detailed code here.)
 
-- [Basic Probability Theory and Statistics](https://towardsdatascience.com/basic-probability-theory-and-statistics-3105ab637213)
+
+
+
+
 
 Most of these papers agree that trying to predict next weeks lottery numbers is absurd. Despite popular beliefs and fallacies, there is no reliable way to predict the lottery. If the odds of winning the lottery are so small, someone may ask: "how come people win all the time?".
 
@@ -176,7 +163,7 @@ The training set will be used to identify winning number patterns, and the test 
 There are several lottery number selection strategies that we need to simulate:\
       
 **Same Number Selection**\
-This is the simplist selection strategy. We will pick the 6 numbers required by the game (_5 unique numbers, and 1 Mega Ball number_) within the required range
+This is the simplest selection strategy. We will pick the 6 numbers required by the game (_5 unique numbers, and 1 Mega Ball number_) within the required range
 (_1 to 70_ for unique numbers, and _1 to 25_ for the Mega Ball), and a **Multiplier** number within the required range of _2 to 5_.
        
 **Random Number Selection**\
@@ -190,15 +177,16 @@ To generate number selections based on the most frequent winning numbers, we wil
 In order to evaluate which selection strategy (_if any_) is most effective, we will compare the strategy selections against the test data to evaluate which strategy results in winning selections most often. This will entail writing an R program that runs each individual strategy against the test data. The program will count the amount of times each strategy results in winning results, and rank them accordingly. Whichever strategy ranks highest, will tell us which strategy is most effective at predicting winning lottery results.
 
 
-
 ## References  {#references}
 
-1. **_Galbo-Jørgensen, Claus B., Suetens, Sigrid., Tyran, Jean-Robert. (2012)_**. [Predicting Lotto Numbers - A natural experiment on
-the gambler’s fallacy and the hot hand fallacy](https://www.parisschoolofeconomics.eu/IMG/pdf/suetens_paper.pdf).
+1. **_Galbo-Jørgensen, Claus B., Suetens, Sigrid., Tyran, Jean-Robert. (2012)_** \
+[Predicting Lotto Numbers - A natural experiment on the gambler’s fallacy and the hot hand fallacy](https://www.parisschoolofeconomics.eu/IMG/pdf/suetens_paper.pdf)
     
-2. **_Oluwaseun A. Otekunrin., Adesola G. Folorunso., Kehinde O. Alawode. (2021)_**. [Number Preferences In Selected Nigerian Lottery Games](http://journal.sjdm.org/20/201204a/jdm201204a.pdf).
+2. **_Oluwaseun A. Otekunrin., Adesola G. Folorunso., Kehinde O. Alawode. (2021)_** \
+[Number Preferences In Selected Nigerian Lottery Games](http://journal.sjdm.org/20/201204a/jdm201204a.pdf)
 
-3. **_Kachurka Raman, Krawczyk Michal. (2020)_**. [Lottery "Strategies": Monetizing Players' Behavioral Biases](https://www.wne.uw.edu.pl/application/files/1616/3609/7214/WNE_WP335.pdf).
+3. **_Gianella Renato. (2014)_** \
+[The Geometry Of Chance:Lotto Numbers Follow A Predicted Pattern](http://jaguar.fcav.unesp.br/RME/fasciculos/v31/v31_n4/A7_RGiarelli.pdf)
 
 
 
