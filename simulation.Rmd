@@ -1,0 +1,187 @@
+---
+title: "simulation"
+author: "Richard"
+date: "4/11/2022"
+output: html_document
+---
+
+```{r}
+library(tidyverse)
+```
+
+
+```{r}
+
+# function that generates random ticket based on numbers and megaball vectors
+random_ticket = function(numbers,megaball){
+  ticket = sample(numbers,5,replace=FALSE)
+  ball = sample(megaball,1,replace=FALSE)
+  return(list('numbers' = ticket, 'megaball' = ball))
+}
+  
+
+# function that gives cost of ticket based on multiplier
+ticket_cost = function(multiplier=FALSE){
+  cost = 2
+  multi = 1
+  if (multiplier==TRUE){
+    cost = cost + 1
+    multi = sample(2:5,1)
+  }
+  return(list('cost' = cost,'multiplier' = multi))
+}
+
+
+# function that compares ticket to winning numbers
+number_matched = function(ticket, win_nums){
+  megaball = 0
+  matched = 0
+  if (ticket$megaball == win_nums$megaball){megaball=1}
+  for (num in ticket$numbers){
+    for (target in win_nums$numbers){
+      if (num == target){
+        matched = matched + 1
+      }
+    }
+  }
+  return(list('match'= matched,'megaball'= megaball))
+}
+
+
+winnings = function(num_match, mega_match){
+  if (mega_match == 1){
+    if(num_match == 0){
+      return (2)
+    }
+    else if (num_match == 1){
+      return (4)
+    }
+    else if (num_match == 2){
+      return (10)
+    }
+    else if (num_match == 3){
+      return (200)
+    }
+    else if (num_match == 4){
+      return (10000)
+    }
+    else{
+      return(10000000)  
+    }
+  }
+  else{
+    if(num_match < 3){
+      return (0)
+    }
+    else if(num_match == 3){
+      return(10)
+    }
+    else if(num_match == 4){
+      return (500)
+    }
+    else{
+      return (1000000)
+    }
+  }
+}
+
+```
+
+
+```{r}
+lucky_nums = function(numbers,megaballs,multi = FALSE){
+  ticket = random_ticket(numbers,megaballs)
+  ticket_cost = ticket_cost(multiplier = multi)
+  return(c(ticket,ticket_cost))
+}
+
+
+winning_nums = function(){
+  return (lucky_nums(1:70,1:25,multi = TRUE))
+}
+
+```
+
+Base case: Same number
+
+```{r}
+same_ticket = function(trials,m=FALSE){
+  nums = 0
+  megas = 0
+  cost = 0
+  win = c()
+  multiplier = 1
+  ticket = lucky_nums(1:70,1:25,multi=m)
+  for (i in 1:trials){
+    winning_numbers = winning_nums()
+    if (m==TRUE){
+      if (winning_numbers$multiplier == ticket$multiplier){
+        multiplier = ticket$multiplier
+      }else{multiplier = 1}
+    }
+    match = number_matched(ticket,winning_numbers)
+    nums = nums + match$match
+    megas = megas + match$megaball
+    cost = cost + ticket$cost
+    win = c(win,(winnings(match$match,match$megaball)*multiplier)-ticket$cost)
+  }
+  return(list('avg_nums' = nums/trials, 'avg_megas' = megas/trials, 'cost' = cost, 'winnings' = win))
+}
+```
+
+Using a different(random) ticket each time the lottery is pulled
+
+```{r}
+diff_ticket = function(trials,m=FALSE){
+  nums = 0
+  megas = 0
+  cost = 0
+  win = c()
+  multiplier = 1
+  for (i in 1:trials){
+    ticket = lucky_nums(1:70,1:25,multi=m)
+    winning_numbers = winning_nums()
+    if (m==TRUE){
+      if (winning_numbers$multiplier == ticket$multiplier){
+        multiplier = ticket$multiplier
+      }else{multiplier = 1}
+    }
+    match = number_matched(ticket,winning_numbers)
+    nums = nums + match$match
+    megas = megas + match$megaball
+    cost = cost + ticket$cost
+    win = c(win,(winnings(match$match,match$megaball)*multiplier)-ticket$cost)
+  }
+  return(list('avg_nums' = nums/trials, 'avg_megas' = megas/trials, 'cost' = cost, 'winnings' = win))
+}
+```
+
+win = total winnings - total cost
+
+```{r}
+base_case = same_ticket(10000,m=FALSE)
+```
+
+
+Multiplier vs No Multiplier
+
+Comparing average ticket winnings between base_case and with multiplier, we see that there is a significant difference in winnings (p-value < 0.05). We reject the null hypothesis and find out that using the multiplier is worse than no multiplier (losses are larger)
+
+```{r}
+with_multi = same_ticket(10000, m=TRUE)
+
+multi_test = t.test(base_case$winnings, with_multi$winnings, alternative = c('two.sided'))
+multi_test
+```
+
+Comparing base case to choosing random tickets each lottery, we see that the P value is greater than 0.05 so we cannot reject the null hypothesis. Both scenarios yield the same results
+
+```{r}
+with_random = diff_ticket(10000,m= FALSE)
+with_random$winnings%>%sum()
+
+random_test = t.test(base_case$winnings, with_random$winnings, alternative = c('two.sided'))
+random_test
+```
+
+
