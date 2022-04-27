@@ -5,12 +5,12 @@ date: "4/11/2022"
 output: html_document
 ---
 
-```{r}
+```{r, message = FALSE, warning = FALSE}
 library(tidyverse)
 ```
 
 
-```{r}
+```{r, message = FALSE, warning = FALSE}
 
 # function that generates random ticket based on numbers and megaball vectors
 random_ticket = function(numbers,megaball){
@@ -88,7 +88,7 @@ winnings = function(num_match, mega_match){
 ```
 
 
-```{r}
+```{r, message = FALSE, warning = FALSE}
 lucky_nums = function(numbers,megaballs,multi = FALSE){
   ticket = random_ticket(numbers,megaballs)
   ticket_cost = ticket_cost(multiplier = multi)
@@ -131,7 +131,7 @@ same_ticket = function(trials,m=FALSE){
 
 Using a different(random) ticket each time the lottery is pulled
 
-```{r}
+```{r, message = FALSE, warning = FALSE}
 diff_ticket = function(trials,m=FALSE){
   nums = 0
   megas = 0
@@ -158,7 +158,7 @@ diff_ticket = function(trials,m=FALSE){
 
 win = total winnings - total cost
 
-```{r}
+```{r, message = FALSE, warning = FALSE}
 base_case = same_ticket(10000,m=FALSE)
 ```
 
@@ -167,7 +167,7 @@ Multiplier vs No Multiplier
 
 Comparing average ticket winnings between base_case and with multiplier, we see that there is a significant difference in winnings (p-value < 0.05). We reject the null hypothesis and find out that using the multiplier is worse than no multiplier (losses are larger)
 
-```{r}
+```{r, message = FALSE, warning = FALSE}
 with_multi = same_ticket(10000, m=TRUE)
 
 multi_test = t.test(base_case$winnings, with_multi$winnings, alternative = c('two.sided'))
@@ -176,7 +176,7 @@ multi_test
 
 Comparing base case to choosing random tickets each lottery, we see that the P value is greater than 0.05 so we cannot reject the null hypothesis. Both scenarios yield the same results
 
-```{r}
+```{r, message = FALSE, warning = FALSE}
 with_random = diff_ticket(10000,m= FALSE)
 with_random$winnings%>%sum()
 
