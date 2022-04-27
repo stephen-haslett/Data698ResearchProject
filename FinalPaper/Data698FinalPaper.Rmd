@@ -16,11 +16,9 @@ knitr::opts_chunk$set(echo = TRUE)
 library(kableExtra)
 ```
 
-![](./images/MegaMillionsLogo.png)
-
 ## Abstract
 
-The goal of this study is to establish if it is possible to strategically play the lottery in order to increase both prize money, and the chances of winning.
+The goal of this study is to establish if it is possible to strategically play the lottery in order to increase both prize money, and the chances of winning. To determine this, we focused on the [Mega Millions](https://nylottery.ny.gov/draw-game/?game=megamillions) lottery game. Mega Millions is a United States based lottery that is played twice a week, and is available in 45 states plus the District of Columbia and the U.S. Virgin Islands. To participate in the game, players must select 5 numbers from 1 to 70, and 1 number from 1 to 25 for the Mega Ball. If the player matches all 5 numbers plus the Mega Ball, then they win the jackpot. [Lower prize tiers](https://nylottery.ny.gov/draw-game/?game=megamillions#odds_prizes) are available for matches that fall short of the jackpot requirement.      
 
 Abstract: use 250 words or less to summarize your problem, methodology, and major outcomes.
 
@@ -33,13 +31,13 @@ In a 2012 study on predicting lottery numbers (_Galbo-Jørgensen, Claus B., Suet
 
 Otekunrin and Folorunso (_2021_) observed that some players will select lottery numbers based on personally significant numbers such as birthdays, house numbers, anniversary dates etc., whilst others heuristically choose numbers based on their frequency of occurrence in previous drawings. When a heuristic approach is applied to lottery number selection, it was observed that players tend to believe that well-spread out numbers are better than distinctive ones even though both have the same probability of occurrence [(2)](#references).
 
-While the aforementioned studies are more concerned with the psychology behind picking lottery numbers, this study focuses on whether or not these selection techniques increase one's chances of selecting winning lottery numbers. We are more concerned with proving these techniques to be either effective or ineffective through the application of mathematics, than with why people believe them to be so.
+While the aforementioned studies are concerned with the psychology behind picking lottery numbers, this study focuses on whether or not these selection techniques increase one's chances of selecting winning lottery numbers. We are more concerned with proving these techniques to be either effective or ineffective through the application of mathematics, than with why people believe them to be so.
 
 This approach is in the same vein as Renato Gianella's approach to this subject. Gianella (_2014_) observed that winning lottery number combinations follow a predictable pattern. By applying probability theory to lottery drawings, Gianella established that the results of a lottery draw follow the same behavior pattern as predicted by the Law of Large Numbers - _When an event is repeated many times, the average of the results from all events should be close to the expected result_ [(3)](#references).
 
 Gianella's method is based on groups of number combinations built from previous lottery results. When tested, his method demonstrated that the probability that a given number combination occurs is not the same for all groups, and that certain groups display a higher probability of winning.
 
-This study does not assume that that Gianella's method is effective, rather it sets out to adopt similar strategies to prove that it, and other strategies are either effective or ineffective in increasing one's chances of winning the lottery.
+This study does not assume that Gianella's method is effective, rather it sets out to adopt similar logical strategies to prove that Gianella's method, and other strategies are either effective or ineffective in increasing one's chances of winning the lottery.
 
 
 ## Introduction
