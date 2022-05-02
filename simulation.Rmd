@@ -5,12 +5,12 @@ date: "4/11/2022"
 output: html_document
 ---
 
-```{r, message = FALSE, warning = FALSE}
+```{r}
 library(tidyverse)
 ```
 
 
-```{r, message = FALSE, warning = FALSE}
+```{r}
 
 # function that generates random ticket based on numbers and megaball vectors
 random_ticket = function(numbers,megaball){
@@ -88,7 +88,7 @@ winnings = function(num_match, mega_match){
 ```
 
 
-```{r, message = FALSE, warning = FALSE}
+```{r}
 lucky_nums = function(numbers,megaballs,multi = FALSE){
   ticket = random_ticket(numbers,megaballs)
   ticket_cost = ticket_cost(multiplier = multi)
@@ -131,7 +131,7 @@ same_ticket = function(trials,m=FALSE){
 
 Using a different(random) ticket each time the lottery is pulled
 
-```{r, message = FALSE, warning = FALSE}
+```{r}
 diff_ticket = function(trials,m=FALSE){
   nums = 0
   megas = 0
@@ -158,7 +158,7 @@ diff_ticket = function(trials,m=FALSE){
 
 win = total winnings - total cost
 
-```{r, message = FALSE, warning = FALSE}
+```{r}
 base_case = same_ticket(10000,m=FALSE)
 ```
 
@@ -167,7 +167,7 @@ Multiplier vs No Multiplier
 
 Comparing average ticket winnings between base_case and with multiplier, we see that there is a significant difference in winnings (p-value < 0.05). We reject the null hypothesis and find out that using the multiplier is worse than no multiplier (losses are larger)
 
-```{r, message = FALSE, warning = FALSE}
+```{r}
 with_multi = same_ticket(10000, m=TRUE)
 
 multi_test = t.test(base_case$winnings, with_multi$winnings, alternative = c('two.sided'))
@@ -176,7 +176,7 @@ multi_test
 
 Comparing base case to choosing random tickets each lottery, we see that the P value is greater than 0.05 so we cannot reject the null hypothesis. Both scenarios yield the same results
 
-```{r, message = FALSE, warning = FALSE}
+```{r}
 with_random = diff_ticket(10000,m= FALSE)
 with_random$winnings%>%sum()
 
@@ -184,4 +184,90 @@ random_test = t.test(base_case$winnings, with_random$winnings, alternative = c('
 random_test
 ```
 
+# historical winning numbers from ny.gov resource
+
+```{r}
+megaMillionsDataURL <- "https://data.ny.gov/resource/5xaw-6ayf.csv"
+megaMillionsWinningNumbers <- read.csv(megaMillionsDataURL)
+megaMillionsWinningNumbers%>%head()
+```
+
+```{r}
+winningNumberOccurrence = function(winning_tickets){
+  winning_numbers = c()
+  for (ticket in winning_tickets){
+    winning_numbers = c(winning_numbers,str_split(ticket, pattern = ' ')[[1]])
+  }
+  number_counts = data.frame(numbers = winning_numbers)%>%
+    group_by(numbers)%>%
+    summarize(count = n())%>%
+    arrange(-count)
+    
+  return(number_counts)
+}
+
+megaballOccurence = function(megaballs){
+  number_counts = data.frame(numbers = megaballs)%>%
+    group_by(numbers)%>%
+    summarize(count = n())%>%
+    arrange(-count)
+  return(number_counts)
+}
+
+```
+
+
+```{r}
+
+number_counts = winningNumberOccurrence(megaMillionsWinningNumbers$winning_numbers)
+megaball_counts = megaballOccurence(megaMillionsWinningNumbers$mega_ball)
+
+hot_numbers = number_counts%>%filter(count >= mean(count))
+hot_megaballs = megaball_counts%>%filter(count >= mean(count))
+
+cold_numbers = number_counts%>%filter(count < mean(count))
+cold_megaballs = megaball_counts%>%filter(count < mean(count))
+
+```
+
+Hot Hand Fallacy: Numbers that were more successful in the past are more likely to be successful in the future
+
+```{r}
+fallacy_cases = function(trials,n_choices,mb_choices,m=FALSE){
+  nums = 0
+  megas = 0
+  cost = 0
+  win = c()
+  multiplier = 1
+  ticket = lucky_nums(n_choices,mb_choices,multi=m)
+  for (i in 1:trials){
+    winning_numbers = winning_nums()
+    if (m==TRUE){
+      if (winning_numbers$multiplier == ticket$multiplier){
+        multiplier = ticket$multiplier
+      }else{multiplier = 1}
+    }
+    match = number_matched(ticket,winning_numbers)
+    nums = nums + match$match
+    megas = megas + match$megaball
+    cost = cost + ticket$cost
+    win = c(win,(winnings(match$match,match$megaball)*multiplier)-ticket$cost)
+  }
+  return(list('avg_nums' = nums/trials, 'avg_megas' = megas/trials, 'cost' = cost, 'winnings' = win))
+}
+
+hot_hand = fallacy_cases(10000,hot_numbers$numbers,hot_megaballs$numbers, m =FALSE)
+hot_hand_test = t.test(base_case$winnings, hot_hand$winnings, alternative = c('two.sided'))
+hot_hand_test
+```
+
+Gamblers Fallacy: Belief that occurances that were less likely to happen in the past are more likely to happen in the future
+
+```{r}
+gambler_fallacy = fallacy_cases(10000,cold_numbers$numbers,cold_megaballs$numbers,m=FALSE)
+gambler_fallacy_test = t.test(base_case$winnings, gambler_fallacy$winnings, alternative = c('two.sided'))
+gambler_fallacy_test
+```
+
+We are unable to reject the null hypothesis for both gamblers fallacy and hot hand fallacy as the they fall within the expected values of the base case
 
