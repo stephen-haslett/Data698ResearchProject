@@ -1,0 +1,654 @@
+## NA
+
+knitr::opts_chunk$set(echo = TRUE)
+
+library(RCurl)
+library(rsample)
+library(dplyr)
+library(tidyr)
+library(readr)
+library(lubridate)
+library(plotly)
+library(ggplot2)
+library(forcats)
+library(caTools)
+library(data.table)
+library(formattable)
+library(kableExtra)
+library(hrbrthemes)
+library(viridis)
+
+megaMillionsDataURL <- "https://data.ny.gov/resource/5xaw-6ayf.csv"
+megaMillionsWinningNumbers <- read.csv(textConnection(getURL(megaMillionsDataURL)))
+
+# Add leading zeros to Mega Ball numbers below 10 so we get accurate counts when counting occurrence frequencies.
+megaMillionsWinningNumbers$mega_ball <- formatC(x = megaMillionsWinningNumbers$mega_ball, digits = 1, flag = '0', format = 'd')
+
+# In order to acheive consistent results in our training data, we manually split the dataset into training and test sets (70/30 split).
+# Using a training/test split function such as "initial_split()" results in inconsistent results everytime the program is run.
+trainingData <- megaMillionsWinningNumbers[row.names(megaMillionsWinningNumbers) %in% 1:700, ]
+testData <- megaMillionsWinningNumbers[row.names(megaMillionsWinningNumbers) %in% 300+1:nrow(megaMillionsWinningNumbers), ]
+
+#' Helper function that counts the number of times a given number occurs within a dataframe column.
+#'
+#' This function takes a number and searches a dataframe column to establish how many
+#' occurrences of the provided number occur within the given dataframe column.
+#'
+#' @param dataFrameColumn The dataframe column in which to search for the number of
+#' occurrences of the given number. Must be in the format "dataframe$columnname".
+#'
+#' @param number Integer: The number for which to search the dataframe column for occurrences.
+#'
+#' @return Integer: The number of times the given number occurs within the given dataframe column.
+#'
+#' @export
+countOccurrencesOfNumber <- function(dataFrameColumn, number) {
+  occurrences <- length(grep(number, dataFrameColumn))
+  occurrences <- formatC(x = occurrences, digits = 1, flag = '0', format = 'd')
+
+  return(occurrences)
+}
+
+#' Helper function that counts the occurrences of individual numbers within a dataframe column.
+#'
+#' This function takes a dataframe column and counts the occurrences of all indivdual numbers within the column.
+#'
+#' @param dataFrameColumn The dataframe column in which to count all indivdual number occurrences.
+#' Must be in the format "dataframe$columnname".
+#'
+#' @param columnName String: The name of the column in which to count all indivdual number occurrences.
+#'
+#' @return Dataframe: A dataframe of all the numbers within the given column and the number of times each
+#' number occurs (ordered by number of occurrences).
+#'
+#' @export
+countTotalNumberOfOccurrencesByColumn <- function(dataFrameColumn, columnName) {
+  occurrencesWithinColumn <- 0
+  occurrenceData <- setNames(data.frame(matrix(ncol = 2)), c('Number', 'Occurrences'))
+
+  # Count occurrences of numbers within the "winning_numbers"" column (number range = 01 to 70).
+  if (columnName == 'winning_numbers') {
+    winningNumbersRange <- seq(1, 70, +1)
+    for (number in winningNumbersRange) {
+      if (!is.na(number)) {
+        # Add leading zero to numbers below 10.
+        if (between(number, 0, 9)) {
+          number <- paste0('0', number)
+        }
+
+        numberOfOccurrences <- countOccurrencesOfNumber(dataFrameColumn, number)
+        occurrenceData[number, ] <- c(number, numberOfOccurrences)
+      }
+    }
+  }
+
+  # Count occurrences of numbers within the "mega_ball" column (number range = 01 to 25).
+  if (columnName == 'mega_ball') {
+    megaBallRange <- seq(1, 25, +1)
+    for (number in megaBallRange) {
+      if (!is.na(number)) {
+        # Add leading zero to numbers below 10.
+        if (between(number, 0, 9)) {
+          number <- paste0('0', number)
+        }
+        
+        numberOfOccurrences <- countOccurrencesOfNumber(dataFrameColumn, number)
+        occurrenceData[number, ]  <- c(number, numberOfOccurrences)
+      }
+    }
+  }
+
+  # Count occurrences of numbers within the "multiplier"" column (number range = 2 to 5).
+  if (columnName == 'multiplier') {
+    multiplierRange <- seq(2, 5, +1)
+    for (number in multiplierRange) {
+      if (!is.na(number)) {
+        numberOfOccurrences <- countOccurrencesOfNumber(dataFrameColumn, number)
+        occurrenceData[number, ]  <- c(number, numberOfOccurrences)
+      }
+    }
+  }
+
+  # Sort results by occurrences in decreasing order.
+  occurrenceData <- occurrenceData[order(occurrenceData[,2], decreasing = TRUE),]
+  
+  # Drop rows containing NAs from the data.
+  occurrenceData <- drop_na(occurrenceData)
+  
+  # Add ranking based on frequency of occurrence (higher frequencies result in higer rankings).
+  occurrenceData$Rank <- round(rank(occurrenceData$Occurrences), 0)
+
+  return(occurrenceData)
+}
+
+#' Helper function that calculates the payout for a lottery game based on the amount of matching numbers obtained.
+#'
+#' @param matchingNumberCount Integer: Total count of winning numbers that were matched in a lottery game.
+#'
+#' @param megaBallMatch Boolean: TRUE if a megaball was matched in a lottery game, FALSE otherwise.
+#'
+#' @param multiplierMatch Optional Boolean: TRUE if a multiplier number was matched, FALSE otherwise.
+#'
+#' @param multiplier Optional Integer: Multiplier number from a simulated lottery ticket.  
+#'
+#' @return Numeric: Total winning dollar amount based on numbers matched.
+#'
+#' @export
+calculateTotalPayout <- function(matchingNumberCount, megaBallMatch, multiplierMatch, multiplier) {
+  # No matching numbers results in a zero dollar payout.
+  payout <- 0
+  
+  # Jackpot payout - 75% of the total prize money. 5 matching numbers with the Mega Ball.
+  if (matchingNumberCount == 5 && isTRUE(megaBallMatch)) {
+    # TODO NEED TO ADD CODE TO CALCULATE THIS VALUE - SETTING TO LARGE NUMBER FOR NOW!!!!
+    payout <- 40000000
+  }
+
+  # Second prize - $1,000,000. 5 matching numbers.
+  if (matchingNumberCount == 5 && isFALSE(megaBallMatch)) {
+    payout <- 1000000
+  }
+  
+  # Third prize - $10,000. 4 matching numbers with the Mega Ball.
+  if (matchingNumberCount == 4 && isTRUE(megaBallMatch)) {
+    payout <- 10000
+  }
+  
+  # Fourth prize - $500. 4 matching numbers.
+  if (matchingNumberCount == 4 && isFALSE(megaBallMatch)) {
+    payout <- 500
+  }
+  
+  # Fifth prize - $200. 3 matching numbers with the Mega Ball.
+  if (matchingNumberCount == 3 && isTRUE(megaBallMatch)) {
+    payout <- 200
+  }
+  
+  # Sixth prize - $10. 3 matching numbers.
+  if (matchingNumberCount == 3 && isFALSE(megaBallMatch)) {
+    payout <- 10
+  }
+  
+  # Seventh prize - $10. 2 matching numbers with the Mega Ball.
+  if (matchingNumberCount == 2 && isTRUE(megaBallMatch)) {
+    payout <- 10
+  }
+  
+  # Eighth prize - $4. 1 matching number with the Mega Ball.
+  if (matchingNumberCount == 1 && isTRUE(megaBallMatch)) {
+    payout <- 4
+  }
+  
+  # Ninth prize - $2. No matching numbers with the Mega Ball.
+  if (matchingNumberCount == 0 && isTRUE(megaBallMatch)) {
+    payout <- 2
+  }
+  
+  # If the multiplier number was matched, multiply the total payout amount by the value of the multiplier number.
+  # The multiplier does not apply to jackpots, so we check to ensure the payout is not a jackpot payout.
+  if (!missing(multiplier) && !missing(multiplierMatch)) {
+    if (isTRUE(multiplierMatch) && !(matchingNumberCount == 5 && isTRUE(megaBallMatch))) {
+      payout <- payout * multiplier
+    }
+  }
+  
+  return(payout)
+}
+
+#' Helper function that calculates total payouts, wins, megaball matches, and multplier
+#' number matches for a given strategy (Consistent, Frequency, and Random).
+#'
+#' @param columnName String: The name of the column to total. Accepted values are:
+#' "winning_numbers_matched", "matching_mega_ball", "matching_multiplier", "payout".
+#'
+#' @param columnValues Numeric/Boolean: The actual column values to total corresponding to
+#' the columnName parameter. Numeric for "winning_numbers_matched", and "payout" columns, boolean
+#' for "matching_mega_ball", and "matching_multiplier" columns. Must be in the format "dataframe$columnname".
+#'
+#' @return Numeric: Total sum of column values passed.
+#'
+#' @export
+calculateColumnValuesTotal <- function(columnName, columnValues) {
+  sumOfColumnValues <- 0
+  if (columnName == 'matching_multiplier' || columnName == 'matching_mega_ball') {
+    sumOfColumnValues <- length(columnValues[columnValues == TRUE])
+  }
+  else if (columnName == 'payout') {
+     payout <- parse_number(as.character(columnValues))
+     sumOfColumnValues <- sum(payout)
+  }
+  else {
+    sumOfColumnValues <- sum(columnValues)
+  }
+  
+  return(sumOfColumnValues)
+}
+
+#' Checks if a simulated lottery ticket Mega Ball value matches the Mega Ball value in the winning numbers dataset.
+#'
+#' @param ticketMegaBall Numeric: The "Mega Ball" value contained within a simulated ticket.
+#'
+#' @param winningMegaBall Numeric: The "Mega Ball" value contained within the winning lottery numbers dataset.
+#'
+#' @return Boolean: True if the numbers match, False otherwise.
+#'
+#' @export
+megaBallMatch <- function(ticketMegaBall, winningMegaBall) {
+  matchCheck <- match(ticketMegaBall, winningMegaBall)
+  if (!is.na(matchCheck)) {
+    return(TRUE)
+  }
+  else {
+    return(FALSE)
+  }
+}
+
+#' Checks if a simulated lottery ticket Multiplier value matches the Multiplier value in the winning lottery numbers dataset.
+#'
+#' @param ticketMultiplier Numeric: The "Multiplier" value contained within a simulated ticket.
+#'
+#' @param winningMultiplier Numeric: The "Multiplier" value contained within the winning lottery numbers dataset.
+#'
+#' @return Boolean: True if the numbers match, False otherwise.
+#'
+#' @export
+multiplierMatch <- function(ticketMultiplier, winningMultiplier) {
+  matchCheck <- match(ticketMultiplier, winningMultiplier)
+  if (!is.na(matchCheck)) {
+    return(TRUE)
+  }
+  else {
+    return(FALSE)
+  }
+}
+
+#' Simulates generating Mega Millions lottery tickets containing random numbers.
+#'
+#' This function returns a list containing 5 unique numbers from 1 to 70, 1 number from
+#' 1 to 25 for the Megaball, and 1 number from 2 to 5 for the multiplier number in order 
+#, to simulate a valid Mega Millions lottery ticket. 
+#'
+#' @return List: A list containing 7 random numbers representing a Mega Millions lottery ticket.
+#'
+#' @export
+generateRandomLotteryTickets <- function() {
+  uniqueNumbers <- as.numeric(sample(1:70, 5, replace = FALSE))
+  mega_ball <- as.numeric(sample(1:25, 1, replace = FALSE))
+  multiplier <- as.numeric(sample(2:5, 1, replace = FALSE))
+  lotteryTickets <- list(uniqueNumbers, mega_ball, multiplier)
+ 
+  return(lotteryTickets)
+}
+
+#' Simulates generating a Mega Millions lottery ticket based on frequently occurring winning numbers.
+#'
+#' This function generates a lottery ticket consisting of the numbers that occur most frequently in
+#' the winning numbers result set.
+#'
+#' @param trainingData Dataframe: The training data from which to generate frequency based numbers.
+#'
+#' @return List: A list consisting of the 5 most frequent winning numbers, the most frequent winning
+#' MegaBall, and most frequent winning multplier number.
+#'
+#' @export
+generateFrequencyBasedLotteryTicket <- function(trainingData) {
+  # Select the top five most frequently occuring winning numbers.
+  winningNumbers <- countTotalNumberOfOccurrencesByColumn(trainingData$winning_numbers, 'winning_numbers')
+
+  winningNumbers <- winningNumbers[1:5, ]$Number
+  winningNumbers <- as.numeric(winningNumbers) 
+
+  # Select the most frequently occuring Megaball.
+  megaBallNumbers <- countTotalNumberOfOccurrencesByColumn(trainingData$mega_ball, 'mega_ball')
+  megaBallNumber <- megaBallNumbers[which.max(megaBallNumbers$Occurrences), ]$Number
+  megaBallNumber <- as.numeric(megaBallNumber)
+  
+  # Select the most frequently occuring Multiplier number.
+  multiplierNumbers <- countTotalNumberOfOccurrencesByColumn(trainingData$multiplier, 'multiplier')
+  multiplierNumber <- multiplierNumbers[which.max(multiplierNumbers$Occurrences), ]$Number
+  multiplierNumber <- as.numeric(multiplierNumber)
+  
+  
+  lotteryTickets <- list(winningNumbers, megaBallNumber, multiplierNumber)
+
+  return(lotteryTickets)
+}
+
+#' Simulates playing a lottery game.
+#'
+#' This function simulates playing lottery numbers against the winning numbers test dataset. 
+#'
+#' @param ticketNumbers Optional Numeric: The lottery numbers to play against the winning lottery numbers test dataset.
+#' IMPORTANT - 7 numbers must be passed. The first 5 numbers are the winning numbers, the 6th is the mega ball, and the
+#' 7th is the multiplier number. Number ranges are as follows:
+#'
+#'    Winning Numbers - 5 numbers from 1 to 70.
+#'    Megaball - 1 number from 1 to 25.
+#'    Multiplier Number - 1 number from 2 to 5.
+#'
+#' @param trainingData Optional Dataframe: The training dataset column in which to count all indivdual number occurrences.
+#' Must be in the format "dataframe$columnname".
+#'
+#' @param testData Dataframe: A test dataset of winning numbers to play against.
+#'
+#' @param generationMethod String: Method to use for generating lottery ticket numbers.
+#' Options: random, frequency, consistent.
+#'
+#' @return Dataframe: The testData dataframe with winning numbers matched, payout, etc., columns attached. 
+#'
+#' @export
+lotteryGameSimulation <- function(ticketNumbers = NULL, trainingData = NULL, testData, generationMethod) {
+  # Define empty vectors to store matching numbers per game count, payout amounts, and megaball match status.
+  matchingNumbersCount <- c()
+  payOut <- c()
+  megaBallStatus <- c()
+  multiplierStatus <- c()
+
+  # When "generationMethod" is "frequency", generate numbers based on their frequency
+  # of occurence in the training dataset.
+  if (generationMethod == 'frequency' && !is.null(trainingData)) {
+    lotteryNumbers <- data.frame()
+    lotteryNumbers <- colnames('winning_numbers')
+    frequencyNumbers <- generateFrequencyBasedLotteryTicket(trainingData)
+    # Add leading zeros to numbers below 10.
+    lotteryNumbers$winning_numbers <- formatC(x = frequencyNumbers[[1]], digits = 1, flag = '0', format = 'd')
+    lotteryNumbers$mega_ball <- formatC(x = frequencyNumbers[[2]], digits = 1, flag = '0', format = 'd')
+    lotteryNumbers$multiplier <- frequencyNumbers[[3]]
+  }
+  
+  # When "generationMethod" is "consistent", Validate that the ticketNumbers parameter is
+  # passed into the function and set "lotteryNumbers" to the ticketNumbers parameter value.
+  if (generationMethod == 'consistent' && !is.null(ticketNumbers)) {
+    lotteryNumbers <- data.frame()
+    lotteryNumbers <- colnames('winning_numbers')
+    lotteryNumbers$winning_numbers <- formatC(x = ticketNumbers, digits = 1, flag = '0', format = 'd')
+    lotteryNumbers$mega_ball <- formatC(x = ticketNumbers[6], digits = 1, flag = '0', format = 'd')
+    lotteryNumbers$multiplier <- ticketNumbers[7]
+  }
+
+  # Loop through the winning lottery numbers testData dataset. 
+  for (row in rownames(testData)) {
+    # When "generationMethod" is "random", generate random lottery numbers. We do this inside of the
+    # for loop so that a random lottery ticket is generated on each iteration. 
+    if (generationMethod == 'random') {
+      lotteryNumbers <- data.frame()
+      lotteryNumbers <- colnames('winning_numbers')
+      random <- generateRandomLotteryTickets()
+      lotteryNumbers$winning_numbers <- formatC(x = random[[1]], digits = 1, flag = '0', format = 'd')
+      lotteryNumbers$mega_ball <- formatC(x = random[[2]], digits = 1, flag = '0', format = 'd')
+      lotteryNumbers$multiplier <- random[[3]]
+    }
+  
+    # Count how many matching winning numbers we get per lottery game. 
+    lotteryGame <- sapply(lotteryNumbers$winning_numbers, function(s) length(grep(s, testData[row, 'winning_numbers'])))
+    totalMatches <- sum(lotteryGame)
+
+    # Check if a simulated lottery ticket mega ball value matches a mega ball value in the test dataset.
+    matchingMegaBall <- megaBallMatch(lotteryNumbers$mega_ball, testData[row, 'mega_ball'])
+    
+    # Check if a simulated lottery ticket multiplier value matches a multiplier value in the test dataset.
+    matchingMultiplier <- multiplierMatch(lotteryNumbers$multiplier, testData[row, 'multiplier'])
+    
+    # Calculate payout based on the amount of numbers matched.
+    payoutAmount <- calculateTotalPayout(totalMatches, matchingMegaBall, matchingMultiplier, lotteryNumbers$multiplier)
+    
+    # Append matching numbers count, matching mega ball status, matching multiplier status, and payout
+    # values to empty vectors so we can append them to the testData dataframe as additional columns.
+    matchingNumbersCount <- append(matchingNumbersCount, totalMatches)
+    payOut <- append(payOut,  payoutAmount)
+    megaBallStatus <- append(megaBallStatus, matchingMegaBall)
+    multiplierStatus <- append(multiplierStatus, matchingMultiplier)
+  }
+ 
+  # Convert the "draw_date" column into a human readable format, and append
+  # additional columns to the testData dataset.
+  testData$draw_date <- format(as.Date(testData$draw_date), "%B %d, %Y")
+  testData$winning_numbers_matched <- matchingNumbersCount
+  testData$matching_mega_ball <- megaBallStatus
+  testData$matching_multiplier <- multiplierStatus
+  testData$payout <- currency(payOut) 
+
+  return(testData)
+}  
+
+# Define the consistent lottery numbers to play - first 5 numbers are the numbers to play,
+# 6th number is the Mega Ball, and the final number is the Multiplier.
+consistentLotteryNumbers <- c(26, 05, 25, 34, 11, 15, 4)
+consistentResults <- lotteryGameSimulation(consistentLotteryNumbers, NULL, testData, 'consistent')
+
+# Calculate the largest individual payout.
+largest_individual_payout <- consistentResults[which.max(as.numeric(consistentResults$payout)), ]$payout
+
+# Calculate totals starting with total winnings.
+total_winnings <- calculateColumnValuesTotal('payout', consistentResults$payout)
+total_winnings <- currency(total_winnings)
+
+# Total winning numbers matched.
+total_winning_numbers_matched <- calculateColumnValuesTotal('winning_numbers_matched', consistentResults$winning_numbers_matched)
+
+# Total Mega Ball matches.
+total_mega_ball_matches <- calculateColumnValuesTotal('matching_mega_ball', consistentResults$matching_mega_ball)
+
+# Total Multiplier numbers matched.
+total_multiplier_matches <- calculateColumnValuesTotal('matching_multiplier', consistentResults$matching_multiplier)
+
+# Add totals to a results summary dataframe.
+consistentResultsSummary <- data.frame(total_winning_numbers_matched, total_mega_ball_matches, total_multiplier_matches, total_winnings, largest_individual_payout)
+
+# Output results summary as a table.
+rownames(consistentResultsSummary) <- c()
+columnNames <- c('Winning Numbers Matched', 'Mega Ball Matches', 'Multiplier Matches', 'Total Winnings', 'Largest Individual Payout')
+kable(consistentResultsSummary, 'html', table.attr = "class=\'consistent-totals-table\'", escape = F,
+      caption = '<center><h3>Consistent Numbers Strategy Results Summary</h3></center>', col.names = columnNames) %>%
+  column_spec(1:5, bold = T) %>%
+  kable_styling('striped') %>%
+  scroll_box(width = '100%', height = 'auto')
+
+# Remove row numbers for readability purposes.
+rownames(consistentResults) <- c()
+
+# Define table column names.
+columnNames <- c('Draw Date', 'Winning Numbers', 'Mega Ball', 'Multiplier', 'Numbers Matched', 'Mega Ball Match', 'Multiplier Match', 'Payout')
+
+# Output results table.
+kable(consistentResults, 'html', table.attr = "class=\'consistent-results-table\'", escape = F,
+      caption = '<center><h3>Consistent Numbers Strategy Results</h3></center>', col.names = columnNames) %>%
+  column_spec(1, bold = T) %>%
+  row_spec(which(parse_number(as.character(consistentResults$payout)) > 0), bold = T, color = 'white', background = 'green') %>%
+  kable_styling('striped') %>%
+  scroll_box(width = '100%', height = '700px')
+
+randomResults <- lotteryGameSimulation(NULL, NULL, testData, 'random')
+
+# Totals summary for Random Numbers strategy.
+total_winnings <- calculateColumnValuesTotal('payout', randomResults$payout)
+total_winnings <- currency(total_winnings)
+total_winning_numbers_matched <- calculateColumnValuesTotal('winning_numbers_matched', randomResults$winning_numbers_matched)
+total_mega_ball_matches <- calculateColumnValuesTotal('matching_mega_ball', randomResults$matching_mega_ball)
+
+largest_individual_payout <- randomResults[which.max(as.numeric(randomResults$payout)), ]$payout
+
+# Total Multiplier numbers matched.
+total_multiplier_matches <- calculateColumnValuesTotal('matching_multiplier', randomResults$matching_multiplier)
+
+# Add totals to a results summary dataframe.
+randomResultsSummary <- data.frame(total_winning_numbers_matched, total_mega_ball_matches, total_multiplier_matches, total_winnings, largest_individual_payout)
+
+# Output results summary as a table.
+rownames(randomResultsSummary) <- c()
+columnNames <- c('Winning Numbers Matched', 'Mega Ball Matches', 'Multiplier Matches', 'Total Winnings', 'Largest Individual Payout')
+kable(randomResultsSummary, 'html', table.attr = "class=\'random-totals-table\'", escape = F,
+      caption = '<center><h3>Random Numbers Strategy Results Summary</h3></center>', col.names = columnNames) %>%
+  column_spec(1:5, bold = T) %>%
+  kable_styling('striped') %>%
+  scroll_box(width = '100%', height = 'auto')
+
+# Remove row numbers for readability purposes.
+rownames(randomResults) <- c()
+
+# Define table column names.
+columnNames <- c('Draw Date', 'Winning Numbers', 'Mega Ball', 'Multiplier', 'Numbers Matched', 'Mega Ball Match', 'Multiplier Match', 'Payout')
+
+# Output results table.
+kable(randomResults, 'html', table.attr = "class=\'random-results-table\'", escape = F,
+      caption = '<center><h3>Random Numbers Strategy Results</h3></center>', col.names = columnNames) %>%
+  column_spec(1, bold = T) %>%
+  row_spec(which(parse_number(as.character(randomResults$payout)) > 0), bold = T, color = 'white', background = 'green') %>%
+  kable_styling('striped') %>%
+  scroll_box(width = '100%', height = '700px')
+
+frequentResults <- lotteryGameSimulation(NULL, trainingData, testData, 'frequency')
+
+# Totals summary for Random Numbers strategy.
+total_winnings <- calculateColumnValuesTotal('payout', frequentResults$payout)
+
+total_winnings <- currency(total_winnings)
+total_winning_numbers_matched <- calculateColumnValuesTotal('winning_numbers_matched', frequentResults$winning_numbers_matched)
+total_mega_ball_matches <- calculateColumnValuesTotal('matching_mega_ball', frequentResults$matching_mega_ball)
+
+largest_individual_payout <- frequentResults[which.max(as.numeric(frequentResults$payout)), ]$payout
+
+# Total Multiplier numbers matched.
+total_multiplier_matches <- calculateColumnValuesTotal('matching_multiplier', frequentResults$matching_multiplier)
+
+# Add totals to a results summary dataframe.
+frequentResultsSummary <- data.frame(total_winning_numbers_matched, total_mega_ball_matches, total_multiplier_matches, total_winnings, largest_individual_payout)
+
+# Output results summary as a table.
+rownames(frequentResultsSummary) <- c()
+columnNames <- c('Winning Numbers Matched', 'Mega Ball Matches', 'Multiplier Matches', 'Total Winnings', 'Largest Individual Payout')
+kable(frequentResultsSummary, 'html', table.attr = "class=\'frequent-totals-table\'", escape = F,
+      caption = '<center><h3>Most Frequent Numbers Strategy Results Summary</h3></center>', col.names = columnNames) %>%
+  column_spec(1:5, bold = T) %>%
+  kable_styling('striped') %>%
+  scroll_box(width = '100%', height = 'auto')
+
+# Remove row numbers for readability purposes.
+rownames(frequentResults) <- c()
+
+# Define table column names.
+columnNames <- c('Draw Date', 'Winning Numbers', 'Mega Ball', 'Multiplier', 'Numbers Matched', 'Mega Ball Match', 'Multiplier Match', 'Payout')
+
+# Output results table.
+kable(frequentResults, 'html', table.attr = "class=\'frequent-results-table\'", escape = F,
+      caption = '<center><h3>Most Frequent Numbers Strategy Results</h3></center>', col.names = columnNames) %>%
+  column_spec(1, bold = T) %>%
+  row_spec(which(parse_number(as.character(frequentResults$payout)) > 0), bold = T, color = 'white', background = 'green') %>%
+  kable_styling('striped') %>%
+  scroll_box(width = '100%', height = '700px')
+
+# Totals summary for Consistent Numbers strategy.
+consistent_largest_payout <- consistentResults[which.max(as.numeric(consistentResults$payout)), ]$payout
+total_consistent_winnings <- calculateColumnValuesTotal('payout', consistentResults$payout)
+total_consistent_winnings <- currency(total_consistent_winnings)
+total_consistent_winning_numbers_matched <- calculateColumnValuesTotal('winning_numbers_matched', consistentResults$winning_numbers_matched)
+total_consistent_mega_ball_matches <- calculateColumnValuesTotal('matching_mega_ball', consistentResults$matching_mega_ball)
+total_consistent_multiplier_matches <- calculateColumnValuesTotal('matching_multiplier', consistentResults$matching_multiplier)
+consistent_strategy <- 'Consistent Numbers Strategy'
+consistentResultsSummary <- data.frame(consistent_strategy, total_consistent_winning_numbers_matched, total_consistent_mega_ball_matches,
+                                       total_consistent_multiplier_matches, total_consistent_winnings, consistent_largest_payout)
+colnames(consistentResultsSummary) <- c('Strategy', 'Winning Numbers Matched', 'Mega Ball Matches', 'Multiplier Matches', 'Total Winnings', 'Largest Individual Payout')
+
+# Totals summary for Random Numbers strategy.
+random_largest_payout <- randomResults[which.max(as.numeric(randomResults$payout)), ]$payout
+total_random_winnings <- calculateColumnValuesTotal('payout', randomResults$payout)
+total_random_winnings <- currency(total_random_winnings)
+total_random_winning_numbers_matched <- calculateColumnValuesTotal('winning_numbers_matched', randomResults$winning_numbers_matched)
+total_random_mega_ball_matches <- calculateColumnValuesTotal('matching_mega_ball', randomResults$matching_mega_ball)
+total_random_multiplier_matches <- calculateColumnValuesTotal('matching_multiplier', randomResults$matching_multiplier)
+random_strategy <- 'Random Numbers Strategy'
+randomResultsSummary <- data.frame(random_strategy, total_random_winning_numbers_matched, total_random_mega_ball_matches,
+                                   total_random_multiplier_matches, total_random_winnings, random_largest_payout)
+colnames(randomResultsSummary) <- c('Strategy', 'Winning Numbers Matched', 'Mega Ball Matches', 'Multiplier Matches', 'Total Winnings', 'Largest Individual Payout')
+
+# Totals summary for Frequent Numbers strategy.
+frequent_largest_payout <- frequentResults[which.max(as.numeric(frequentResults$payout)), ]$payout
+total_frequent_winnings <- calculateColumnValuesTotal('payout', frequentResults$payout)
+total_frequent_winnings <- currency(total_frequent_winnings)
+total_frequent_winning_numbers_matched <- calculateColumnValuesTotal('winning_numbers_matched', frequentResults$winning_numbers_matched)
+total_frequent_mega_ball_matches <- calculateColumnValuesTotal('matching_mega_ball', frequentResults$matching_mega_ball)
+total_frequent_multiplier_matches <- calculateColumnValuesTotal('matching_multiplier', frequentResults$matching_multiplier)
+frequent_strategy <- 'Most Frequent Numbers Strategy'
+frequentResultsSummary <- data.frame(frequent_strategy, total_frequent_winning_numbers_matched, total_frequent_mega_ball_matches,
+                                     total_frequent_multiplier_matches, total_frequent_winnings, frequent_largest_payout)
+
+colnames(frequentResultsSummary) <- c('Strategy', 'Winning Numbers Matched', 'Mega Ball Matches', 'Multiplier Matches', 'Total Winnings', 'Largest Individual Payout')
+
+strategyResultsComparison <- tibble()
+strategyResultsComparison <- bind_rows(consistentResultsSummary, randomResultsSummary, frequentResultsSummary)
+
+# Output results comparison as a table.
+columnNames <- c('Strategy', 'Winning Numbers Matched', 'Mega Ball Matches', 'Multiplier Matches', 'Total Winnings', 'Largest Individual Payout')
+kable(strategyResultsComparison %>% arrange(desc(`Winning Numbers Matched`)), 'html', table.attr = "class=\'strategy-results-comparision-table\'", escape = F,
+      caption = '<center><h3>Strategy Results Comparison</h3></center>', col.names = columnNames) %>%
+  column_spec(1:6, bold = T) %>%
+  kable_styling('striped')
+
+strategyResultsComparison %>%
+  ggplot( aes(x = reorder(Strategy, - `Mega Ball Matches`), fill = Strategy, y = `Mega Ball Matches`)) +
+    ggtitle('Mega Ball Matches') +
+    labs(y = 'Number of Matches', x = '') +
+    geom_bar(stat = 'identity') +
+    scale_fill_manual(values = c('#FFA500', "#DC143C", '#006400')) +
+    scale_y_continuous(limits = c(0, 60), breaks = seq(0, 60, by = 5)) +
+    theme(legend.position = 'right',
+          legend.justification = 'top',
+          panel.background = element_blank(),
+          axis.text.x = element_blank(),
+          axis.ticks.x = element_blank())
+
+strategyResultsComparison
+strategyResultsComparison %>%
+  ggplot( aes(x = reorder(Strategy, - `Winning Numbers Matched`), fill = Strategy, y = `Winning Numbers Matched`)) +
+    ggtitle('Winning Numbers Matched') +
+    labs(y = 'Numbers Matched', x = '') +
+    geom_bar(stat = 'identity') +
+    scale_fill_manual(values = c('#FFA500', "#DC143C", '#006400')) +
+    scale_y_continuous(limits = c(0, 550), breaks = seq(0, 550, by = 50)) +
+    theme(legend.position = 'right',
+          legend.justification = 'top',
+          panel.background = element_blank(),
+          axis.text.x = element_blank(),
+          axis.ticks.x = element_blank())
+
+# TODO: Figure out why last 2 rows of DF do not show in bar chart. 
+winningNumbersData <-countTotalNumberOfOccurrencesByColumn(trainingData$winning_numbers, 'winning_numbers')
+
+winningNumbersOccurrenceChart <- winningNumbersData %>%
+  plot_ly(x = ~winningNumbersData$Number,
+          y = winningNumbersData$Occurrences,
+          type = 'bar',
+          color = winningNumbersData$Number, colors = c('#FA8072'),
+          showlegend = FALSE,
+          orientation = 'v') %>%
+  layout(title = list(text = 'Occurrences Of Winning Numbers', font = list(size = 12)),
+    xaxis = list(
+      title = 'Winning Number'
+    ),
+    yaxis = list(
+      title = 'Total Occurrences'
+    )
+  )
+
+subplot(winningNumbersOccurrenceChart)   
+
+# TODO: Figure out why last 2 rows of DF do not show in bar chart. 
+megaBallData <-countTotalNumberOfOccurrencesByColumn(trainingData$mega_ball, 'mega_ball')
+
+megaBallOccurrenceChart <- megaBallData %>%
+  plot_ly(x = ~megaBallData$Number,
+          y = megaBallData$Occurrences,
+          type = 'bar',
+          color = megaBallData$Number, colors = c('#DC143C'),
+          showlegend = FALSE,
+          orientation = 'v') %>%
+  layout(title = list(text = 'Occurrences Of Mega Ball Numbers', font = list(size = 12)),
+    xaxis = list(
+      title = 'Mega Ball'
+    ),
+    yaxis = list(
+      title = 'Total Occurrences'
+    )
+  )
+
+subplot(megaBallOccurrenceChart)
