@@ -183,7 +183,7 @@ In order to evaluate which selection strategy (_if any_) is most effective, we w
 
 ### A1. Code
 
-```{r code=readLines(knitr::purl('../Data698AppendixCode.Rmd', documentation = 0)), eval = FALSE}
+```{r code=readLines(knitr::purl('../Code/AppendixCode.Rmd', documentation = 0)), eval = FALSE}
 ```
 
 
