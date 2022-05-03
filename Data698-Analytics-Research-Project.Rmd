@@ -702,42 +702,6 @@ strategyResultsComparison %>%
 ```
 
 
-```{r}
-# TODO: THIS IS CODE FOR DEVELOPMENT PURPOSES ONLY AND SHOULD BE REMOVED ONCE DEVELOPMENT IS COMPLETE!!!
-
-# https://lotterycodex.com/how-to-win-the-lottery-mathematically/
-
-#frequencyNumbers <- generateFrequencyBasedLotteryTicket(trainingData)
-#frequencyNumbers
-#const <- c(07, 22, 36, 45, 46, 12, 2)
-#const <- c(08, 11, 29, 32, 40, 02, 3)
-#const <- c(17, 31, 20, 28, 14, 10, 3)
-#results <- lotteryGameSimulation(NULL, trainingData, testData, 'frequency')
-#results <- lotteryGameSimulation(const, NULL, testData, 'consistent')
-#results <- lotteryGameSimulation(NULL, NULL, testData, 'random')
-
-#payout <- calculateColumnValuesTotal('payout', results$payout)
-#payout <- currency(payout)
-#payout
-
-#winningNumbers <- calculateColumnValuesTotal('winning_numbers_matched', results$winning_numbers_matched)
-#winningNumbers
-
-#mega <- calculateColumnValuesTotal('matching_mega_ball', results$matching_mega_ball)
-#mega
-
-#multiplier <- calculateColumnValuesTotal('matching_multiplier', results$matching_multiplier)
-#multiplier
-
-#table(results$multiplier)
-
-#results
-#head(testData)
-```
-
-
-
-
 
 
 ```{r numberOfOccurrenceBarChart, echo = FALSE, message = FALSE, warning = FALSE}
