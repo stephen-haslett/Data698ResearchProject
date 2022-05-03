@@ -11,7 +11,7 @@ output:
     highlight: tango
 ---
 
-```{r setup, include=FALSE}
+```{r documentSetup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(kableExtra)
 ```
@@ -183,6 +183,8 @@ In order to evaluate which selection strategy (_if any_) is most effective, we w
 
 ### A1. Code
 
+```{r code=readLines(knitr::purl('../Data698AppendixCode.Rmd', documentation = 0)), eval = FALSE}
+```
 
 
 

@@ -1,15 +1,5 @@
----
-title: "Data 698 Analytics Master’s Research Project"
-subtitle: "Predicting Winning New York Mega Millions Lottery Numbers"
-author: "Richard Zheng, Stephen Haslett"
-date: "2/7/2022"
-output: html_document
----
+## NA
 
-```{css, echo = FALSE, message = FALSE, warning = FALSE}
-```
-
-```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 
 library(RCurl)
@@ -27,10 +17,7 @@ library(formattable)
 library(kableExtra)
 library(hrbrthemes)
 library(viridis)
-```
 
-
-```{r dataImport, echo = FALSE, message = FALSE, warning = FALSE}
 megaMillionsDataURL <- "https://data.ny.gov/resource/5xaw-6ayf.csv"
 megaMillionsWinningNumbers <- read.csv(textConnection(getURL(megaMillionsDataURL)))
 
@@ -41,11 +28,7 @@ megaMillionsWinningNumbers$mega_ball <- formatC(x = megaMillionsWinningNumbers$m
 # Using a training/test split function such as "initial_split()" results in inconsistent results everytime the program is run.
 trainingData <- megaMillionsWinningNumbers[row.names(megaMillionsWinningNumbers) %in% 1:700, ]
 testData <- megaMillionsWinningNumbers[row.names(megaMillionsWinningNumbers) %in% 300+1:nrow(megaMillionsWinningNumbers), ]
-```
 
-## {.tabset}
-
-```{r countOccurrencesOfNumber, echo = FALSE, message = FALSE, warning = FALSE}
 #' Helper function that counts the number of times a given number occurs within a dataframe column.
 #'
 #' This function takes a number and searches a dataframe column to establish how many
@@ -65,11 +48,7 @@ countOccurrencesOfNumber <- function(dataFrameColumn, number) {
 
   return(occurrences)
 }
-```
 
-
-
-```{r countTotalNumberOfOccurrencesByColumn, echo = FALSE, message = FALSE, warning = FALSE}
 #' Helper function that counts the occurrences of individual numbers within a dataframe column.
 #'
 #' This function takes a dataframe column and counts the occurrences of all indivdual numbers within the column.
@@ -141,11 +120,7 @@ countTotalNumberOfOccurrencesByColumn <- function(dataFrameColumn, columnName) {
 
   return(occurrenceData)
 }
-```
 
-
-
-```{r, calculatePayout, echo = FALSE, message = FALSE, warning = FALSE}
 #' Helper function that calculates the payout for a lottery game based on the amount of matching numbers obtained.
 #'
 #' @param matchingNumberCount Integer: Total count of winning numbers that were matched in a lottery game.
@@ -219,11 +194,7 @@ calculateTotalPayout <- function(matchingNumberCount, megaBallMatch, multiplierM
   
   return(payout)
 }
-```
 
-
-
-```{r, calculateColumnValuesTotal, echo = FALSE, message = FALSE, warning = FALSE}
 #' Helper function that calculates total payouts, wins, megaball matches, and multplier
 #' number matches for a given strategy (Consistent, Frequency, and Random).
 #'
@@ -252,11 +223,7 @@ calculateColumnValuesTotal <- function(columnName, columnValues) {
   
   return(sumOfColumnValues)
 }
-```
 
-
-
-```{r megaBallMatch, echo = FALSE, message = FALSE, warning = FALSE}
 #' Checks if a simulated lottery ticket Mega Ball value matches the Mega Ball value in the winning numbers dataset.
 #'
 #' @param ticketMegaBall Numeric: The "Mega Ball" value contained within a simulated ticket.
@@ -275,11 +242,7 @@ megaBallMatch <- function(ticketMegaBall, winningMegaBall) {
     return(FALSE)
   }
 }
-```
 
-
-
-```{r multiplierMatch, echo = FALSE, message = FALSE, warning = FALSE}
 #' Checks if a simulated lottery ticket Multiplier value matches the Multiplier value in the winning lottery numbers dataset.
 #'
 #' @param ticketMultiplier Numeric: The "Multiplier" value contained within a simulated ticket.
@@ -298,11 +261,7 @@ multiplierMatch <- function(ticketMultiplier, winningMultiplier) {
     return(FALSE)
   }
 }
-```
 
-
-
-```{r randomLotteryTicketGenerator, echo = FALSE, message = FALSE, warning = FALSE}
 #' Simulates generating Mega Millions lottery tickets containing random numbers.
 #'
 #' This function returns a list containing 5 unique numbers from 1 to 70, 1 number from
@@ -320,11 +279,7 @@ generateRandomLotteryTickets <- function() {
  
   return(lotteryTickets)
 }
-```
 
-
-
-```{r, generateFrequencyBasedLotteryTicket, echo = FALSE, message = FALSE, warning = FALSE}
 #' Simulates generating a Mega Millions lottery ticket based on frequently occurring winning numbers.
 #'
 #' This function generates a lottery ticket consisting of the numbers that occur most frequently in
@@ -358,11 +313,7 @@ generateFrequencyBasedLotteryTicket <- function(trainingData) {
 
   return(lotteryTickets)
 }
-```
 
-
-
-```{r, simulateLotteryGame, echo = FALSE, message = FALSE, warning = FALSE}
 #' Simulates playing a lottery game.
 #'
 #' This function simulates playing lottery numbers against the winning numbers test dataset. 
@@ -459,13 +410,7 @@ lotteryGameSimulation <- function(ticketNumbers = NULL, trainingData = NULL, tes
 
   return(testData)
 }  
-```
 
-
-
-### Consistent Numbers Strategy
-
-```{r, consistentStrategyResultsTable, echo = FALSE, message = FALSE, warning = FALSE}
 # Define the consistent lottery numbers to play - first 5 numbers are the numbers to play,
 # 6th number is the Mega Ball, and the final number is the Multiplier.
 consistentLotteryNumbers <- c(26, 05, 25, 34, 11, 15, 4)
@@ -512,16 +457,7 @@ kable(consistentResults, 'html', table.attr = "class=\'consistent-results-table\
   row_spec(which(parse_number(as.character(consistentResults$payout)) > 0), bold = T, color = 'white', background = 'green') %>%
   kable_styling('striped') %>%
   scroll_box(width = '100%', height = '700px')
-```
 
-
-
-\ 
-\ 
-
-### Random Numbers Strategy
-
-```{r, randomStrategyResultsTable, echo = FALSE, message = FALSE, warning = FALSE}
 randomResults <- lotteryGameSimulation(NULL, NULL, testData, 'random')
 
 # Totals summary for Random Numbers strategy.
@@ -560,16 +496,7 @@ kable(randomResults, 'html', table.attr = "class=\'random-results-table\'", esca
   row_spec(which(parse_number(as.character(randomResults$payout)) > 0), bold = T, color = 'white', background = 'green') %>%
   kable_styling('striped') %>%
   scroll_box(width = '100%', height = '700px')
-```
 
-
-
-\ 
-\ 
-
-### Most Frequent Numbers Strategy
-
-```{r, frequentResultsTable, echo = FALSE, message = FALSE, warning = FALSE}
 frequentResults <- lotteryGameSimulation(NULL, trainingData, testData, 'frequency')
 
 # Totals summary for Random Numbers strategy.
@@ -609,16 +536,7 @@ kable(frequentResults, 'html', table.attr = "class=\'frequent-results-table\'", 
   row_spec(which(parse_number(as.character(frequentResults$payout)) > 0), bold = T, color = 'white', background = 'green') %>%
   kable_styling('striped') %>%
   scroll_box(width = '100%', height = '700px')
-```
 
-
-
-\ 
-\ 
-
-### Strategy Results Comparison
-
-```{r, strategyResultsComparisonTable, echo = FALSE, message = FALSE, warning = FALSE}
 # Totals summary for Consistent Numbers strategy.
 consistent_largest_payout <- consistentResults[which.max(as.numeric(consistentResults$payout)), ]$payout
 total_consistent_winnings <- calculateColumnValuesTotal('payout', consistentResults$payout)
@@ -665,11 +583,7 @@ kable(strategyResultsComparison %>% arrange(desc(`Winning Numbers Matched`)), 'h
       caption = '<center><h3>Strategy Results Comparison</h3></center>', col.names = columnNames) %>%
   column_spec(1:6, bold = T) %>%
   kable_styling('striped')
-```
 
-
-
-```{r, strategyResultsComparisonMegaballMatchesGraph, echo = FALSE, message = FALSE, warning = FALSE}
 strategyResultsComparison %>%
   ggplot( aes(x = reorder(Strategy, - `Mega Ball Matches`), fill = Strategy, y = `Mega Ball Matches`)) +
     ggtitle('Mega Ball Matches') +
@@ -682,10 +596,7 @@ strategyResultsComparison %>%
           panel.background = element_blank(),
           axis.text.x = element_blank(),
           axis.ticks.x = element_blank())
-```
 
-
-```{r, strategyResultsComparisonMultiplierMatchesGraph, echo = FALSE, message = FALSE, warning = FALSE}
 strategyResultsComparison
 strategyResultsComparison %>%
   ggplot( aes(x = reorder(Strategy, - `Winning Numbers Matched`), fill = Strategy, y = `Winning Numbers Matched`)) +
@@ -699,48 +610,7 @@ strategyResultsComparison %>%
           panel.background = element_blank(),
           axis.text.x = element_blank(),
           axis.ticks.x = element_blank())
-```
 
-
-```{r}
-# TODO: THIS IS CODE FOR DEVELOPMENT PURPOSES ONLY AND SHOULD BE REMOVED ONCE DEVELOPMENT IS COMPLETE!!!
-
-# https://lotterycodex.com/how-to-win-the-lottery-mathematically/
-
-#frequencyNumbers <- generateFrequencyBasedLotteryTicket(trainingData)
-#frequencyNumbers
-#const <- c(07, 22, 36, 45, 46, 12, 2)
-#const <- c(08, 11, 29, 32, 40, 02, 3)
-#const <- c(17, 31, 20, 28, 14, 10, 3)
-#results <- lotteryGameSimulation(NULL, trainingData, testData, 'frequency')
-#results <- lotteryGameSimulation(const, NULL, testData, 'consistent')
-#results <- lotteryGameSimulation(NULL, NULL, testData, 'random')
-
-#payout <- calculateColumnValuesTotal('payout', results$payout)
-#payout <- currency(payout)
-#payout
-
-#winningNumbers <- calculateColumnValuesTotal('winning_numbers_matched', results$winning_numbers_matched)
-#winningNumbers
-
-#mega <- calculateColumnValuesTotal('matching_mega_ball', results$matching_mega_ball)
-#mega
-
-#multiplier <- calculateColumnValuesTotal('matching_multiplier', results$matching_multiplier)
-#multiplier
-
-#table(results$multiplier)
-
-#results
-#head(testData)
-```
-
-
-
-
-
-
-```{r numberOfOccurrenceBarChart, echo = FALSE, message = FALSE, warning = FALSE}
 # TODO: Figure out why last 2 rows of DF do not show in bar chart. 
 winningNumbersData <-countTotalNumberOfOccurrencesByColumn(trainingData$winning_numbers, 'winning_numbers')
 
@@ -761,11 +631,7 @@ winningNumbersOccurrenceChart <- winningNumbersData %>%
   )
 
 subplot(winningNumbersOccurrenceChart)   
-```
 
-
-
-```{r megaBallOccurrenceBarChart, echo = FALSE, message = FALSE, warning = FALSE}
 # TODO: Figure out why last 2 rows of DF do not show in bar chart. 
 megaBallData <-countTotalNumberOfOccurrencesByColumn(trainingData$mega_ball, 'mega_ball')
 
@@ -786,7 +652,3 @@ megaBallOccurrenceChart <- megaBallData %>%
   )
 
 subplot(megaBallOccurrenceChart)
-```
-
-
-
