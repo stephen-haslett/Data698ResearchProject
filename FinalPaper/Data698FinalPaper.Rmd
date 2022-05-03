@@ -26,36 +26,29 @@ Abstract: use 250 words or less to summarize your problem, methodology, and majo
 
 ## Introduction
 
-The famous American writter Ambrose Bierce once defined a lottery as "_A tax on people who are bad at math_" (_The Unabridged Devil's Dictionary_). According to the United States Census Bureau's [2020 Annual Survey of State Government Finances](https://www.census.gov/data/tables/2020/econ/state/historical-tables.html), Americans spent more than $80 billion on lottery tickets in 2020 alone. Based on these statistics, it is clear that many Americans, despite the incredibly thin odds of winning the jackpot (_The odds of winning the Mega Millions jackpot is 1 in 302,575,350_), are willing to shun Bierce's advice and spend a significant amount of money for the chance of lifelong financial security.
+The famous American writter Ambrose Bierce once defined a lottery as "_A tax on people who are bad at math_" (_The Unabridged Devil's Dictionary_). According to the United States Census Bureau's [2020 Annual Survey of State Government Finances](https://www.census.gov/data/tables/2020/econ/state/historical-tables.html), Americans spent more than $80 billion on lottery tickets in 2020 alone. Based on these statistics, it is clear that many Americans, despite the incredibly thin odds of winning the jackpot (_1 in 302,575,350 for the Mega Millions jackpot_), are willing to shun Bierce's advice and part with a significant amount of money for the chance of lifelong financial security.
 
-Given the outragesouly slim chances of winning, it is almost certain that at one stage or another, every lottery player has pondered the thought of how to beat these odds.
+The outrageously slim chances of winning have led to an array of different approaches to playing the lottery in the hope of beating the odds. These range from strategies based on mysticism, such as playing numbers based on [numerology](https://www.mercurynews.com/2019/03/20/want-to-win-tonights-550m-powerball-take-a-deeper-look-at-the-numbers/), to those based on statistical probability, such as playing numbers that have frequently shown up in winning number sets and are thus believed to more likely show up in future drawings.
 
+While there may be an unlikely chance that mystical strategies can assist in increasing the odds of winning the lottery, such approaches are unmeasurable. As a result, this study will not be concerned with such appraoches. Instead, we will focus on strategies that are based on statistical probability, and are thus more measurable.
 
-
-We will analyze the past 20 years of winning numbers for the [Mega Millions](https://nylottery.ny.gov/draw-game/?game=megamillions) lottery to answer the following questions:
+In order to assess if these strategies can better one's odds of winning, We will analyze the past 20 years of winning numbers from the [Mega Millions](https://nylottery.ny.gov/draw-game/?game=megamillions) lottery to answer the following questions:
 
 - Is it possible to predict future winning lottery numbers based on previous results?
 
 - Can a pattern be identified regarding which winning numbers are drawn most often per game over time?
 
-- Does using these numbers increase our chances of winning?
+- Can playing these numbers increase our chances of winning, and how does this strategy relate to the [hot hand fallacy](https://en.wikipedia.org/wiki/Hot_hand)?
 
-- In terms of winning, is it better to play the same numbers, or pick different numbers every game?
+- Conversely, can avoiding these numbers increase the odds of winning, and how does this strategy relate to the [gambler's fallacy](https://en.wikipedia.org/wiki/Gambler%27s_fallacy)?
 
-- What strategies can be applied to ensure our chances of winning are increased (if any)?
+- In terms of winning, is it better to play the same numbers, or pick random numbers every game?
 
-- How do winning numbers correlate to payout amounts?
+- Out of all the strategies under investigation, which strategy gives us the best odds of winning (if any)?
 
-- What statistical theories are applicable to our goal, and which theories can benefit us (if any):
+- What correlations exist between winning numbers and payout amounts?
 
-    - [Law of Large Numbers](https://en.wikipedia.org/wiki/Law_of_large_numbers)
-    - [Monty Hall Problem](https://en.wikipedia.org/wiki/Monty_Hall_problem)
-    - [Gambler's Fallacy](https://en.wikipedia.org/wiki/Gambler%27s_fallacy)
-    - [Hot Hand Fallacy](https://www.investopedia.com/terms/h/hot-hand.asp#:~:text=The%20hot%20hand%20fallacy%20is,rolled%20it%20in%20the%20past)
 
-Similar to previous studies, we want to understand whether or not it is possible to obtain an edge when playing the lottery. With the Data that we have gathered
-(_From the nylottery and megamillions websites_), we will identify data trends and use simulations to answer the aforementioned questions. 
-In addition to testing various "winning strategies", we also want to explore lottery payout amounts, as jackpot numbers change, and prize money expectations.
 
 ### Mega Millions Lottery Game
 
@@ -141,12 +134,6 @@ describe what you did (validation, experimental design, the study of the theorie
 ## Summary
 conclude your findings, suggest areas for future work.
 
-## Appendices
-(put your detailed code here.)
-
-
-
-
 
 
 Most of these papers agree that trying to predict next weeks lottery numbers is absurd. Despite popular beliefs and fallacies, there is no reliable way to predict the lottery. If the odds of winning the lottery are so small, someone may ask: "how come people win all the time?".
@@ -190,6 +177,11 @@ In order to evaluate which selection strategy (_if any_) is most effective, we w
 
 3. **_Gianella Renato. (2014)_** \
 [The Geometry Of Chance:Lotto Numbers Follow A Predicted Pattern](http://jaguar.fcav.unesp.br/RME/fasciculos/v31/v31_n4/A7_RGiarelli.pdf)
+
+
+## Appendix 
+
+### A1. Code
 
 
 
