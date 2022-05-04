@@ -43,7 +43,7 @@ trainingData <- megaMillionsWinningNumbers[row.names(megaMillionsWinningNumbers)
 testData <- megaMillionsWinningNumbers[row.names(megaMillionsWinningNumbers) %in% 300+1:nrow(megaMillionsWinningNumbers), ]
 ```
 
-## {.tabset}
+
 
 ```{r countOccurrencesOfNumber, echo = FALSE, message = FALSE, warning = FALSE}
 #' Helper function that counts the number of times a given number occurs within a dataframe column.
