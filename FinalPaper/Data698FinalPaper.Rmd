@@ -30,7 +30,7 @@ The famous American writter Ambrose Bierce once defined a lottery as "_A tax on 
 
 The outrageously slim chances of winning have led to an array of different approaches to playing the lottery in the hope of beating the odds. These range from strategies based on mysticism, such as playing numbers based on [numerology](https://www.mercurynews.com/2019/03/20/want-to-win-tonights-550m-powerball-take-a-deeper-look-at-the-numbers/), to those based on statistical probability, such as playing numbers that have frequently shown up in winning number sets and are thus believed to more likely show up in future drawings.
 
-While there may be an unlikely chance that mystical strategies can assist in increasing the odds of winning the lottery, such approaches are unmeasurable. As a result, this study will not be concerned with such appraoches. Instead, we will focus on strategies that are based on statistical probability, and are thus more measurable.
+While there may be an unlikely chance that mystical strategies can assist in increasing the odds of winning the lottery, such appraoches are unmeasurable. As a result, this study will not be concerned with mystical strategies. Instead, we will focus on strategies that are based on statistical probability, and are thus more measurable.
 
 In order to assess if these strategies can better one's odds of winning, We will analyze the past 20 years of winning numbers from the [Mega Millions](https://nylottery.ny.gov/draw-game/?game=megamillions) lottery to answer the following questions:
 
@@ -44,20 +44,18 @@ In order to assess if these strategies can better one's odds of winning, We will
 
 - In terms of winning, is it better to play the same numbers, or pick random numbers every game?
 
-- Out of all the strategies under investigation, which strategy gives us the best odds of winning (if any)?
-
-- What correlations exist between winning numbers and payout amounts?
+- Out of all the strategies under investigation, which strategy gives us the best return on investment (if any)?
 
 
 
-### Mega Millions Lottery Game
+### The Mega Millions Lottery Game
 
 Mega Millions is a US multi-state lottery game that is drawn twice a week on Tuesdays and Fridays.
 To participate in the game, players purchase one or more lottery tickets at a cost of $2 per ticket.
 Players must pick **5** _unique numbers_ from **1** to **70**, and **1** number from **1** to **25** for the _Mega Ball_.
 Optionally, players can opt for randomly selected numbers at the time of ticket purchase.
 
-### Game Rules
+#### Game Rules
 
 Lottery numbers are drawn randomly **twice** a week on _Tuesdays_ and _Fridays_ at 11PM (EST). 
 50% of lottery ticket sales is allocated as prize money (_75% of which is__used for the jackpot payout_). 
@@ -128,7 +126,15 @@ This study does not assume that Gianella's method is effective, rather it sets o
 ## Methodology
 discuss the key aspects of your model/problem. If you work on real data, explain how you verified your model. If you work on theoretical aspects of data science advancement, explain your method with details (you can put the theory and proof in the appendix if you see fit).
 
+- Lottery is rule based and follows logic and thus it can be simulated.
+
+- Talk about how we are comparing models - comparing using T test.
+
+- How we are verifying our models - with the T test. We can do it on our data due to the central limit theorem (the sample mean comes from a normal distribution with standard deviation = to standard error - given that the sample size is large enough). Doesn't matter what distribution your sample looks like, because the resampled means will approximate a normal distribution.  
+
 ## Results
+
+All my code will be pointing toward how we came up with hot hand fallacy numbers (charts, tables, etc. to show this). 
 describe what you did (validation, experimental design, the study of the theories, etc.), and what you found out (statistical analysis, comparison of various approaches, system performance improvement, optimization, new algorithm development, etc.).
 
 ## Summary
@@ -181,10 +187,9 @@ In order to evaluate which selection strategy (_if any_) is most effective, we w
 
 ## Appendix 
 
-### A1. Code
+https://github.com/stephen-haslett/Data698ResearchProject
 
-```{r code=readLines(knitr::purl('../Code/AppendixCode.Rmd', documentation = 0)), eval = FALSE}
-```
+Add links to individual files along with a summary explaining each file.
 
 
 
