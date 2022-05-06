@@ -1,6 +1,5 @@
 ---
-title: "Data 698 Analytics Master’s Research Project"
-subtitle: "Predicting Winning New York Mega Millions Lottery Numbers"
+title: "Winning Numbers Data Analysis"
 author: "Richard Zheng, Stephen Haslett"
 date: "2/7/2022"
 output: html_document
@@ -498,20 +497,6 @@ kable(consistentResultsSummary, 'html', table.attr = "class=\'consistent-totals-
   column_spec(1:5, bold = T) %>%
   kable_styling('striped') %>%
   scroll_box(width = '100%', height = 'auto')
-
-# Remove row numbers for readability purposes.
-rownames(consistentResults) <- c()
-
-# Define table column names.
-columnNames <- c('Draw Date', 'Winning Numbers', 'Mega Ball', 'Multiplier', 'Numbers Matched', 'Mega Ball Match', 'Multiplier Match', 'Payout')
-
-# Output results table.
-kable(consistentResults, 'html', table.attr = "class=\'consistent-results-table\'", escape = F,
-      caption = '<center><h3>Consistent Numbers Strategy Results</h3></center>', col.names = columnNames) %>%
-  column_spec(1, bold = T) %>%
-  row_spec(which(parse_number(as.character(consistentResults$payout)) > 0), bold = T, color = 'white', background = 'green') %>%
-  kable_styling('striped') %>%
-  scroll_box(width = '100%', height = '700px')
 ```
 
 
@@ -546,20 +531,6 @@ kable(randomResultsSummary, 'html', table.attr = "class=\'random-totals-table\'"
   column_spec(1:5, bold = T) %>%
   kable_styling('striped') %>%
   scroll_box(width = '100%', height = 'auto')
-
-# Remove row numbers for readability purposes.
-rownames(randomResults) <- c()
-
-# Define table column names.
-columnNames <- c('Draw Date', 'Winning Numbers', 'Mega Ball', 'Multiplier', 'Numbers Matched', 'Mega Ball Match', 'Multiplier Match', 'Payout')
-
-# Output results table.
-kable(randomResults, 'html', table.attr = "class=\'random-results-table\'", escape = F,
-      caption = '<center><h3>Random Numbers Strategy Results</h3></center>', col.names = columnNames) %>%
-  column_spec(1, bold = T) %>%
-  row_spec(which(parse_number(as.character(randomResults$payout)) > 0), bold = T, color = 'white', background = 'green') %>%
-  kable_styling('striped') %>%
-  scroll_box(width = '100%', height = '700px')
 ```
 
 
@@ -595,20 +566,6 @@ kable(frequentResultsSummary, 'html', table.attr = "class=\'frequent-totals-tabl
   column_spec(1:5, bold = T) %>%
   kable_styling('striped') %>%
   scroll_box(width = '100%', height = 'auto')
-
-# Remove row numbers for readability purposes.
-rownames(frequentResults) <- c()
-
-# Define table column names.
-columnNames <- c('Draw Date', 'Winning Numbers', 'Mega Ball', 'Multiplier', 'Numbers Matched', 'Mega Ball Match', 'Multiplier Match', 'Payout')
-
-# Output results table.
-kable(frequentResults, 'html', table.attr = "class=\'frequent-results-table\'", escape = F,
-      caption = '<center><h3>Most Frequent Numbers Strategy Results</h3></center>', col.names = columnNames) %>%
-  column_spec(1, bold = T) %>%
-  row_spec(which(parse_number(as.character(frequentResults$payout)) > 0), bold = T, color = 'white', background = 'green') %>%
-  kable_styling('striped') %>%
-  scroll_box(width = '100%', height = '700px')
 ```
 
 
@@ -671,7 +628,7 @@ kable(strategyResultsComparison %>% arrange(desc(`Winning Numbers Matched`)), 'h
 
 ```{r, strategyResultsComparisonMegaballMatchesGraph, echo = FALSE, message = FALSE, warning = FALSE}
 strategyResultsComparison %>%
-  ggplot( aes(x = reorder(Strategy, - `Mega Ball Matches`), fill = Strategy, y = `Mega Ball Matches`)) +
+  ggplot(aes(x = reorder(Strategy, - `Mega Ball Matches`), fill = Strategy, y = `Mega Ball Matches`)) +
     ggtitle('Mega Ball Matches') +
     labs(y = 'Number of Matches', x = '') +
     geom_bar(stat = 'identity') +
@@ -686,9 +643,8 @@ strategyResultsComparison %>%
 
 
 ```{r, strategyResultsComparisonMultiplierMatchesGraph, echo = FALSE, message = FALSE, warning = FALSE}
-strategyResultsComparison
 strategyResultsComparison %>%
-  ggplot( aes(x = reorder(Strategy, - `Winning Numbers Matched`), fill = Strategy, y = `Winning Numbers Matched`)) +
+  ggplot(aes(x = reorder(Strategy, - `Winning Numbers Matched`), fill = Strategy, y = `Winning Numbers Matched`)) +
     ggtitle('Winning Numbers Matched') +
     labs(y = 'Numbers Matched', x = '') +
     geom_bar(stat = 'identity') +
@@ -704,52 +660,34 @@ strategyResultsComparison %>%
 
 
 
-```{r numberOfOccurrenceBarChart, echo = FALSE, message = FALSE, warning = FALSE}
-# TODO: Figure out why last 2 rows of DF do not show in bar chart. 
+```{r numberOfOccurrenceBarChart, echo = FALSE, message = FALSE, warning = FALSE, fig.width = 16, fig.height = 7}
 winningNumbersData <-countTotalNumberOfOccurrencesByColumn(trainingData$winning_numbers, 'winning_numbers')
-
-winningNumbersOccurrenceChart <- winningNumbersData %>%
-  plot_ly(x = ~winningNumbersData$Number,
-          y = winningNumbersData$Occurrences,
-          type = 'bar',
-          color = winningNumbersData$Number, colors = c('#FA8072'),
-          showlegend = FALSE,
-          orientation = 'v') %>%
-  layout(title = list(text = 'Occurrences Of Winning Numbers', font = list(size = 12)),
-    xaxis = list(
-      title = 'Winning Number'
-    ),
-    yaxis = list(
-      title = 'Total Occurrences'
-    )
-  )
-
-subplot(winningNumbersOccurrenceChart)   
+winningNumbersData %>%
+  ggplot(aes(x = reorder(Number, -as.numeric(Occurrences)), fill = Number, y = Occurrences)) +
+    ggtitle('Frequency of Winning Numbers') +
+    labs(y = 'Frequency', x = 'Winning Number') +
+    geom_bar(stat = 'identity', position = 'identity') +
+    geom_col(width = 0.5, position = position_dodge(2)) +
+    theme(legend.position = 'none',
+          panel.background = element_blank(),
+          axis.text.y = element_text(hjust = 15),
+          text = element_text(size = 15))
 ```
 
 
 
 ```{r megaBallOccurrenceBarChart, echo = FALSE, message = FALSE, warning = FALSE}
-# TODO: Figure out why last 2 rows of DF do not show in bar chart. 
 megaBallData <-countTotalNumberOfOccurrencesByColumn(trainingData$mega_ball, 'mega_ball')
-
-megaBallOccurrenceChart <- megaBallData %>%
-  plot_ly(x = ~megaBallData$Number,
-          y = megaBallData$Occurrences,
-          type = 'bar',
-          color = megaBallData$Number, colors = c('#DC143C'),
-          showlegend = FALSE,
-          orientation = 'v') %>%
-  layout(title = list(text = 'Occurrences Of Mega Ball Numbers', font = list(size = 12)),
-    xaxis = list(
-      title = 'Mega Ball'
-    ),
-    yaxis = list(
-      title = 'Total Occurrences'
-    )
-  )
-
-subplot(megaBallOccurrenceChart)
+megaBallData %>%
+  ggplot(aes(x = reorder(Number, -as.numeric(Occurrences)), fill = Number, y = Occurrences)) +
+    ggtitle('Frequency of Mega Ball Numbers') +
+    labs(y = 'Frequency', x = 'Mega Ball') +
+    geom_bar(stat = 'identity', position = 'identity') +
+    geom_col(width = 0.5, position = position_dodge(2)) +
+    theme(legend.position = 'none',
+          panel.background = element_blank(),
+          axis.text.y = element_text(hjust = 15),
+          text = element_text(size = 15))
 ```
 
 

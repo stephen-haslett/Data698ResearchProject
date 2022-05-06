@@ -30,7 +30,7 @@ The famous American writter Ambrose Bierce once defined a lottery as "_A tax on 
 
 The outrageously slim chances of winning have led to an array of different approaches to playing the lottery in the hope of beating the odds. These range from strategies based on mysticism, such as playing numbers based on [numerology](https://www.mercurynews.com/2019/03/20/want-to-win-tonights-550m-powerball-take-a-deeper-look-at-the-numbers/), to those based on statistical probability, such as playing numbers that have frequently shown up in winning number sets and are thus believed to more likely show up in future drawings.
 
-While there may be an unlikely chance that mystical strategies can assist in increasing the odds of winning the lottery, such appraoches are unmeasurable. As a result, this study will not be concerned with mystical strategies. Instead, we will focus on strategies that are based on statistical probability, and are thus more measurable.
+While there may be an unlikely chance that mystical strategies can assist in increasing the odds of winning the lottery, such appraoches are unmeasurable and as such, this study will not be concerned with mystical strategies. Instead, we will focus on strategies that are based on statistical probability, and are thus more measurable.
 
 In order to assess if these strategies can better one's odds of winning, We will analyze the past 20 years of winning numbers from the [Mega Millions](https://nylottery.ny.gov/draw-game/?game=megamillions) lottery to answer the following questions:
 
@@ -46,6 +46,19 @@ In order to assess if these strategies can better one's odds of winning, We will
 
 - Out of all the strategies under investigation, which strategy gives us the best return on investment (if any)?
 
+We will compare 4 different game strategies in this study to determine if one or more strategies results in a greater amount of wins. The strategies that we will investigate are as follows:
+
+1. **Consistent Numbers Strategy**  
+_Playing the same numbers every game_. 
+
+2. **Random Numbers Strategy**  
+_Playing randomly selected numbers every game_. 
+
+3. **Most Frequent Numbers Strategy**  
+_This strategy involves playing the numbers that have most frequently occurred in past winning number sets every game_.
+
+4. **Least Frequent Numbers Strategy**  
+_This strategy involves playing the numbers that have least frequently occurred in past winning number sets every game_.
 
 
 ### The Mega Millions Lottery Game
@@ -92,9 +105,9 @@ then the payout for the winning lottery numbers will be multiplied by the winnin
 
 ## Data Source
 
-The data that we utltilized for this project was supplied by [NY Open Data](https://data.ny.gov/),
+The data that we utilized for this project was supplied by [NY Open Data](https://data.ny.gov/),
 and contains biweekly winning Mega Millions lottery numbers from 2002, through the current week. 
-The dataset is in CSV format and can be accessed here:
+The dataset is in CSV format and can be accessed at the following location:
 
 [Lottery Mega Millions Winning Numbers: Beginning 2002](https://data.ny.gov/Government-Finance/Lottery-Mega-Millions-Winning-Numbers-Beginning-20/5xaw-6ayf/data). As of writing, the set consists of 2058 observations broken into 4 columns:
 
@@ -124,6 +137,7 @@ This study does not assume that Gianella's method is effective, rather it sets o
 
 
 ## Methodology
+In order to evaluate
 discuss the key aspects of your model/problem. If you work on real data, explain how you verified your model. If you work on theoretical aspects of data science advancement, explain your method with details (you can put the theory and proof in the appendix if you see fit).
 
 - Lottery is rule based and follows logic and thus it can be simulated.
