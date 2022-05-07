@@ -164,8 +164,7 @@ calculateTotalPayout <- function(matchingNumberCount, megaBallMatch, multiplierM
   
   # Jackpot payout - 75% of the total prize money. 5 matching numbers with the Mega Ball.
   if (matchingNumberCount == 5 && isTRUE(megaBallMatch)) {
-    # TODO NEED TO ADD CODE TO CALCULATE THIS VALUE - SETTING TO LARGE NUMBER FOR NOW!!!!
-    payout <- 40000000
+    payout <- 999000000
   }
 
   # Second prize - $1,000,000. 5 matching numbers.
@@ -361,6 +360,45 @@ generateFrequencyBasedLotteryTicket <- function(trainingData) {
 
 
 
+```{r, generateLeastFrequentNumbersBasedLotteryTicket, echo = FALSE, message = FALSE, warning = FALSE}
+#' Simulates generating a Mega Millions lottery ticket based on least frequently occurring winning numbers.
+#'
+#' This function generates a lottery ticket consisting of the numbers that occur least frequently in
+#' the winning numbers result set.
+#'
+#' @param trainingData Dataframe: The training data from which to generate least frequent based numbers.
+#'
+#' @return List: A list consisting of the 5 least frequent winning numbers, the least frequent winning
+#' MegaBall, and least frequent winning multplier number.
+#'
+#' @export
+generateLeastFrequentNumbersBasedLotteryTicket <- function(trainingData) {
+  # Select the top five least frequently occurring winning numbers.
+  winningNumbers <- countTotalNumberOfOccurrencesByColumn(trainingData$winning_numbers, 'winning_numbers')
+  end <- nrow(winningNumbers)
+  start <- end - 4
+  winningNumbers <- winningNumbers[start:end, ]$Number
+  winningNumbers <- as.numeric(winningNumbers) 
+
+  # Select the least frequently occurring Megaball.
+  megaBallNumbers <- countTotalNumberOfOccurrencesByColumn(trainingData$mega_ball, 'mega_ball')
+  megaBallNumber <- megaBallNumbers[which.min(megaBallNumbers$Occurrences), ]$Number
+  megaBallNumber <- as.numeric(megaBallNumber)
+
+  # Select the least frequently occurring Multiplier number.
+  multiplierNumbers <- countTotalNumberOfOccurrencesByColumn(trainingData$multiplier, 'multiplier')
+  multiplierNumber <- multiplierNumbers[which.min(multiplierNumbers$Occurrences), ]$Number
+  multiplierNumber <- as.numeric(multiplierNumber)
+  
+  
+  lotteryTickets <- list(winningNumbers, megaBallNumber, multiplierNumber)
+
+  return(lotteryTickets)
+}
+```
+
+
+
 ```{r, simulateLotteryGame, echo = FALSE, message = FALSE, warning = FALSE}
 #' Simulates playing a lottery game.
 #'
@@ -393,7 +431,7 @@ lotteryGameSimulation <- function(ticketNumbers = NULL, trainingData = NULL, tes
   multiplierStatus <- c()
 
   # When "generationMethod" is "frequency", generate numbers based on their frequency
-  # of occurence in the training dataset.
+  # of occurrence in the training dataset.
   if (generationMethod == 'frequency' && !is.null(trainingData)) {
     lotteryNumbers <- data.frame()
     lotteryNumbers <- colnames('winning_numbers')
@@ -403,6 +441,18 @@ lotteryGameSimulation <- function(ticketNumbers = NULL, trainingData = NULL, tes
     lotteryNumbers$mega_ball <- formatC(x = frequencyNumbers[[2]], digits = 1, flag = '0', format = 'd')
     lotteryNumbers$multiplier <- frequencyNumbers[[3]]
   }
+ 
+  # When "generationMethod" is "leastfrequent", generate numbers based on
+  # those that occur least frequently in the training dataset.
+  if (generationMethod == 'leastfrequent' && !is.null(trainingData)) {
+    lotteryNumbers <- data.frame()
+    lotteryNumbers <- colnames('winning_numbers')
+    leastFrequentNumbers <- generateLeastFrequentNumbersBasedLotteryTicket(trainingData)
+    # Add leading zeros to numbers below 10.
+    lotteryNumbers$winning_numbers <- formatC(x = leastFrequentNumbers[[1]], digits = 1, flag = '0', format = 'd')
+    lotteryNumbers$mega_ball <- formatC(x = leastFrequentNumbers[[2]], digits = 1, flag = '0', format = 'd')
+    lotteryNumbers$multiplier <- leastFrequentNumbers[[3]]
+  } 
   
   # When "generationMethod" is "consistent", Validate that the ticketNumbers parameter is
   # passed into the function and set "lotteryNumbers" to the ticketNumbers parameter value.
