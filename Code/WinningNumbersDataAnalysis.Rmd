@@ -164,8 +164,7 @@ calculateTotalPayout <- function(matchingNumberCount, megaBallMatch, multiplierM
   
   # Jackpot payout - 75% of the total prize money. 5 matching numbers with the Mega Ball.
   if (matchingNumberCount == 5 && isTRUE(megaBallMatch)) {
-    # TODO NEED TO ADD CODE TO CALCULATE THIS VALUE - SETTING TO LARGE NUMBER FOR NOW!!!!
-    payout <- 40000000
+    payout <- 999000000
   }
 
   # Second prize - $1,000,000. 5 matching numbers.
@@ -361,6 +360,45 @@ generateFrequencyBasedLotteryTicket <- function(trainingData) {
 
 
 
+```{r, generateLeastFrequentNumbersBasedLotteryTicket, echo = FALSE, message = FALSE, warning = FALSE}
+#' Simulates generating a Mega Millions lottery ticket based on least frequently occurring winning numbers.
+#'
+#' This function generates a lottery ticket consisting of the numbers that occur least frequently in
+#' the winning numbers result set.
+#'
+#' @param trainingData Dataframe: The training data from which to generate least frequent based numbers.
+#'
+#' @return List: A list consisting of the 5 least frequent winning numbers, the least frequent winning
+#' MegaBall, and least frequent winning multplier number.
+#'
+#' @export
+generateLeastFrequentNumbersBasedLotteryTicket <- function(trainingData) {
+  # Select the top five least frequently occurring winning numbers.
+  winningNumbers <- countTotalNumberOfOccurrencesByColumn(trainingData$winning_numbers, 'winning_numbers')
+  end <- nrow(winningNumbers)
+  start <- end - 4
+  winningNumbers <- winningNumbers[start:end, ]$Number
+  winningNumbers <- as.numeric(winningNumbers) 
+
+  # Select the least frequently occurring Megaball.
+  megaBallNumbers <- countTotalNumberOfOccurrencesByColumn(trainingData$mega_ball, 'mega_ball')
+  megaBallNumber <- megaBallNumbers[which.min(megaBallNumbers$Occurrences), ]$Number
+  megaBallNumber <- as.numeric(megaBallNumber)
+
+  # Select the least frequently occurring Multiplier number.
+  multiplierNumbers <- countTotalNumberOfOccurrencesByColumn(trainingData$multiplier, 'multiplier')
+  multiplierNumber <- multiplierNumbers[which.min(multiplierNumbers$Occurrences), ]$Number
+  multiplierNumber <- as.numeric(multiplierNumber)
+  
+  
+  lotteryTickets <- list(winningNumbers, megaBallNumber, multiplierNumber)
+
+  return(lotteryTickets)
+}
+```
+
+
+
 ```{r, simulateLotteryGame, echo = FALSE, message = FALSE, warning = FALSE}
 #' Simulates playing a lottery game.
 #'
@@ -393,7 +431,7 @@ lotteryGameSimulation <- function(ticketNumbers = NULL, trainingData = NULL, tes
   multiplierStatus <- c()
 
   # When "generationMethod" is "frequency", generate numbers based on their frequency
-  # of occurence in the training dataset.
+  # of occurrence in the training dataset.
   if (generationMethod == 'frequency' && !is.null(trainingData)) {
     lotteryNumbers <- data.frame()
     lotteryNumbers <- colnames('winning_numbers')
@@ -403,6 +441,18 @@ lotteryGameSimulation <- function(ticketNumbers = NULL, trainingData = NULL, tes
     lotteryNumbers$mega_ball <- formatC(x = frequencyNumbers[[2]], digits = 1, flag = '0', format = 'd')
     lotteryNumbers$multiplier <- frequencyNumbers[[3]]
   }
+ 
+  # When "generationMethod" is "leastfrequent", generate numbers based on
+  # those that occur least frequently in the training dataset.
+  if (generationMethod == 'leastfrequent' && !is.null(trainingData)) {
+    lotteryNumbers <- data.frame()
+    lotteryNumbers <- colnames('winning_numbers')
+    leastFrequentNumbers <- generateLeastFrequentNumbersBasedLotteryTicket(trainingData)
+    # Add leading zeros to numbers below 10.
+    lotteryNumbers$winning_numbers <- formatC(x = leastFrequentNumbers[[1]], digits = 1, flag = '0', format = 'd')
+    lotteryNumbers$mega_ball <- formatC(x = leastFrequentNumbers[[2]], digits = 1, flag = '0', format = 'd')
+    lotteryNumbers$multiplier <- leastFrequentNumbers[[3]]
+  } 
   
   # When "generationMethod" is "consistent", Validate that the ticketNumbers parameter is
   # passed into the function and set "lotteryNumbers" to the ticketNumbers parameter value.
@@ -543,7 +593,7 @@ kable(randomResultsSummary, 'html', table.attr = "class=\'random-totals-table\'"
 ```{r, frequentResultsTable, echo = FALSE, message = FALSE, warning = FALSE}
 frequentResults <- lotteryGameSimulation(NULL, trainingData, testData, 'frequency')
 
-# Totals summary for Random Numbers strategy.
+# Totals summary for Most Frequent Numbers strategy.
 total_winnings <- calculateColumnValuesTotal('payout', frequentResults$payout)
 
 total_winnings <- currency(total_winnings)
@@ -563,6 +613,41 @@ rownames(frequentResultsSummary) <- c()
 columnNames <- c('Winning Numbers Matched', 'Mega Ball Matches', 'Multiplier Matches', 'Total Winnings', 'Largest Individual Payout')
 kable(frequentResultsSummary, 'html', table.attr = "class=\'frequent-totals-table\'", escape = F,
       caption = '<center><h3>Most Frequent Numbers Strategy Results Summary</h3></center>', col.names = columnNames) %>%
+  column_spec(1:5, bold = T) %>%
+  kable_styling('striped') %>%
+  scroll_box(width = '100%', height = 'auto')
+```
+
+
+
+\ 
+\ 
+
+### Least Frequent Numbers Strategy
+
+```{r, leastFrequentResultsTable, echo = FALSE, message = FALSE, warning = FALSE}
+leastFrequentResults <- lotteryGameSimulation(NULL, trainingData, testData, 'leastfrequent')
+
+# Totals summary for Least Frequent Numbers strategy.
+total_winnings <- calculateColumnValuesTotal('payout', leastFrequentResults$payout)
+
+total_winnings <- currency(total_winnings)
+total_winning_numbers_matched <- calculateColumnValuesTotal('winning_numbers_matched', leastFrequentResults$winning_numbers_matched)
+total_mega_ball_matches <- calculateColumnValuesTotal('matching_mega_ball', leastFrequentResults$matching_mega_ball)
+
+largest_individual_payout <- leastFrequentResults[which.max(as.numeric(leastFrequentResults$payout)), ]$payout
+
+# Total Multiplier numbers matched.
+total_multiplier_matches <- calculateColumnValuesTotal('matching_multiplier', leastFrequentResults$matching_multiplier)
+
+# Add totals to a results summary dataframe.
+leastFrequentResultsSummary <- data.frame(total_winning_numbers_matched, total_mega_ball_matches, total_multiplier_matches, total_winnings, largest_individual_payout)
+
+# Output results summary as a table.
+rownames(leastFrequentResultsSummary) <- c()
+columnNames <- c('Winning Numbers Matched', 'Mega Ball Matches', 'Multiplier Matches', 'Total Winnings', 'Largest Individual Payout')
+kable(leastFrequentResultsSummary, 'html', table.attr = "class=\'least-frequent-totals-table\'", escape = F,
+      caption = '<center><h3>Least Frequent Numbers Strategy Results Summary</h3></center>', col.names = columnNames) %>%
   column_spec(1:5, bold = T) %>%
   kable_styling('striped') %>%
   scroll_box(width = '100%', height = 'auto')
@@ -613,8 +698,21 @@ frequentResultsSummary <- data.frame(frequent_strategy, total_frequent_winning_n
 
 colnames(frequentResultsSummary) <- c('Strategy', 'Winning Numbers Matched', 'Mega Ball Matches', 'Multiplier Matches', 'Total Winnings', 'Largest Individual Payout')
 
+# Totals summary for Least Frequent Numbers strategy.
+least_frequent_largest_payout <- leastFrequentResults[which.max(as.numeric(leastFrequentResults$payout)), ]$payout
+total_least_frequent_winnings <- calculateColumnValuesTotal('payout', leastFrequentResults$payout)
+total_least_frequent_winnings <- currency(total_least_frequent_winnings)
+total_least_frequent_winning_numbers_matched <- calculateColumnValuesTotal('winning_numbers_matched', leastFrequentResults$winning_numbers_matched)
+total_least_frequent_mega_ball_matches <- calculateColumnValuesTotal('matching_mega_ball', leastFrequentResults$matching_mega_ball)
+total_least_frequent_multiplier_matches <- calculateColumnValuesTotal('matching_multiplier', leastFrequentResults$matching_multiplier)
+least_frequent_strategy <- 'Least Frequent Numbers Strategy'
+leastFrequentResultsSummary <- data.frame(least_frequent_strategy, total_least_frequent_winning_numbers_matched, total_least_frequent_mega_ball_matches,
+                                     total_least_frequent_multiplier_matches, total_least_frequent_winnings, least_frequent_largest_payout)
+
+colnames(leastFrequentResultsSummary) <- c('Strategy', 'Winning Numbers Matched', 'Mega Ball Matches', 'Multiplier Matches', 'Total Winnings', 'Largest Individual Payout')
+
 strategyResultsComparison <- tibble()
-strategyResultsComparison <- bind_rows(consistentResultsSummary, randomResultsSummary, frequentResultsSummary)
+strategyResultsComparison <- bind_rows(consistentResultsSummary, randomResultsSummary, frequentResultsSummary, leastFrequentResultsSummary)
 
 # Output results comparison as a table.
 columnNames <- c('Strategy', 'Winning Numbers Matched', 'Mega Ball Matches', 'Multiplier Matches', 'Total Winnings', 'Largest Individual Payout')
@@ -626,13 +724,16 @@ kable(strategyResultsComparison %>% arrange(desc(`Winning Numbers Matched`)), 'h
 
 
 
+\ 
+\ 
+
 ```{r, strategyResultsComparisonMegaballMatchesGraph, echo = FALSE, message = FALSE, warning = FALSE}
 strategyResultsComparison %>%
   ggplot(aes(x = reorder(Strategy, - `Mega Ball Matches`), fill = Strategy, y = `Mega Ball Matches`)) +
     ggtitle('Mega Ball Matches') +
     labs(y = 'Number of Matches', x = '') +
     geom_bar(stat = 'identity') +
-    scale_fill_manual(values = c('#FFA500', "#DC143C", '#006400')) +
+    scale_fill_manual(values = c('#FFA500', "#DC143C", '#006400', '#8000FF')) +
     scale_y_continuous(limits = c(0, 60), breaks = seq(0, 60, by = 5)) +
     theme(legend.position = 'right',
           legend.justification = 'top',
@@ -642,13 +743,16 @@ strategyResultsComparison %>%
 ```
 
 
+\ 
+\ 
+
 ```{r, strategyResultsComparisonMultiplierMatchesGraph, echo = FALSE, message = FALSE, warning = FALSE}
 strategyResultsComparison %>%
   ggplot(aes(x = reorder(Strategy, - `Winning Numbers Matched`), fill = Strategy, y = `Winning Numbers Matched`)) +
     ggtitle('Winning Numbers Matched') +
     labs(y = 'Numbers Matched', x = '') +
     geom_bar(stat = 'identity') +
-    scale_fill_manual(values = c('#FFA500', "#DC143C", '#006400')) +
+    scale_fill_manual(values = c('#FFA500', "#DC143C", '#006400', '#8000FF')) +
     scale_y_continuous(limits = c(0, 550), breaks = seq(0, 550, by = 50)) +
     theme(legend.position = 'right',
           legend.justification = 'top',
@@ -659,6 +763,8 @@ strategyResultsComparison %>%
 
 
 
+\ 
+\ 
 
 ```{r numberOfOccurrenceBarChart, echo = FALSE, message = FALSE, warning = FALSE, fig.width = 16, fig.height = 7}
 winningNumbersData <-countTotalNumberOfOccurrencesByColumn(trainingData$winning_numbers, 'winning_numbers')
@@ -676,6 +782,9 @@ winningNumbersData %>%
 
 
 
+\ 
+\ 
+
 ```{r megaBallOccurrenceBarChart, echo = FALSE, message = FALSE, warning = FALSE}
 megaBallData <-countTotalNumberOfOccurrencesByColumn(trainingData$mega_ball, 'mega_ball')
 megaBallData %>%
@@ -690,5 +799,23 @@ megaBallData %>%
           text = element_text(size = 15))
 ```
 
+
+
+\ 
+\ 
+
+```{r multiplierOccurrenceBarChart, echo = FALSE, message = FALSE, warning = FALSE}
+multiplierNumberData <-countTotalNumberOfOccurrencesByColumn(trainingData$multiplier, 'multiplier')
+multiplierNumberData %>%
+  ggplot(aes(x = reorder(Number, -as.numeric(Occurrences)), fill = Number, y = Occurrences)) +
+    ggtitle('Frequency of Multiplier Numbers') +
+    labs(y = 'Frequency', x = 'Multiplier') +
+    geom_bar(stat = 'identity', position = 'identity') +
+    geom_col(width = 0.5, position = position_dodge(2)) +
+    theme(legend.position = 'none',
+          panel.background = element_blank(),
+          axis.text.y = element_text(hjust = 15),
+          text = element_text(size = 15))
+```
 
 
