@@ -267,19 +267,23 @@ cold_megaballs = megaball_counts %>% filter(count < mean(count))
 
 
 
-```{r, barCharts, echo = FALSE, message = FALSE, warning = FALSE}
+```{r, barCharts, echo = FALSE, message = FALSE, warning = FALSE, fig.width = 12, fig.height = 7}
 plot_bar = function(dataset, title) {
   dataset %>%
   ggplot(aes(x = reorder(numbers, -count), y = count, fill = count)) +
   geom_bar(stat = 'identity') +
-  labs(x = 'number', title = title) +
-  theme_minimal()
+  labs(x = 'Number', y = 'Count', title = title) +
+  theme_minimal() +
+  theme(plot.title = element_text(size = 20),
+        axis.text = element_text(size = 12),
+        axis.title = element_text(size = 18))
 }
 
 plot_bar(hot_numbers,'Most Recurring Lottery Numbers')
 plot_bar(cold_numbers,'Least Recurring Lottery Numbers')
 plot_bar(hot_megaballs,'Most Recurring Megaball Numbers')
 plot_bar(cold_megaballs,'Least Recurring Megaball Numbers')
+
 ```
 
 
@@ -343,7 +347,7 @@ compare_dist = function(dist1, dist2, title) {
   normal_dist1 %>%
     ggplot(aes(x1, color = 'Base Case')) + geom_histogram(alpha = 0.1, bins = 50) +
     geom_histogram(data = normal_dist2,aes(x1, color = 'Other Case'), alpha = 0.1, bins = 50) +
-    labs(x = 'winnings', y = 'counts', title = title, color = 'Legend') +
+    labs(x = 'Winnings', y = 'Count', title = title, color = 'Legend') +
     scale_color_manual(values = colors)
 }
 
