@@ -2,7 +2,9 @@
 title: "simulation"
 author: "Richard"
 date: "4/11/2022"
-output: html_document
+output:
+  html_document: default
+  pdf_document: default
 ---
 
 ```{r}
@@ -11,7 +13,6 @@ library(tidyverse)
 
 
 ```{r}
-
 # function that generates random ticket based on numbers and megaball vectors
 random_ticket = function(numbers,megaball){
   ticket = sample(numbers,5,replace=FALSE)
@@ -160,6 +161,7 @@ win = total winnings - total cost
 
 ```{r}
 base_case = same_ticket(10000,m=FALSE)
+base_winnings = base_case$winnings
 ```
 
 
@@ -169,8 +171,8 @@ Comparing average ticket winnings between base_case and with multiplier, we see 
 
 ```{r}
 with_multi = same_ticket(10000, m=TRUE)
-
-multi_test = t.test(base_case$winnings, with_multi$winnings, alternative = c('two.sided'))
+multi_winnings = with_multi$winnings
+multi_test = t.test(base_winnings, multi_winnings, alternative = c('two.sided'))
 multi_test
 ```
 
@@ -178,9 +180,9 @@ Comparing base case to choosing random tickets each lottery, we see that the P v
 
 ```{r}
 with_random = diff_ticket(10000,m= FALSE)
-with_random$winnings%>%sum()
+random_winnings = with_random$winnings
 
-random_test = t.test(base_case$winnings, with_random$winnings, alternative = c('two.sided'))
+random_test = t.test(base_winnings, random_winnings, alternative = c('two.sided'))
 random_test
 ```
 
@@ -218,6 +220,7 @@ megaballOccurence = function(megaballs){
 
 
 ```{r}
+#finding hot and cold numbers based on megamillions historical dataset
 
 number_counts = winningNumberOccurrence(megaMillionsWinningNumbers$winning_numbers)
 megaball_counts = megaballOccurence(megaMillionsWinningNumbers$mega_ball)
@@ -229,6 +232,22 @@ cold_numbers = number_counts%>%filter(count < mean(count))
 cold_megaballs = megaball_counts%>%filter(count < mean(count))
 
 ```
+
+```{r}
+plot_bar = function(dataset,title){
+  dataset%>%
+  ggplot(aes(x = reorder(numbers,-count)
+             , y = count))+
+  geom_bar(stat='identity')+
+  labs(x = 'number',title = title)
+}
+
+plot_bar(hot_numbers,'Most Recurring Lottery Numbers')
+plot_bar(cold_numbers,'Least Recurring Lottery Numbers')
+plot_bar(hot_megaballs,'Most Reucrring Megaball Numbers')
+plot_bar(cold_megaballs,'Least Recurring Megaball Numbers')
+```
+
 
 Hot Hand Fallacy: Numbers that were more successful in the past are more likely to be successful in the future
 
@@ -257,17 +276,67 @@ fallacy_cases = function(trials,n_choices,mb_choices,m=FALSE){
 }
 
 hot_hand = fallacy_cases(10000,hot_numbers$numbers,hot_megaballs$numbers, m =FALSE)
-hot_hand_test = t.test(base_case$winnings, hot_hand$winnings, alternative = c('two.sided'))
+hot_winnings = hot_hand$winnings
+hot_hand_test = t.test(base_winnings, hot_winnings, alternative = c('two.sided'))
 hot_hand_test
 ```
 
-Gamblers Fallacy: Belief that occurances that were less likely to happen in the past are more likely to happen in the future
+Gamblers Fallacy: Belief that occurrences that were less likely to happen in the past are more likely to happen in the future
 
 ```{r}
 gambler_fallacy = fallacy_cases(10000,cold_numbers$numbers,cold_megaballs$numbers,m=FALSE)
-gambler_fallacy_test = t.test(base_case$winnings, gambler_fallacy$winnings, alternative = c('two.sided'))
+gambler_winnings = gambler_fallacy$winnings
+gambler_fallacy_test = t.test(base_winnings, gambler_winnings, alternative = c('two.sided'))
 gambler_fallacy_test
 ```
 
 We are unable to reject the null hypothesis for both gamblers fallacy and hot hand fallacy as the they fall within the expected values of the base case
+
+
+```{r}
+compare_dist = function(dist1,dist2,title){
+  colors = c(
+    'Base Case' = 'blue',
+    'Other Case' = 'red'
+  )
+  se1 = sd(dist1)/sqrt(length(dist1))
+  se2 = sd = sd(dist2)/sqrt(length(dist2))
+  normal_dist1 = data.frame(x1 = rnorm(n = 10000,mean = mean(dist1), sd = se1))
+  normal_dist2 = data.frame(x1 = rnorm(n = 10000,mean = mean(dist2), sd = se2))
+  normal_dist1%>%
+    ggplot(aes(x1,color='Base Case'))+geom_histogram(alpha=0.1, bins=50)+
+    geom_histogram(data = normal_dist2,aes(x1, color='Other Case'), alpha=0.1, bins=50)+
+    labs(x = 'winnings', y = 'counts', title=title,color = 'Legend')+
+    scale_color_manual(values = colors)
+}
+
+compare_dist(base_winnings,
+             multi_winnings,
+            'Base case Vs Multiplier')
+
+compare_dist(base_winnings,
+             random_winnings,
+            'Base case Vs Random')
+compare_dist(base_winnings,
+             hot_winnings,
+            'Base case Vs Hot Hand')
+compare_dist(base_winnings,
+             gambler_winnings,
+            'Base case Vs Gamblers Fallacy')
+
+
+
+```
+
+```{r}
+average_winnings = data.frame(
+  c('Base Case','Multi Case','Random Case','Hot Hand', 'Gamblers Fallacy'),
+  c(base_winnings%>%mean(), multi_winnings%>%mean(),random_winnings%>%mean(),hot_winnings%>%mean(),gambler_winnings%>%mean()),
+  c(base_winnings%>%sd(), multi_winnings%>%sd(),random_winnings%>%sd(),hot_winnings%>%sd(),gambler_winnings%>%sd())
+  )
+
+colnames(average_winnings) = c('Case','Average_Win','Standard Devidation')
+
+average_winnings
+```
 
