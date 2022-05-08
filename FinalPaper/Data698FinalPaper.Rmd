@@ -1,5 +1,5 @@
 ---
-title: "Data 698 - Final Project"
+title: "CUNY MSDS DATA 698 Capstone Project"
 subtitle: "Predicting Winning New York Mega Millions Lottery Numbers"
 author: "Richard Zheng, Stephen Haslett"
 date: "2/13/2022"
@@ -30,7 +30,7 @@ The famous American writter Ambrose Bierce once defined a lottery as "_A tax on 
 
 The outrageously slim chances of winning have led to an array of different approaches to playing the lottery in the hope of beating the odds. These range from strategies based on mysticism, such as playing numbers based on [numerology](https://www.mercurynews.com/2019/03/20/want-to-win-tonights-550m-powerball-take-a-deeper-look-at-the-numbers/), to those based on statistical probability, such as playing numbers that have frequently shown up in winning number sets and are thus believed to more likely show up in future drawings.
 
-While there may be an unlikely chance that mystical strategies can assist in increasing the odds of winning the lottery, such appraoches are unmeasurable and as such, this study will not be concerned with mystical strategies. Instead, we will focus on strategies that are based on statistical probability, and are thus more measurable.
+While there may be an unlikely chance that mystical strategies can assist in increasing the odds of winning the lottery, such appraoches are unmeasurable and as such, this study will not be concerned with these approaches. Instead, we will focus on strategies that are based on statistical probability, and are thus more measurable.
 
 In order to assess if these strategies can better one's odds of winning, We will analyze the past 20 years of winning numbers from the [Mega Millions](https://nylottery.ny.gov/draw-game/?game=megamillions) lottery to answer the following questions:
 
@@ -46,22 +46,30 @@ In order to assess if these strategies can better one's odds of winning, We will
 
 - Out of all the strategies under investigation, which strategy gives us the best return on investment (if any)?
 
-We will compare 4 different game strategies in this study to determine if one or more strategies results in a greater amount of wins. The strategies that we will investigate are as follows:
+We will compare 5 different game strategies in this study to determine if one or more strategies results in a greater amount of wins. The strategies that we will investigate are as follows:
 
 1. **Consistent Numbers Strategy**  
-_Playing the same numbers every game_. 
+_Playing the same numbers every game. This strategy is our base case_. 
 
 2. **Random Numbers Strategy**  
 _Playing randomly selected numbers every game_. 
 
-3. **Most Frequent Numbers Strategy**  
-_This strategy involves playing the numbers that have most frequently occurred in past winning number sets every game_.
+3. **Multiplier Strategy**  
+_Applying the Mega Millions Megaplier number to the Consistent Numbers Strategy_  
+_(Please refer to the "Game Rules"" section of the "Mega Millions Lottery Game" section_   
+_for further information on multplier numbers)_.
 
-4. **Least Frequent Numbers Strategy**  
-_This strategy involves playing the numbers that have least frequently occurred in past winning number sets every game_.
+4. **Most Frequent Numbers Strategy**  
+_This strategy involves playing numbers that most frequently occurred in past winning number sets_  
+_every game and thus adheres to the Hot Hand Fallacy_.
+
+5. **Least Frequent Numbers Strategy**  
+_This strategy involves playing the numbers that have least frequently occurred in past winning_  
+_number sets every game and thus adheres to the Gambler's Fallacy_.
 
 
-### The Mega Millions Lottery Game
+
+### Mega Millions Lottery Game
 
 Mega Millions is a US multi-state lottery game that is drawn twice a week on Tuesdays and Fridays.
 To participate in the game, players purchase one or more lottery tickets at a cost of $2 per ticket.
@@ -96,20 +104,14 @@ kable(tableData, caption = 'Prize Tiers and Payouts') %>%
 
 \ 
 
-Additionally, Players can pay an extra dollar to purchase a multiplier number. 
-Multiplier numbers range from **2** to **5**. 
-
-If a player picks a winning multiplier number and also winning lottery numbers, 
-then the payout for the winning lottery numbers will be multiplied by the winning multiplier number. 
+Additionally, Players can pay an extra dollar to purchase a multiplier number known as the _Megaplier_. Multiplier numbers range from **2** to **5**. If a player picks a winning multiplier number and also winning lottery numbers, then the payout for the winning lottery numbers will be multiplied by the winning multiplier number. 
 
 
 ## Data Source
 
 The data that we utilized for this project was supplied by [NY Open Data](https://data.ny.gov/),
 and contains biweekly winning Mega Millions lottery numbers from 2002, through the current week. 
-The dataset is in CSV format and can be accessed at the following location:
-
-[Lottery Mega Millions Winning Numbers: Beginning 2002](https://data.ny.gov/Government-Finance/Lottery-Mega-Millions-Winning-Numbers-Beginning-20/5xaw-6ayf/data). As of writing, the set consists of 2058 observations broken into 4 columns:
+The dataset is in CSV format and can be accessed at the following location - [Lottery Mega Millions Winning Numbers: Beginning 2002](https://data.ny.gov/Government-Finance/Lottery-Mega-Millions-Winning-Numbers-Beginning-20/5xaw-6ayf/data). As of writing, the set consists of 2058 observations broken into 4 columns:
 
 - **Draw Date**: _The date on which the lottery draw took place_.
 - **Winning Numbers**: _The winning numbers for the given lottery draw_.
@@ -134,10 +136,32 @@ This study does not assume that Gianella's method is effective, rather it sets o
 
 
 
-
-
 ## Methodology
-In order to evaluate
+
+The core focus of this study is to determine if one or more of the strategies outlined in the introduction (_Consistent Numbers Strategy_, _Multiplier Strategy_, _Random Numbers Strategy_, _Most Frequent Numbers Strategy_, and _Least Frequent Numbers Strategy_) can either increase or chances of winning the lottery, or give us a better return on investment. In order to evaluate this, we wrote several simulators in R that simulate playing each of these strategies against randomly generated winning numbers in order to simulate an actual Mega Millions lottery game.
+
+The tickets generated for each of the above listed strategies comprise of _**5** random unique numbers between **1** and **70**_ that make up the base numbers on the ticket, and _**1** number between **1** and **25**_ for the Mega Ball number. In the case of the Multiplier Strategy, an additional number _between **2** and **5**_ was generated for the Megaplier number. We then ran 10,000 trails for each individual strategy.
+
+For our base case strategy (_The Consistent Numbers Strategy_) 
+BASE CASE: We randomly generate 1 lottery, ticket (consstent strategy), and play the same ticket aganst a randomly generated winning ticket each time.
+
+RANDOM NUMBER STRATEGY - We generate a different lottery ticket and play it aganst a randomly generated winning ticket - each game.
+
+MULTIPLIER CASE - SAme as base case but turn multpliers on.
+
+For the next 2 cases we leveraged the original dataset in order to select the most frequent and least frequent numbers. Looked at the historical dataset of winning tickets and rank ordered the occurence of indivudal numbers, and megaballs. We used to top 50 percentile to represent hot (most frequent), and the bottom 50 percentile to represent least frequent.
+
+LEAST FREQUENT CASE
+We randomly generate 1 lottery ticket based on only the least frequently occuring numbers and played the same ticket aganst a randomly generated winning ticket each time.
+MOST FREQUENT CASE
+We randomly generate 1 lottery ticket based on only the most frequently occuring numbers and played the same ticket aganst a randomly generated winning ticket each time.
+
+We plan to compare each strategie to the base case based on the average winnings for each strategy.
+
+
+
+
+
 discuss the key aspects of your model/problem. If you work on real data, explain how you verified your model. If you work on theoretical aspects of data science advancement, explain your method with details (you can put the theory and proof in the appendix if you see fit).
 
 - Lottery is rule based and follows logic and thus it can be simulated.
@@ -168,19 +192,6 @@ While we agree with the overall consensus, that the lottery is unpredictable, we
 It is impossible to evaluate our predictions against future winning lottery numbers so we will split the dataset into separate training, and test sets. 
 The training set will be used to identify winning number patterns, and the test set will be used to establish if our predictions influence the winning numbers.
 
-### Lottery Number Selection Strategies
-
-There are several lottery number selection strategies that we need to simulate:\
-      
-**Same Number Selection**\
-This is the simplest selection strategy. We will pick the 6 numbers required by the game (_5 unique numbers, and 1 Mega Ball number_) within the required range
-(_1 to 70_ for unique numbers, and _1 to 25_ for the Mega Ball), and a **Multiplier** number within the required range of _2 to 5_.
-       
-**Random Number Selection**\
-To simulate picking random lottery numbers, we will write a number generator in R that randomly generates the required 6 numbers and optional Multiplier number.
-
-**Most Frequent Winning Numbers Selection**\
-To generate number selections based on the most frequent winning numbers, we will write an R program that mines the training data and counts how often specific winning numbers occur. We will then rank these numbers and based on how high specific numbers rank, we will include them in our selection.
 
 ### Selection Strategy Evaluation
 
