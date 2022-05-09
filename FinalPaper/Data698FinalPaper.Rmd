@@ -90,7 +90,6 @@ The remaining 25% of the prize money is then allocated to lower tiered prizes.
 
 \newpage
 
-**Mega Millions Prize Tiers**
 
 ```{r, prizeTiers, echo=FALSE, message=FALSE, warning=FALSE}
 tableData <- data.frame(c("Jackpot", "Second Prize", "Third Prize", "Fourth Prize", "Fifth Prize",  "Sixth Prize", "Seventh Prize", "Eighth Prize", "Ninth Prize"),
@@ -189,6 +188,29 @@ conclude your findings, suggest areas for future work.
 
 3. **_Gianella Renato. (2014)_** \
 [The Geometry Of Chance:Lotto Numbers Follow A Predicted Pattern](http://jaguar.fcav.unesp.br/RME/fasciculos/v31/v31_n4/A7_RGiarelli.pdf)
+
+
+
+## Bibliography
+
+1. **_Grace M. Barnes, John W. Welte, Marie-Cecile O. Tidwell, Joseph H. Hoffman. (2010)_** \ 
+[Gambling on the Lottery: Sociodemographic Correlates Across the Lifespan](https://link.springer.com/article/10.1007/s10899-010-9228-7)
+
+2. **_Hwai-Chung Ho, Shih-Chin Lee & Hsiou-wei Lin. (2019)_** \
+[Modelling Of How Lotto Players Select Their Number Combinations Dynamically](https://www.researchgate.net/profile/Shih-Chin-Lee-2/publication/328269835_Modelling_of_how_lotto_players_select_their_number_combinations_dynamically/links/5f695d49a6fdcc0086342140/Modelling-of-how-lotto-players-select-their-number-combinations-dynamically.pdf)
+
+3. **_Suetens, Sigrid and Tyran, Jean-Robert. (2011)_** \
+[The Gambler’s Fallacy and Gender](https://deliverypdf.ssrn.com/delivery.php?ID=776114008100073125083084008110114014038018014015006038127117107011069081076117012007106099010022103035124023026122000097092018126008014016039107086015118115099122037061009111126103116099076112005031072127090112076065115003096001125101098067082123117&EXT=pdf&INDEX=TRUE)
+
+4. **_Garrett Thomas A., Sobel Russell S. (2004)_** \
+[State Lottery Revenue: The Importance Of Game Characteristics](http://faculty.citadel.edu/sobel/All%20Pubs%20PDF/State%20Lottery%20Revenue.pdf)
+
+5. **_Benedicte Apouey and Andrew E. Clark. (2015)_** \
+[Winning Big But Feeling No Better? The Effect Of Lottery Prizes On Physical And Mental Health](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4180795/)
+
+6. **_Sefton Martin, Morgan John (2000)_** \
+[Funding Public Goods With Lotteries: Experimental Evidence](https://econweb.ucsd.edu/~jandreoni/Econ264/papers/Morgan%20Sefton%20RES%202000.pdf)
+
 
 
 ## Appendix 
