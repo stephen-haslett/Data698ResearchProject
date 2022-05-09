@@ -158,14 +158,10 @@ For the Least Frequent Numbers strategy, we generated a lottery ticket using the
 
 The same approach was adopted for the Most Frequent Numbers strategy only in this case we used the most frequent winning numbers extracted from the dataset rather than the least frequent.
 
-
-We plan to compare each strategie to the base case based on the average winnings for each strategy.
-
+In order to evaluate the effectiveness of each strategy in terms of increasing the odds of winning and return on investment, we compared the average winnings for each of the above 4 strategies (_Least and Most Frequent Numbers strategies, Multiplier, and Random Numbers strategies_) to those of our base case.
 
 
 
-
-discuss the key aspects of your model/problem. If you work on real data, explain how you verified your model. If you work on theoretical aspects of data science advancement, explain your method with details (you can put the theory and proof in the appendix if you see fit).
 
 - Lottery is rule based and follows logic and thus it can be simulated.
 
@@ -175,30 +171,12 @@ discuss the key aspects of your model/problem. If you work on real data, explain
 
 ## Results
 
-All my code will be pointing toward how we came up with hot hand fallacy numbers (charts, tables, etc. to show this). 
+
 describe what you did (validation, experimental design, the study of the theories, etc.), and what you found out (statistical analysis, comparison of various approaches, system performance improvement, optimization, new algorithm development, etc.).
 
 ## Summary
 conclude your findings, suggest areas for future work.
 
-
-
-Most of these papers agree that trying to predict next weeks lottery numbers is absurd. Despite popular beliefs and fallacies, there is no reliable way to predict the lottery. If the odds of winning the lottery are so small, someone may ask: "how come people win all the time?".
-
-Although the odds of winning the Mega Millions are about one in 300 million, people win all the time because millions of people play weekly.
-While we agree with the overall consensus, that the lottery is unpredictable, we still want to see if there are any strategies to even get a slight edge when playing.
-
-
-
-## Approach
-
-It is impossible to evaluate our predictions against future winning lottery numbers so we will split the dataset into separate training, and test sets. 
-The training set will be used to identify winning number patterns, and the test set will be used to establish if our predictions influence the winning numbers.
-
-
-### Selection Strategy Evaluation
-
-In order to evaluate which selection strategy (_if any_) is most effective, we will compare the strategy selections against the test data to evaluate which strategy results in winning selections most often. This will entail writing an R program that runs each individual strategy against the test data. The program will count the amount of times each strategy results in winning results, and rank them accordingly. Whichever strategy ranks highest, will tell us which strategy is most effective at predicting winning lottery results.
 
 
 ## References  {#references}
