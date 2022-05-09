@@ -3,8 +3,11 @@ title: "CUNY MSDS DATA 698 Capstone Project"
 subtitle: "Predicting Winning New York Mega Millions Lottery Numbers"
 author: "Richard Zheng, Stephen Haslett"
 date: "2/13/2022"
+always_allow_html: true
 output:
- html_document:
+  pdf_document:
+    toc: yes
+  html_document:
     toc: true
     toc_float: true
     theme: flatly
@@ -85,6 +88,8 @@ If multiple players win the jackpot, then the jackpot is divided equally among t
 If no one wins the jackpot for a particular drawing, then the jackpot amount rolls over to the next drawing. 
 The remaining 25% of the prize money is then allocated to lower tiered prizes.
 
+\newpage
+
 **Mega Millions Prize Tiers**
 
 ```{r, prizeTiers, echo=FALSE, message=FALSE, warning=FALSE}
@@ -109,8 +114,7 @@ Additionally, Players can pay an extra dollar to purchase a multiplier number kn
 
 ## Data Source
 
-The data that we utilized for this project was supplied by [NY Open Data](https://data.ny.gov/),
-and contains biweekly winning Mega Millions lottery numbers from 2002, through the current week. 
+The data that we utilized for this project was supplied by [NY Open Data](https://data.ny.gov/), and contains biweekly winning Mega Millions lottery numbers from 2002, through the current week. 
 The dataset is in CSV format and can be accessed at the following location - [Lottery Mega Millions Winning Numbers: Beginning 2002](https://data.ny.gov/Government-Finance/Lottery-Mega-Millions-Winning-Numbers-Beginning-20/5xaw-6ayf/data). As of writing, the set consists of 2058 observations broken into 4 columns:
 
 - **Draw Date**: _The date on which the lottery draw took place_.
@@ -138,23 +142,22 @@ This study does not assume that Gianella's method is effective, rather it sets o
 
 ## Methodology
 
-The core focus of this study is to determine if one or more of the strategies outlined in the introduction (_Consistent Numbers Strategy_, _Multiplier Strategy_, _Random Numbers Strategy_, _Most Frequent Numbers Strategy_, and _Least Frequent Numbers Strategy_) can either increase or chances of winning the lottery, or give us a better return on investment. In order to evaluate this, we wrote several simulators in R that simulate playing each of these strategies against randomly generated winning numbers in order to simulate an actual Mega Millions lottery game.
+The core focus of this study is to determine if one or more of the strategies outlined in the introduction (_Consistent Numbers Strategy_, _Multiplier Strategy_, _Random Numbers Strategy_, _Most Frequent Numbers Strategy_, and _Least Frequent Numbers Strategy_) can either increase our chances of winning the lottery, or give us a better return on investment. In order to evaluate this, we wrote several simulators in R that simulate playing each of these strategies against randomly generated winning numbers in order to simulate an actual Mega Millions lottery game.
 
 The tickets generated for each of the above listed strategies comprise of _**5** random unique numbers between **1** and **70**_ that make up the base numbers on the ticket, and _**1** number between **1** and **25**_ for the Mega Ball number. In the case of the Multiplier Strategy, an additional number _between **2** and **5**_ was generated for the Megaplier number. We then ran 10,000 trails for each individual strategy.
 
-For our base case strategy (_The Consistent Numbers Strategy_) 
-BASE CASE: We randomly generate 1 lottery, ticket (consstent strategy), and play the same ticket aganst a randomly generated winning ticket each time.
+For our base case strategy (_The Consistent Numbers Strategy_) We randomly generate 1 lottery ticket to rule out human bias, and played the same ticket against a randomly generated winning ticket each time.
 
-RANDOM NUMBER STRATEGY - We generate a different lottery ticket and play it aganst a randomly generated winning ticket - each game.
+For the Random Numbers Strategy, we generated a different lottery ticket consisting of random numbers for each trail, and played it aganst a randomly generated winning ticket each time.
 
-MULTIPLIER CASE - SAme as base case but turn multpliers on.
+For the Multiplier strategy, we used our base case (_The Consistent Numbers Strategy_) and just applied the multiplier number logic (_i.e. If both a winning multiplier number and winning lottery numbers are selected, then the payout for the winning lottery numbers is multiplied by the winning multiplier number_). 
 
-For the next 2 cases we leveraged the original dataset in order to select the most frequent and least frequent numbers. Looked at the historical dataset of winning tickets and rank ordered the occurence of indivudal numbers, and megaballs. We used to top 50 percentile to represent hot (most frequent), and the bottom 50 percentile to represent least frequent.
+For the last two strategies that we evaluated (_the Least and Most Frequent Numbers strategies_) we leveraged the NY Open Data Mega Millions Winning Numbers dataset in order to select the most and least frequent winning numbers. This involved analysing the dataset and rank ordered the occurence of indivudal numbers, and megaballs. We then used the top 50 percentile to represent the most frequent numbers, and the bottom 50 percentile to represent the least frequent numbers.
 
-LEAST FREQUENT CASE
-We randomly generate 1 lottery ticket based on only the least frequently occuring numbers and played the same ticket aganst a randomly generated winning ticket each time.
-MOST FREQUENT CASE
-We randomly generate 1 lottery ticket based on only the most frequently occuring numbers and played the same ticket aganst a randomly generated winning ticket each time.
+For the Least Frequent Numbers strategy, we generated a lottery ticket using the least frequent winning numbers extracted from the Mega Millions Winning Numbers dataset and played the same ticket aganst a randomly generated winning ticket for each trail.
+
+The same approach was adopted for the Most Frequent Numbers strategy only in this case we used the most frequent winning numbers extracted from the dataset rather than the least frequent.
+
 
 We plan to compare each strategie to the base case based on the average winnings for each strategy.
 

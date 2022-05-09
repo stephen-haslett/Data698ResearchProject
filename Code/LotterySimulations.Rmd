@@ -130,7 +130,7 @@ winning_nums = function() {
 }
 ```
 
-Base case: Same number
+Base case: Consistent Numbers Strategy.
 
 ```{r, sameTicket, echo = FALSE, message = FALSE, warning = FALSE}
 same_ticket = function(trials, m = FALSE) {
@@ -210,7 +210,7 @@ multi_test = t.test(base_winnings, multi_winnings, alternative = c('two.sided'))
 multi_test
 ```
 
-Comparing base case to choosing random tickets each lottery, we see that the P value is greater than 0.05 so we cannot reject the null hypothesis. Both scenarios yield the same results
+Comparing base case to choosing random tickets each lottery, we see that the P value is greater than 0.05 so we cannot reject the null hypothesis. Both scenarios yield the same results.
 
 ```{r, randomTTest, echo = FALSE, message = FALSE, warning = FALSE}
 with_random = diff_ticket(10000, m = FALSE)
@@ -296,13 +296,15 @@ fallacy_cases = function(trials, n_choices, mb_choices, m = FALSE) {
   cost = 0
   win = c()
   multiplier = 1
-  ticket = lucky_nums(n_choices,mb_choices,multi = m)
+  ticket = lucky_nums(n_choices, mb_choices, multi = m)
   for (i in 1:trials) {
     winning_numbers = winning_nums()
     if (m == TRUE) {
       if (winning_numbers$multiplier == ticket$multiplier) {
         multiplier = ticket$multiplier
-      } else {multiplier = 1}
+      } else {
+        multiplier = 1
+      }
     }
     match = number_matched(ticket, winning_numbers)
     nums = nums + match$match
