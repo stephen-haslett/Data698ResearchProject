@@ -21,12 +21,12 @@ library(kableExtra)
 #'
 #' @param numbers Numeric: Random numbers to be used for the ticket base numbers.
 #'
-#' @param megaball Numeric: Random number to be used for the Mega Ball..
+#' @param megaball Numeric: Random number to be used for the Mega Ball.
 #'
 #' @return List: A list containing 7 random numbers representing a Mega Millions lottery ticket.
 #'
 #' @export
-random_ticket = function(numbers, megaball) {
+random_ticket_generator = function(numbers, megaball) {
   ticket = sample(numbers, 5, replace = FALSE)
   ball = sample(megaball, 1, replace = FALSE)
   return(list('numbers' = ticket, 'megaball' = ball))
@@ -40,7 +40,7 @@ random_ticket = function(numbers, megaball) {
 #' @return List: A list containing the cost of a lottery ticket.
 #'
 #' @export
-ticket_cost = function(multiplier = FALSE) {
+calculate_ticket_cost = function(multiplier = FALSE) {
   cost = 2
   multi = 1
   if (multiplier == TRUE) {
@@ -51,8 +51,16 @@ ticket_cost = function(multiplier = FALSE) {
 }
 
 
-# function that compares ticket to winning numbers
-number_matched = function(ticket, win_nums) {
+#' Compares simulated lottery ticket numbers with winning numbers to calculate the amount of matching numbers present.
+#'
+#' @param ticket Numeric: The lottery ticket numbers under comparison.
+#'
+#' @param win_nums Numeric: The winning lottery numbers to compare against.
+#'
+#' @return List: A list containing the total number of matching base and mega ball numbers.
+#'
+#' @export
+numbers_matched = function(ticket, win_nums) {
   megaball = 0
   matched = 0
   if (ticket$megaball == win_nums$megaball) {
@@ -69,7 +77,7 @@ number_matched = function(ticket, win_nums) {
 }
 
 
-#' Helper function that calculates the payout for a lottery game based on the amount of matching numbers obtained.
+#' Calculates the payout for a lottery game based on the amount of matching numbers obtained.
 #'
 #' @param num_match Numeric: The number of matching winning numbers.
 #'
@@ -78,7 +86,7 @@ number_matched = function(ticket, win_nums) {
 #' @return Numeric: Total winning dollar amount based on numbers matched.
 #'
 #' @export
-winnings = function(num_match, mega_match) {
+calculate_winnings = function(num_match, mega_match) {
   if (mega_match == 1) {
     if (num_match == 0) {
       return(2)
@@ -118,17 +126,30 @@ winnings = function(num_match, mega_match) {
 
 
 ```{r, numbers, echo = FALSE, message = FALSE, warning = FALSE}
-# function that returns a ticket along with its cost
-lucky_nums = function(numbers, megaballs, multi = FALSE) {
-  ticket = random_ticket(numbers, megaballs)
-  ticket_cost = ticket_cost(multiplier = multi)
+#' Generates and returns a lottery ticket along with its cost.
+#'
+#' @param numbers Numeric: The base numbers to be included in the ticket.
+#'
+#' @param megaball Numeric: The Mega Ball number to be included in the ticket..
+#'
+#' @return List: A list containing ticket base numbers, Mega Ball, ticket cost,
+#' and multiplier number when "multi" is equal to TRUE.
+#'
+#' @export
+ticket_generator = function(numbers, megaball, multi = FALSE) {
+  ticket = random_ticket_generator(numbers, megaball)
+  ticket_cost = calculate_ticket_cost(multiplier = multi)
   return(c(ticket, ticket_cost))
 }
 
 
-# function that simulates winning numbers
-winning_nums = function() {
-  return (lucky_nums(1:70, 1:25, multi = TRUE))
+#' Responsible for generating the winning numbers against which lottery tickets are compared.
+#'
+#' @return List: A list of simulated winning numbers.
+#'
+#' @export
+winning_numbers_generator = function() {
+  return (ticket_generator(1:70, 1:25, multi = TRUE))
 }
 ```
 
@@ -142,9 +163,9 @@ same_ticket = function(trials, m = FALSE) {
   cost = 0
   win = c()
   multiplier = 1
-  ticket = lucky_nums(1:70, 1:25, multi = m)
+  ticket = ticket_generator(1:70, 1:25, multi = m)
   for (i in 1:trials) {
-    winning_numbers = winning_nums()
+    winning_numbers = winning_numbers_generator()
     if (m == TRUE) {
       if (winning_numbers$multiplier == ticket$multiplier) {
         multiplier = ticket$multiplier
@@ -153,11 +174,11 @@ same_ticket = function(trials, m = FALSE) {
         multiplier = 1
       }
     }
-    match = number_matched(ticket, winning_numbers)
+    match = numbers_matched(ticket, winning_numbers)
     nums = nums + match$match
     megas = megas + match$megaball
     cost = cost + ticket$cost
-    win = c(win, (winnings(match$match, match$megaball)*multiplier)-ticket$cost)
+    win = c(win, (calculate_winnings(match$match, match$megaball)*multiplier)-ticket$cost)
   }
   return(list('avg_nums' = nums/trials, 'avg_megas' = megas/trials, 'cost' = cost, 'winnings' = win))
 }
@@ -175,8 +196,8 @@ diff_ticket = function(trials, m = FALSE) {
   win = c()
   multiplier = 1
   for (i in 1:trials) {
-    ticket = lucky_nums(1:70, 1:25, multi = m)
-    winning_numbers = winning_nums()
+    ticket = ticket_generator(1:70, 1:25, multi = m)
+    winning_numbers = winning_numbers_generator()
     if (m == TRUE) {
       if (winning_numbers$multiplier == ticket$multiplier) {
         multiplier = ticket$multiplier
@@ -185,11 +206,11 @@ diff_ticket = function(trials, m = FALSE) {
         multiplier = 1
       }
     }
-    match = number_matched(ticket, winning_numbers)
+    match = numbers_matched(ticket, winning_numbers)
     nums = nums + match$match
     megas = megas + match$megaball
     cost = cost + ticket$cost
-    win = c(win, (winnings(match$match, match$megaball)*multiplier)-ticket$cost)
+    win = c(win, (calculate_winnings(match$match, match$megaball)*multiplier)-ticket$cost)
   }
   return(list('avg_nums' = nums/trials, 'avg_megas' = megas/trials, 'cost' = cost, 'winnings' = win))
 }
@@ -306,9 +327,9 @@ fallacy_cases = function(trials, n_choices, mb_choices, m = FALSE) {
   cost = 0
   win = c()
   multiplier = 1
-  ticket = lucky_nums(n_choices, mb_choices, multi = m)
+  ticket = ticket_generator(n_choices, mb_choices, multi = m)
   for (i in 1:trials) {
-    winning_numbers = winning_nums()
+    winning_numbers = winning_numbers_generator()
     if (m == TRUE) {
       if (winning_numbers$multiplier == ticket$multiplier) {
         multiplier = ticket$multiplier
@@ -316,11 +337,11 @@ fallacy_cases = function(trials, n_choices, mb_choices, m = FALSE) {
         multiplier = 1
       }
     }
-    match = number_matched(ticket, winning_numbers)
+    match = numbers_matched(ticket, winning_numbers)
     nums = nums + match$match
     megas = megas + match$megaball
     cost = cost + ticket$cost
-    win = c(win, (winnings(match$match, match$megaball)*multiplier)-ticket$cost)
+    win = c(win, (calculate_winnings(match$match, match$megaball)*multiplier)-ticket$cost)
   }
   
   return(list('avg_nums' = nums/trials, 'avg_megas' = megas/trials, 'cost' = cost, 'winnings' = win))
