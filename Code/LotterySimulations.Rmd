@@ -51,7 +51,15 @@ ticket_cost = function(multiplier = FALSE) {
 }
 
 
-# function that compares ticket to winning numbers
+#' Compares simulated lottery ticket numbers with winning numbers to calculate the amount of matching numbers present.
+#'
+#' @param ticket Numeric: The lottery ticket numbers under comparison.
+#'
+#' @param win_nums Numeric: The winning lottery numbers to compare against.
+#'
+#' @return List: A list containing the total number of matching base and mega ball numbers.
+#'
+#' @export
 number_matched = function(ticket, win_nums) {
   megaball = 0
   matched = 0
@@ -69,7 +77,7 @@ number_matched = function(ticket, win_nums) {
 }
 
 
-#' Helper function that calculates the payout for a lottery game based on the amount of matching numbers obtained.
+#' Calculates the payout for a lottery game based on the amount of matching numbers obtained.
 #'
 #' @param num_match Numeric: The number of matching winning numbers.
 #'
