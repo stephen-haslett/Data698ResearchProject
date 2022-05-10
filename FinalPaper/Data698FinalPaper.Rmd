@@ -29,11 +29,11 @@ Abstract: use 250 words or less to summarize your problem, methodology, and majo
 
 ## Introduction
 
-The famous American writter Ambrose Bierce once defined a lottery as "_A tax on people who are bad at math_" (_The Unabridged Devil's Dictionary_). According to the United States Census Bureau's [2020 Annual Survey of State Government Finances](https://www.census.gov/data/tables/2020/econ/state/historical-tables.html), Americans spent more than $80 billion on lottery tickets in 2020 alone. Based on these statistics, it is clear that many Americans, despite the incredibly thin odds of winning the jackpot (_1 in 302,575,350 for the Mega Millions jackpot_), are willing to shun Bierce's advice and part with a significant amount of money for the chance of lifelong financial security.
+The famous American writer Ambrose Bierce once defined a lottery as "_A tax on people who are bad at math_" (_The Unabridged Devil's Dictionary_). According to the United States Census Bureau's [2020 Annual Survey of State Government Finances](https://www.census.gov/data/tables/2020/econ/state/historical-tables.html), Americans spent more than $80 billion on lottery tickets in 2020 alone. Based on these statistics, it is clear that many Americans, despite the incredibly thin odds of winning the jackpot (_1 in 302,575,350 for the Mega Millions jackpot_), are willing to shun Bierce's advice and part with a significant amount of money for the chance of lifelong financial security.
 
 The outrageously slim chances of winning have led to an array of different approaches to playing the lottery in the hope of beating the odds. These range from strategies based on mysticism, such as playing numbers based on [numerology](https://www.mercurynews.com/2019/03/20/want-to-win-tonights-550m-powerball-take-a-deeper-look-at-the-numbers/), to those based on statistical probability, such as playing numbers that have frequently shown up in winning number sets and are thus believed to more likely show up in future drawings.
 
-While there may be an unlikely chance that mystical strategies can assist in increasing the odds of winning the lottery, such appraoches are unmeasurable and as such, this study will not be concerned with these approaches. Instead, we will focus on strategies that are based on statistical probability, and are thus more measurable.
+While there may be an unlikely chance that mystical strategies can assist in increasing the odds of winning the lottery, such approaches are unmeasurable and as such, this study will not be concerned with these approaches. Instead, we will focus on strategies that are based on statistical probability, and are thus more measurable.
 
 In order to assess if these strategies can better one's odds of winning, We will analyze the past 20 years of winning numbers from the [Mega Millions](https://nylottery.ny.gov/draw-game/?game=megamillions) lottery to answer the following questions:
 
@@ -147,27 +147,20 @@ The tickets generated for each of the above listed strategies comprise of _**5**
 
 For our base case strategy (_The Consistent Numbers Strategy_) We randomly generate 1 lottery ticket to rule out human bias, and played the same ticket against a randomly generated winning ticket each time.
 
-For the Random Numbers Strategy, we generated a different lottery ticket consisting of random numbers for each trail, and played it aganst a randomly generated winning ticket each time.
+For the Random Numbers Strategy, we generated a different lottery ticket consisting of random numbers for each trail, and played it against a randomly generated winning ticket each time.
 
 For the Multiplier strategy, we used our base case (_The Consistent Numbers Strategy_) and just applied the multiplier number logic (_i.e. If both a winning multiplier number and winning lottery numbers are selected, then the payout for the winning lottery numbers is multiplied by the winning multiplier number_). 
 
-For the last two strategies that we evaluated (_the Least and Most Frequent Numbers strategies_) we leveraged the NY Open Data Mega Millions Winning Numbers dataset in order to select the most and least frequent winning numbers. This involved analysing the dataset and rank ordered the occurence of indivudal numbers, and megaballs. We then used the top 50 percentile to represent the most frequent numbers, and the bottom 50 percentile to represent the least frequent numbers.
+For the last two strategies that we evaluated (_the Least and Most Frequent Numbers strategies_) we leveraged the NY Open Data Mega Millions Winning Numbers dataset in order to select the most and least frequent winning numbers. This involved analyzing the dataset and rank ordered the occurrence of individual numbers, and mega balls. We then used the top 50 percentile to represent the most frequent numbers, and the bottom 50 percentile to represent the least frequent numbers.
 
-For the Least Frequent Numbers strategy, we generated a lottery ticket using the least frequent winning numbers extracted from the Mega Millions Winning Numbers dataset and played the same ticket aganst a randomly generated winning ticket for each trail.
+For the Least Frequent Numbers strategy, we generated a lottery ticket using the least frequent winning numbers extracted from the Mega Millions Winning Numbers dataset and played the same ticket against a randomly generated winning ticket for each trail.
 
 The same approach was adopted for the Most Frequent Numbers strategy only in this case we used the most frequent winning numbers extracted from the dataset rather than the least frequent.
 
-In order to evaluate the effectiveness of each strategy in terms of increasing the odds of winning and return on investment, we compared the average winnings for each of the above 4 strategies (_Least and Most Frequent Numbers strategies, Multiplier, and Random Numbers strategies_) to those of our base case.
+In order to evaluate the effectiveness of each strategy in terms of increasing the odds of winning and return on investment, we compared the average winnings for each of the above 4 strategies (_Least and Most Frequent Numbers strategies, Multiplier, and Random Numbers strategies_) to those of our base case. The metric that we focused on during this comparison was the average win amount across 10000 trials. This comparison was carried out using **T-tests**. T tests were the ideal comparison method for this study as they provided us with a means by which to determine the significance of difference between each strategy's mean. They also allowed us to determine if these differences could have happened by chance.
 
 
-
-
-- Lottery is rule based and follows logic and thus it can be simulated.
-
-- Talk about how we are comparing models - comparing using T test.
-
-- How we are verifying our models - with the T test. We can do it on our data due to the central limit theorem (the sample mean comes from a normal distribution with standard deviation = to standard error - given that the sample size is large enough). Doesn't matter what distribution your sample looks like, because the resampled means will approximate a normal distribution.  
-
+ 
 ## Results
 
 
