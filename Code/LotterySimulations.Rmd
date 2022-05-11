@@ -254,7 +254,7 @@ multi_test
 Comparing base case to choosing random tickets each lottery, we see that the P value is greater than 0.05 so we cannot reject the null hypothesis. Both scenarios yield the same results.
 
 ```{r, randomTTest, echo = FALSE, message = FALSE, warning = FALSE}
-with_random = single_ticket_comparison(10000, m = FALSE)
+with_random = multiple_ticket_comparison(10000, m = FALSE)
 random_winnings = with_random$winnings
 
 random_test = t.test(base_winnings, random_winnings, alternative = c('two.sided'))
