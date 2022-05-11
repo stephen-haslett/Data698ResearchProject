@@ -125,7 +125,7 @@ calculate_winnings = function(num_match, mega_match) {
 ```
 
 
-```{r, numbers, echo = FALSE, message = FALSE, warning = FALSE}
+```{r, ticketGenerators, echo = FALSE, message = FALSE, warning = FALSE}
 #' Generates and returns a lottery ticket along with its cost.
 #'
 #' @param numbers Numeric: The base numbers to be included in the ticket.
@@ -155,9 +155,17 @@ winning_numbers_generator = function() {
 
 Base case: Consistent Numbers Strategy.
 
-```{r, sameTicket, echo = FALSE, message = FALSE, warning = FALSE}
-# function that compares a single random ticket to 10000 winning tickets
-same_ticket = function(trials, m = FALSE) {
+```{r, singleTicketComparison, echo = FALSE, message = FALSE, warning = FALSE}
+#  Compares a single random ticket against n winning tickets.
+#'
+#' @param trails Numeric: The number of trails to perform the comparison for.
+#'
+#' @param m Optional Boolean: Whether or not the multiplier number should be included in the comparison.
+#'
+#' @return List: A list containing average numbers and megaball numbers, cost and winnings per n trails.
+#'
+#' @export
+single_ticket_comparison = function(trials, m = FALSE) {
   nums = 0
   megas = 0
   cost = 0
@@ -187,9 +195,17 @@ same_ticket = function(trials, m = FALSE) {
 Using a different(random) ticket each time the lottery is pulled
 
 
-```{r, differentTicket, echo = FALSE, message = FALSE, warning = FALSE}
-# function that compares 10000 random tickets to 10000 winning tickets
-diff_ticket = function(trials, m = FALSE) {
+```{r, multipleTicketComparison, echo = FALSE, message = FALSE, warning = FALSE}
+#  Compares n random tickets against n winning tickets.
+#'
+#' @param trails Numeric: The number of trails to perform the comparison for.
+#'
+#' @param m Optional Boolean: Whether or not the multiplier number should be included in the comparison.
+#'
+#' @return List: A list containing average numbers and megaball numbers, cost and winnings per n trails.
+#'
+#' @export
+multiple_ticket_comparison = function(trials, m = FALSE) {
   nums = 0
   megas = 0
   cost = 0
@@ -219,7 +235,7 @@ diff_ticket = function(trials, m = FALSE) {
 win = total winnings - total cost
 
 ```{r, baseCase, echo = FALSE, message = FALSE, warning = FALSE}
-base_case = same_ticket(10000, m = FALSE)
+base_case = single_ticket_comparison(10000, m = FALSE)
 base_winnings = base_case$winnings
 ```
 
@@ -229,7 +245,7 @@ Multiplier vs No Multiplier
 Comparing average ticket winnings between base_case and with multiplier, we see that there is a significant difference in winnings (p-value < 0.05). We reject the null hypothesis and find out that using the multiplier is worse than no multiplier (losses are larger)
 
 ```{r, tTest, echo = FALSE, message = FALSE, warning = FALSE}
-with_multi = same_ticket(10000, m = TRUE)
+with_multi = single_ticket_comparison(10000, m = TRUE)
 multi_winnings = with_multi$winnings
 multi_test = t.test(base_winnings, multi_winnings, alternative = c('two.sided'))
 multi_test
@@ -238,7 +254,7 @@ multi_test
 Comparing base case to choosing random tickets each lottery, we see that the P value is greater than 0.05 so we cannot reject the null hypothesis. Both scenarios yield the same results.
 
 ```{r, randomTTest, echo = FALSE, message = FALSE, warning = FALSE}
-with_random = diff_ticket(10000, m = FALSE)
+with_random = single_ticket_comparison(10000, m = FALSE)
 random_winnings = with_random$winnings
 
 random_test = t.test(base_winnings, random_winnings, alternative = c('two.sided'))
@@ -253,8 +269,14 @@ megaMillionsWinningNumbers <- read.csv(megaMillionsDataURL)
 megaMillionsWinningNumbers %>% head()
 ```
 
-```{r, occurrences, echo = FALSE, message = FALSE, warning = FALSE}
-# function that returns a dataframe of winning numbers by count
+```{r, winningNumberOccurrences, echo = FALSE, message = FALSE, warning = FALSE}
+#' Counts the amount of winning numbers in a ticket.
+#'
+#' @param winning_tickets Numeric: The tickets containing the winning numbers to be counted.
+#'
+#' @return Dataframe: A dataframe containing counts of winning numbers.
+#'
+#' @export
 winningNumberOccurrence = function(winning_tickets) {
   winning_numbers = c()
   for (ticket in winning_tickets) {
@@ -268,7 +290,13 @@ winningNumberOccurrence = function(winning_tickets) {
   return(number_counts)
 }
 
-# function that returns a dataframe of winning megaballs by count
+#' Counts the amount of winning Mega Ball numbers in a ticket.
+#'
+#' @param winning_tickets Numeric: A ticket containing the winning Mega Ball numbers to be counted.
+#'
+#' @return Dataframe: A dataframe containing counts of winning Mega Ball numbers.
+#'
+#' @export
 megaballOccurrence = function(megaballs) {
   number_counts = data.frame(numbers = megaballs) %>%
     group_by(numbers) %>%
@@ -297,8 +325,16 @@ cold_megaballs = megaball_counts %>% filter(count < mean(count))
 
 
 ```{r, barCharts, echo = FALSE, message = FALSE, warning = FALSE, fig.width = 12, fig.height = 7}
-# function that plots bar plots in descending order
-plot_bar = function(dataset, title) {
+#' Plots bar charts and organizes the data in descending order.
+#'
+#' @param dataset Numeric: The dataset containing the data that should be plotted as a bar chart.
+#'
+#' @param title String: The title of the bar chart.
+#'
+#' @return List: The rendered bar chart.
+#'
+#' @export
+chart_plotter = function(dataset, title) {
   dataset %>%
   ggplot(aes(x = reorder(numbers, -count), y = count, fill = count)) +
   geom_bar(stat = 'identity') +
@@ -309,11 +345,10 @@ plot_bar = function(dataset, title) {
         axis.title = element_text(size = 18))
 }
 
-plot_bar(hot_numbers,'Most Recurring Lottery Numbers')
-plot_bar(cold_numbers,'Least Recurring Lottery Numbers')
-plot_bar(hot_megaballs,'Most Recurring Megaball Numbers')
-plot_bar(cold_megaballs,'Least Recurring Megaball Numbers')
-
+chart_plotter(hot_numbers,'Most Recurring Lottery Numbers')
+chart_plotter(cold_numbers,'Least Recurring Lottery Numbers')
+chart_plotter(hot_megaballs,'Most Recurring Megaball Numbers')
+chart_plotter(cold_megaballs,'Least Recurring Megaball Numbers')
 ```
 
 

@@ -106,7 +106,6 @@ kable(tableData, caption = 'Prize Tiers and Payouts') %>%
       scroll_box(width = '100%')
 ```
 
-\ 
 
 Additionally, Players can pay an extra dollar to purchase a multiplier number known as the _Megaplier_. Multiplier numbers range from **2** to **5**. If a player picks a winning multiplier number and also winning lottery numbers, then the payout for the winning lottery numbers will be multiplied by the winning multiplier number. 
 
@@ -157,7 +156,9 @@ For the Least Frequent Numbers strategy, we generated a lottery ticket using the
 
 The same approach was adopted for the Most Frequent Numbers strategy only in this case we used the most frequent winning numbers extracted from the dataset rather than the least frequent.
 
-In order to evaluate the effectiveness of each strategy in terms of increasing the odds of winning and return on investment, we compared the average winnings for each of the above 4 strategies (_Least and Most Frequent Numbers strategies, Multiplier, and Random Numbers strategies_) to those of our base case. The metric that we focused on during this comparison was the average win amount across 10000 trials. This comparison was carried out using **T-tests**. T tests were the ideal comparison method for this study as they provided us with a means by which to determine the significance of difference between each strategy's mean. They also allowed us to determine if these differences could have happened by chance.
+In order to evaluate the effectiveness of each strategy in terms of increasing the odds of winning and return on investment, we compared the average winnings for each of the above 4 strategies (_Least and Most Frequent Numbers strategies, Multiplier, and Random Numbers strategies_) to those of our base case. The metric that we focused on during this comparison was the average win amount across 10000 trials.
+
+This comparison was carried out using **T-tests**. T tests were the ideal comparison method for this study as they provided us with a means by which to determine the significance of difference between each strategy's mean. They also allowed us to determine if these differences could have happened by chance.
 
 
  
@@ -165,6 +166,21 @@ In order to evaluate the effectiveness of each strategy in terms of increasing t
 
 
 describe what you did (validation, experimental design, the study of the theories, etc.), and what you found out (statistical analysis, comparison of various approaches, system performance improvement, optimization, new algorithm development, etc.).
+
+
+![](./images/leastRecurringMegaBalls.png)
+![](./images/leastRecurringNumbers.png)
+![](./images/mostRecurringNumbers.png)
+![](./images/mostRecurringMegaBalls.png)
+![](./images/baseVsMultiplier.png)
+![](./images/averageWinningsTable.png)
+![](./images/baseVsLeastFrequent.png)
+![](./images/baseVsMostFrequent.png)
+
+
+
+
+
 
 ## Summary
 conclude your findings, suggest areas for future work.
