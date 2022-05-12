@@ -169,14 +169,16 @@ This comparison was carried out using **T-tests**. T tests were the ideal compar
 
 The Most and Least Frequent Numbers strategies in this study are based on the Hot Hand Fallacy (_the believe that selecting winning numbers that occurred frequently in the past will better your odds of winning_), and the Gambler's Fallacy (_the believe that not selecting such numbers will better your odds of winning_) respectively.
 
-In order to simulate both of these approaches, we first needed to find the numbers that conformed to each philosophy. To do this, we ran through the historical Mega Millions winning numbers dataset and counted the frequency of both the most and least frequently occurring winning Mega Ball and base numbers.We then ranked each number in accordance to it's frequency.
+In order to simulate both of these approaches, we first needed to find the numbers that conformed to each philosophy. To do this, we ran through the historical Mega Millions winning numbers dataset and counted the frequency of both the most and least frequently occurring winning Mega Ball and base numbers. We then ranked each number in accordance to it's frequency.
 
-This provided us with a set of the top _n_ most/least frequently occurring numbers from which to create tickets for use in our Hot Hand and Gambler's Fallacy (_Most and Least Frequent Numbers strategies_) based simulations. This process left us with the following Mega Ball and base number pools from which to pull from:
+This provided us with a set of the top _n_ most/least recurring numbers from which to create tickets for use in our Hot Hand and Gambler's Fallacy (_Most and Least Frequent Numbers strategies_) based simulations. This process left us with the following Mega Ball and Base Number pools from which to pull from:
 
 
-\centering
+\begingroup\centering
 
-#### Most Frequently Occurring Numbers Set
+#### Most Recurring Numbers Set
+
+\ 
 
 
 ![](./images/mostRecurringMegaBalls.png)
@@ -184,19 +186,25 @@ This provided us with a set of the top _n_ most/least frequently occurring numbe
 
 ![](./images/mostRecurringNumbers.png)
 
-\centering
+\endgroup
 
 
 
 \ 
 \ 
 
-##### Least Frequently Occurring Numbers Set
+\begingroup\centering
+
+##### Least Recurring Numbers Set
+
+\ 
 
 ![](./images/leastRecurringMegaBalls.png)
+
+
 ![](./images/leastRecurringNumbers.png)
 
-
+\endgroup
 
 
 
