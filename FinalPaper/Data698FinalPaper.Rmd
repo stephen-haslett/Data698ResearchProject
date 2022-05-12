@@ -7,6 +7,7 @@ always_allow_html: true
 output:
   pdf_document:
     toc: yes
+    fig_caption: FALSE
   html_document:
     toc: true
     toc_float: true
@@ -164,14 +165,50 @@ This comparison was carried out using **T-tests**. T tests were the ideal compar
  
 ## Results
 
+### Frequency of Mega Ball and Winning Numbers Analysis 
+
+The Most and Least Frequent Numbers strategies in this study are based on the Hot Hand Fallacy (_the believe that selecting winning numbers that occurred frequently in the past will better your odds of winning_), and the Gambler's Fallacy (_the believe that not selecting such numbers will better your odds of winning_) respectively.
+
+In order to simulate both of these approaches, we first needed to find the numbers that conformed to each philosophy. To do this, we ran through the historical Mega Millions winning numbers dataset and counted the frequency of both the most and least frequently occurring winning Mega Ball and base numbers.We then ranked each number in accordance to it's frequency.
+
+This provided us with a set of the top _n_ most/least frequently occurring numbers from which to create tickets for use in our Hot Hand and Gambler's Fallacy (_Most and Least Frequent Numbers strategies_) based simulations. This process left us with the following Mega Ball and base number pools from which to pull from:
+
+
+\centering
+
+#### Most Frequently Occurring Numbers Set
+
+
+![](./images/mostRecurringMegaBalls.png)
+
+
+![](./images/mostRecurringNumbers.png)
+
+\centering
+
+
+
+\ 
+\ 
+
+##### Least Frequently Occurring Numbers Set
+
+![](./images/leastRecurringMegaBalls.png)
+![](./images/leastRecurringNumbers.png)
+
+
+
+
+
+
+
+ 
+
 
 describe what you did (validation, experimental design, the study of the theories, etc.), and what you found out (statistical analysis, comparison of various approaches, system performance improvement, optimization, new algorithm development, etc.).
 
 
-![](./images/leastRecurringMegaBalls.png)
-![](./images/leastRecurringNumbers.png)
-![](./images/mostRecurringNumbers.png)
-![](./images/mostRecurringMegaBalls.png)
+
 ![](./images/baseVsMultiplier.png)
 ![](./images/averageWinningsTable.png)
 ![](./images/baseVsLeastFrequent.png)
