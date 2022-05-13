@@ -55,21 +55,22 @@ We will compare 5 different game strategies in this study to determine if one or
 1. **Consistent Numbers Strategy**  
 _Playing the same numbers every game. This strategy is our base case_. 
 
-2. **Random Numbers Strategy**  
+2. **Most Frequent Numbers Strategy**  
+_This strategy involves playing numbers that most frequently occurred in past winning number sets_  
+_every game and thus adheres to the Hot Hand Fallacy_.
+
+3. **Least Frequent Numbers Strategy**  
+_This strategy involves playing the numbers that have least frequently occurred in past winning_  
+_number sets every game and thus adheres to the Gambler's Fallacy_.
+
+4. **Random Numbers Strategy**  
 _Playing randomly selected numbers every game_. 
 
-3. **Multiplier Strategy**  
+5. **Multiplier Strategy**  
 _Applying the Mega Millions Megaplier number to the Consistent Numbers Strategy_  
 _(Please refer to the "Game Rules"" section of the "Mega Millions Lottery Game" section_   
 _for further information on multplier numbers)_.
 
-4. **Most Frequent Numbers Strategy**  
-_This strategy involves playing numbers that most frequently occurred in past winning number sets_  
-_every game and thus adheres to the Hot Hand Fallacy_.
-
-5. **Least Frequent Numbers Strategy**  
-_This strategy involves playing the numbers that have least frequently occurred in past winning_  
-_number sets every game and thus adheres to the Gambler's Fallacy_.
 
 
 
@@ -159,11 +160,17 @@ The same approach was adopted for the Most Frequent Numbers strategy only in thi
 
 In order to evaluate the effectiveness of each strategy in terms of increasing the odds of winning and return on investment, we compared the average winnings for each of the above 4 strategies (_Least and Most Frequent Numbers strategies, Multiplier, and Random Numbers strategies_) to those of our base case. The metric that we focused on during this comparison was the average win amount across 10,000 trials.
 
+MENTION HYPOTHESIS TESTING HERE!!!
+
 This comparison was carried out using **T-tests**. T tests were the ideal comparison method for this study as they provided us with a means by which to determine the significance of difference between each strategy's mean. They also allowed us to determine if these differences could have happened by chance.
 
 
  
 ## Results
+
+### Consistent Numbers Strategy (_Base Case_)
+
+\ 
 
 ### Most and Least Frequent Numbers Strategies
 
@@ -208,19 +215,30 @@ This provided us with a set of the top _n_ most/least recurring numbers from whi
 
 For the Most Frequent Numbers strategy, we created 1 random ticket consisting of numbers pulled from the Most Recurring Numbers set (_5 Base numbers, and 1 Mega Ball number_). The same approach was taken for the Least Frequent Numbers strategy only for this strategy, the numbers were drawn from the Least Recurring Numbers set.
 
-The next step was to compare the average winnings obtained from playing these tickets against those obtained from our base case (_Consistent Numbers Strategy_). In order to get a clear picture of the difference between the mean of the base case and that of the strategy under inspection, we used T-Tests as our main method of comparison. The following is a breakdown of findings for each strategy:
+The next step was to compare the average winnings obtained from playing these tickets against those obtained from our base case (_Consistent Numbers Strategy_). In order to get a clear picture of the difference between the mean of the base case and that of the strategy under inspection, we used T-tests as our main method of comparison. The following is a breakdown of findings for each strategy:
 
 \ 
 
-**Most Frequent Numbers Strategy (_Hot Hand Fallacy_)**
+**Most Frequent Numbers Strategy (_Hot Hand Fallacy approach_)**
 
 ![](./images/ttest_base_hot.png)
 
+In the T-test results above, the high **_p_** value of _0.8872_ indicates that the average winnings of the Most Frequent Numbers strategy are not significantly different to those of the base case, and therefore we cannot reject the null hypothesis that neither strategy is more effective than the other. This observation is further consolidated by the low **_t_** value of _0.14182_.     
 
+\ 
 
+**Least Frequent Numbers Strategy (_Gambler's Fallacy approach_)**
 
-
+![](./images/ttest_base_gambler.png)
  
+
+
+### Random Numbers Strategy
+
+
+
+### Multiplier Strategy
+
 
 
 describe what you did (validation, experimental design, the study of the theories, etc.), and what you found out (statistical analysis, comparison of various approaches, system performance improvement, optimization, new algorithm development, etc.).
@@ -231,6 +249,7 @@ describe what you did (validation, experimental design, the study of the theorie
 ![](./images/averageWinningsTable.png)
 ![](./images/baseVsLeastFrequent.png)
 ![](./images/baseVsMostFrequent.png)
+![](./images/ttest_base_gambler.png)
 
 
 
