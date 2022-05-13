@@ -168,6 +168,12 @@ This comparison was carried out using **T-tests**. T tests were the ideal compar
  
 ## Results
 
+ADD INTRODUCTION TO RESULTS SECTION HERE.
+
+Null Hypothesis: No one strategy is more effective than the other.
+
+Alternative Hypothesis: Strategies are not equal in terms of their effectiveness.
+
 ### Consistent Numbers Strategy (_Base Case_)
 
 \ 
