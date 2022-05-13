@@ -151,13 +151,13 @@ For the Random Numbers Strategy, we generated a different lottery ticket consist
 
 For the Multiplier strategy, we used our base case (_The Consistent Numbers Strategy_) and just applied the multiplier number logic (_i.e. If both a winning multiplier number and winning lottery numbers are selected, then the payout for the winning lottery numbers is multiplied by the winning multiplier number_). 
 
-For the last two strategies that we evaluated (_the Least and Most Frequent Numbers strategies_) we leveraged the NY Open Data Mega Millions Winning Numbers dataset in order to select the most and least frequent winning numbers. This involved analyzing the dataset and rank ordered the occurrence of individual numbers, and mega balls. We then used the top 50 percentile to represent the most frequent numbers, and the bottom 50 percentile to represent the least frequent numbers.
+For the last two strategies that we evaluated (_the Least and Most Frequent Numbers strategies_) we leveraged the NY Open Data Mega Millions Winning Numbers dataset in order to select the most and least frequent winning numbers. This involved analyzing the dataset and rank ordered the occurrence of individual numbers, and Mega Balls. We then used the top 50 percentile to represent the most frequent numbers, and the bottom 50 percentile to represent the least frequent numbers.
 
 For the Least Frequent Numbers strategy, we generated a single random lottery ticket using the least frequent winning numbers extracted from the Mega Millions Winning Numbers dataset and then played the same ticket against a randomly generated winning ticket for each trail.
 
 The same approach was adopted for the Most Frequent Numbers strategy only in this case we used the most frequent winning numbers extracted from the dataset rather than the least frequent.
 
-In order to evaluate the effectiveness of each strategy in terms of increasing the odds of winning and return on investment, we compared the average winnings for each of the above 4 strategies (_Least and Most Frequent Numbers strategies, Multiplier, and Random Numbers strategies_) to those of our base case. The metric that we focused on during this comparison was the average win amount across 10000 trials.
+In order to evaluate the effectiveness of each strategy in terms of increasing the odds of winning and return on investment, we compared the average winnings for each of the above 4 strategies (_Least and Most Frequent Numbers strategies, Multiplier, and Random Numbers strategies_) to those of our base case. The metric that we focused on during this comparison was the average win amount across 10,000 trials.
 
 This comparison was carried out using **T-tests**. T tests were the ideal comparison method for this study as they provided us with a means by which to determine the significance of difference between each strategy's mean. They also allowed us to determine if these differences could have happened by chance.
 
@@ -169,7 +169,7 @@ This comparison was carried out using **T-tests**. T tests were the ideal compar
 
 The Most and Least Frequent Numbers strategies in this study are based on the Hot Hand Fallacy (_the believe that selecting winning numbers that occurred frequently in the past will better your odds of winning_), and the Gambler's Fallacy (_the believe that not selecting such numbers will better your odds of winning_) respectively.
 
-In order to simulate both of these approaches, we first needed to find the numbers that conformed to each philosophy. To do this, we ran through the historical Mega Millions winning numbers dataset and calculated the frequency of both the most and least frequently occurring winning Mega Ball and Base numbers. We then ranked each number in accordance to it's frequency.
+In order to simulate both of these approaches, we first needed to find the numbers that conformed to each philosophy. To do this, we ran through the historical Mega Millions winning numbers dataset and calculated the frequency of both the most and least frequently occurring Mega Ball and Base numbers. We then ranked each number in accordance to its frequency.
 
 This provided us with a set of the top _n_ most/least recurring numbers from which to create tickets for use in our Hot Hand and Gambler's Fallacy (_Most and Least Frequent Numbers strategies_) based simulations. This process left us with the following Mega Ball and Base Number pools from which to pull from:
 
@@ -208,7 +208,15 @@ This provided us with a set of the top _n_ most/least recurring numbers from whi
 
 For the Most Frequent Numbers strategy, we created 1 random ticket consisting of numbers pulled from the Most Recurring Numbers set (_5 Base numbers, and 1 Mega Ball number_). The same approach was taken for the Least Frequent Numbers strategy only for this strategy, the numbers were drawn from the Least Recurring Numbers set.
 
-With the simulated lottery tickets in hand, the next step was to compare the winnings obtained from playing these tickets against those of our base case (_Consistent Numbers Strategy_) ...... in order to ascertain 
+The next step was to compare the average winnings obtained from playing these tickets against those obtained from our base case (_Consistent Numbers Strategy_). In order to get a clear picture of the difference between the mean of the base case and that of the strategy under inspection, we used T-Tests as our main method of comparison. The following is a breakdown of findings for each strategy:
+
+\ 
+
+**Most Frequent Numbers Strategy (_Hot Hand Fallacy_)**
+
+![](./images/ttest_base_hot.png)
+
+
 
 
 
@@ -223,6 +231,7 @@ describe what you did (validation, experimental design, the study of the theorie
 ![](./images/averageWinningsTable.png)
 ![](./images/baseVsLeastFrequent.png)
 ![](./images/baseVsMostFrequent.png)
+
 
 
 
