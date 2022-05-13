@@ -170,7 +170,7 @@ This comparison was carried out using **T-tests**. T tests were the ideal compar
 
 ADD INTRODUCTION TO RESULTS SECTION HERE.
 
-Null Hypothesis: No one strategy is more effective than the other.
+Null Hypothesis: No one strategy is more effective than an other.
 
 Alternative Hypothesis: Strategies are not equal in terms of their effectiveness.
 
