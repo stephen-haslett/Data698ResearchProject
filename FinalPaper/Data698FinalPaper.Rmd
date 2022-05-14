@@ -174,7 +174,6 @@ Null Hypothesis: No one strategy is more effective than an other.
 
 Alternative Hypothesis: Strategies are not equal in terms of their effectiveness.
 
-### Consistent Numbers Strategy (_Base Case_)
 
 \ 
 
@@ -229,7 +228,11 @@ The next step was to compare the average winnings obtained from playing these ti
 
 ![](./images/ttest_base_hot.png)
 
-In the T-test results above, the high **_p_** value of _0.8872_ indicates that the average winnings of the Most Frequent Numbers strategy are not significantly different to those of the base case, and therefore we cannot reject the null hypothesis that neither strategy is more effective than the other. This observation is further consolidated by the low **_t_** value of _0.14182_.     
+In the T-test results above, the **_p_** value of _0.05222_ indicates that the average winnings of the Most Frequent Numbers strategy are close to significantly different to those of the base case. Nevertheless, it is still above 0.05 which would suggest that we cannot reject the null hypothesis that neither strategy is more effective than the other.
+
+However, the hign **_t_** value of _1.9415_.    
+
+![](./images/baseVsMostFrequent.png)
 
 \ 
 
@@ -237,25 +240,32 @@ In the T-test results above, the high **_p_** value of _0.8872_ indicates that t
 
 ![](./images/ttest_base_gambler.png)
  
+![](./images/baseVsLeastFrequent.png)
 
 
 ### Random Numbers Strategy
+
+![](./images/ttest_base_random.png)
+
+![](./images/baseVsRandom.png)
 
 
 
 ### Multiplier Strategy
 
+![](./images/ttest_base_multi.png)
 
+![](./images/baseVsMultiplier.png)
 
 describe what you did (validation, experimental design, the study of the theories, etc.), and what you found out (statistical analysis, comparison of various approaches, system performance improvement, optimization, new algorithm development, etc.).
 
 
 
-![](./images/baseVsMultiplier.png)
+
 ![](./images/averageWinningsTable.png)
-![](./images/baseVsLeastFrequent.png)
-![](./images/baseVsMostFrequent.png)
-![](./images/ttest_base_gambler.png)
+
+
+
 
 
 
