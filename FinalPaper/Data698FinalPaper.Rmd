@@ -34,7 +34,7 @@ The famous American writer Ambrose Bierce once defined a lottery as "_A tax on p
 
 The outrageously slim chances of winning have led to an array of different approaches to playing the lottery in the hope of beating the odds. These range from strategies based on mysticism, such as playing numbers based on [numerology](https://www.mercurynews.com/2019/03/20/want-to-win-tonights-550m-powerball-take-a-deeper-look-at-the-numbers/), to those based on statistical probability, such as playing numbers that have frequently shown up in winning number sets and are thus believed to more likely show up in future drawings.
 
-While there may be an unlikely chance that mystical strategies can assist in increasing the odds of winning the lottery, such approaches are unmeasurable and as such, these apporaches will not be considered in this study. Instead, we will focus on strategies that are based on statistical probability, and are thus more measurable.
+While there may be an unlikely chance that mystical strategies can assist in increasing the odds of winning the lottery, such approaches are unmeasurable and as such, these approaches will not be considered in this study. Instead, we will focus on strategies that are based on statistical probability, and are thus more measurable.
 
 In order to assess if these strategies can better one's odds of winning, We will analyze the past 20 years of winning numbers from the [Mega Millions](https://nylottery.ny.gov/draw-game/?game=megamillions) lottery to answer the following questions:
 
@@ -53,7 +53,7 @@ In order to assess if these strategies can better one's odds of winning, We will
 We will compare 5 different game strategies in this study to determine if one or more strategies results in a greater amount of wins. The strategies that we will investigate are as follows:
 
 1. **Consistent Numbers Strategy**  
-_Playing the same numbers every game. This strategy is our base case_. 
+_Playing the same numbers every game. This strategy is our **base case**_. 
 
 2. **Most Frequent Numbers Strategy**  
 _This strategy involves playing numbers that most frequently occurred in past winning number sets_  
@@ -170,9 +170,11 @@ This comparison was carried out using **T-tests**. T tests were the ideal compar
 
 ADD INTRODUCTION TO RESULTS SECTION HERE.
 
-Null Hypothesis: No one strategy is more effective than an other.
+**Null Hypothesis**: A specific strategy is the same as the base case in terms of average winnings generated. This is measured as follows:
+_The mean between the base case average winnings minus a specific strategy's average winnings is equal to 0_. 
 
-Alternative Hypothesis: Strategies are not equal in terms of their effectiveness.
+**Alternative Hypothesis**: A specific strategy is not the same as the base case in terms of average winnings generated. This is measured as follows:
+_The mean between the base case average winnings minus a specific strategy's average winnings is not equal to 0_. 
 
 
 \ 
@@ -222,15 +224,12 @@ For the Most Frequent Numbers strategy, we created 1 random ticket consisting of
 
 The next step was to compare the average winnings obtained from playing these tickets against those obtained from our base case (_Consistent Numbers Strategy_). In order to get a clear picture of the difference between the mean of the base case and that of the strategy under inspection, we used T-tests as our main method of comparison. The following is a breakdown of findings for each strategy:
 
-\ 
 
 **Most Frequent Numbers Strategy (_Hot Hand Fallacy approach_)**
 
 ![](./images/ttest_base_hot.png)
 
-In the T-test results above, the **_p_** value of _0.05222_ indicates that the average winnings of the Most Frequent Numbers strategy are close to significantly different to those of the base case. Nevertheless, it is still above 0.05 which would suggest that we cannot reject the null hypothesis that neither strategy is more effective than the other.
-
-However, the hign **_t_** value of _1.9415_.    
+In the T-test results above, the **_p value_** of _0.05222_ indicates that the average winnings of the Most Frequent Numbers strategy are not significantly different from those of the base case. Therefore we cannot reject the null hypothesis that the _Most Frequent Numbers strategy is the same as the base case in terms of average winnings_. This is further consolidated by the insignificant **_t_** value of _1.9415_.    
 
 ![](./images/baseVsMostFrequent.png)
 
