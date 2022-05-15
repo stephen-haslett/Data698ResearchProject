@@ -244,6 +244,7 @@ As with the Most Frequent Numbers strategy's T-Test results, the Least Frequent 
 
 Whilst there is less overlap between the distributions of this strategy and the base case than there was with the Most Frequent Numbers strategy, it is still evident that the values fall within the expected values of the base case. Therefore, based on this evidence and the evidence provided by the T-Test, we can conclude that the Least Frequent Numbers strategy does not result in more winnings than the base case and as such, we cannot reject the null hypothesis that the _Least Frequent Numbers strategy is the same as the base case in terms of average winnings_.
 
+\ 
 
 ### Random Numbers Strategy
 
@@ -275,11 +276,15 @@ describe what you did (validation, experimental design, the study of the theorie
 
 
 
-## Conclusion & Next Steps
+## Conclusion
 
-While we started of hopeful that we would discover a solid strategy for winning the lottery, the results of this study dwindled our hopes and proved that such a strategy is unattainable. 
 
-conclude your findings, suggest areas for future work.
+
+### Future Work
+
+While we started out hopeful that we would discover a solid strategy for winning the Mega Millions lottery, the results of this study dwindled our hopes and proved that such a strategy is unattainable. Although it is almost assured that this truth can be applied to lottery games in general, follow-up studies could explore applying the strategies we investigated to different lottery games in order to be able to make this claim with certainty.
+
+Lottery games such as New York's **_[Win4](https://nylottery.ny.gov/draw-game?game=win4)_** only require 4 numbers to be matched in order to win the jackpot. Whilst the payouts are considerably less than those of the Mega Millions lottery, the odds of winning the jackpot are remarkably greater (_1 in 10,000_). Given this drastic change in odds and the fact that fewer matching numbers are required to win, future studies could investigate how our results would differ when applying the 4 strategies we applied to the Mega Millions game. Such comparisons could benefit follow-up studies by revealing new attainable strategies to playing the lottery that deserve further investigation. For example, is it possible to win a certain amount of money with less tickets playing a game that requires fewer matching numbers than it takes to win the same amount of money playing the Mega Millions lottery?  
 
 
 
