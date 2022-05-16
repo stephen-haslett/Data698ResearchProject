@@ -160,28 +160,17 @@ In order to evaluate the effectiveness of each strategy in terms of increasing t
 
 This comparison was carried out using **T-tests**. T-tests were the ideal comparison method for this study as they provided us with a means by which to determine the significance of difference between each strategy's mean.
 
-
- 
-## Results
-
-ADD INTRODUCTION TO RESULTS SECTION HERE.
-
-**Null Hypothesis (_H0_)**: A specific strategy is the same as the base case in terms of average winnings generated and therefore neither strategy will result in more winnings.
-This is measured as follows: _The mean of the base case average winnings minus a specific strategy's average winnings is equal to 0_. 
-
-**Alternative Hypothesis (_Ha_)**: A specific strategy is not the same as the base case in terms of average winnings generated and therefore playing one or the other strategies will result in more winnings. This is measured as follows: _The mean of the base case average winnings minus a specific strategy's average winnings is not equal to 0_. 
-
-
-\ 
-
 ### Most and Least Frequent Numbers Strategies
 
-The Most and Least Frequent Numbers strategies in this study are based on the Hot Hand Fallacy (_the believe that selecting winning numbers that occurred frequently in the past will better your odds of winning_), and the Gambler's Fallacy (_the believe that not selecting such numbers will better your odds of winning_) respectively.
+The Most and Least Frequent Numbers strategies deserve their own section within our methodology as the preperation behind them was more involved than that of the other 3 strategies.
+
+The Most and Least Frequent Numbers strategies are based on the Hot Hand Fallacy (_the believe that selecting winning numbers that occurred frequently in the past will better your odds of winning_), and the Gambler's Fallacy (_the believe that not selecting such numbers will better your odds of winning_) respectively.
 
 In order to simulate both of these approaches, we first needed to find the numbers that conformed to each philosophy. To do this, we ran through the historical Mega Millions winning numbers data and calculated the frequency of both the most and least frequently occurring Mega Ball and Base numbers. We then ranked each number in accordance to its frequency.
 
 This provided us with a set of the top _n_ most/least recurring numbers from which to create tickets for use in our Hot Hand and Gambler's Fallacy (_Most and Least Frequent Numbers strategies_) based simulations. This process left us with the following Mega Ball and Base Number pools from which to pull from:
 
+\newpage
 
 \begingroup\centering
 
@@ -202,6 +191,8 @@ This provided us with a set of the top _n_ most/least recurring numbers from whi
 \ 
 \ 
 
+\newpage
+
 \begingroup\centering
 
 ##### Least Recurring Numbers Set
@@ -216,6 +207,20 @@ This provided us with a set of the top _n_ most/least recurring numbers from whi
 \endgroup
 
 For the Most Frequent Numbers strategy, we created 1 random ticket consisting of numbers pulled from the Most Recurring Numbers set (_5 Base numbers, and 1 Mega Ball number_). The same approach was taken for the Least Frequent Numbers strategy only for this strategy, the numbers were drawn from the Least Recurring Numbers set.
+
+
+ 
+## Results
+
+ADD INTRODUCTION TO RESULTS SECTION HERE.
+
+**Null Hypothesis (_H0_)**: A specific strategy is the same as the base case in terms of average winnings generated and therefore neither strategy will result in more winnings.
+This is measured as follows: _The mean of the base case average winnings minus a specific strategy's average winnings is equal to 0_. 
+
+**Alternative Hypothesis (_Ha_)**: A specific strategy is not the same as the base case in terms of average winnings generated and therefore playing one or the other strategies will result in more winnings. This is measured as follows: _The mean of the base case average winnings minus a specific strategy's average winnings is not equal to 0_. 
+
+
+\ 
 
 The next step was to compare the average winnings obtained from playing these tickets against those obtained from our base case (_Consistent Numbers Strategy_). In order to get a clear picture of the difference between the mean of the base case and that of the strategy under inspection, we used T-tests as our main method of comparison. The following is a breakdown of findings for each strategy:
 
