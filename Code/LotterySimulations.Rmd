@@ -315,7 +315,7 @@ megaballOccurrence = function(megaballs) {
 
 ```{r, hotColdNumbers, echo = FALSE, message = FALSE, warning = FALSE}
 # Run through the NY Open Data's historic winning Mega Millions data set to find the
-# Most frequently occurring  winning numbers and Mega Balls (hot numbers), and least
+# Most frequently occurring winning numbers and Mega Balls (hot numbers), and least
 # frequently occurring numbers (cold numbers). 
 number_counts = winningNumberOccurrence(megaMillionsWinningNumbers$winning_numbers)
 megaball_counts = megaballOccurrence(megaMillionsWinningNumbers$mega_ball)
@@ -365,7 +365,7 @@ chart_plotter(cold_megaballs,'Least Recurring Megaball Numbers')
 #'
 #' @param trails Numeric: The number of trails to perform the comparison for.
 #'
-#' @param n_choices Numeric: THe base numbers to compare.
+#' @param n_choices Numeric: The base numbers to compare.
 #'
 #' @param mb_choices Numeric: The Mega Ball numbers to compare.
 #'
