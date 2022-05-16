@@ -360,4 +360,4 @@ Lottery games such as New York's **_[Win4](https://nylottery.ny.gov/draw-game?ga
 
 The lottery simulation code that was written for this study can be found at the following location:
 
-https://github.com/stephen-haslett/Data698ResearchProject/blob/master/Code/LotterySimulations.Rmd
+[https://github.com/stephen-haslett/Data698ResearchProject/blob/master/Code/LotterySimulations.Rmd](https://github.com/stephen-haslett/Data698ResearchProject/blob/master/Code/LotterySimulations.Rmd)
