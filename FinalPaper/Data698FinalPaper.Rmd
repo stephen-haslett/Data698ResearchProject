@@ -24,7 +24,7 @@ library(kableExtra)
 
 The goal of this study is to establish if it is possible to strategically play the lottery in order to increase both prize money, and the chances of winning. To determine this, we focused on the [Mega Millions](https://nylottery.ny.gov/draw-game/?game=megamillions) lottery game. Mega Millions is a United States based lottery that is played twice a week, and is available in 45 states plus the District of Columbia and the U.S. Virgin Islands. To participate in the game, players must select 5 numbers from 1 to 70, and 1 number from 1 to 25 for the Mega Ball. If the player matches all 5 numbers plus the Mega Ball, then they win the jackpot. [Lower prize tiers](https://nylottery.ny.gov/draw-game/?game=megamillions#odds_prizes) are available for matches that fall short of the jackpot requirement.
 
-Our methodology toward satisfying this goal was to compare 4 different approaches to playing the lottery using hypothesis testing. We compared the average winnings of each strategy through the use of T-Tests in order to establish whether or not specific strategies outperformed others in terms of bettering the odds of winning, and increasing return on investment. The results showed no evidence that one strategy was better than another, suggesting that the lottery is purely a game of chance, and that applying strategy to game play has little to no influence over the outcome of the game. 
+Our methodology toward satisfying this goal was to compare 4 different approaches to playing the lottery using hypothesis testing. We compared the average winnings of each strategy through the use of T-tests in order to establish whether or not specific strategies outperformed others in terms of bettering the odds of winning, and increasing return on investment. The results showed no evidence that one strategy was better than another, suggesting that the lottery is purely a game of chance, and that applying strategy to game play has little to no influence over the outcome of the game. 
 
 **Keywords: _probability_, _lottery strategy_, _gambler's fallacy_, _hot hand fallacy_**.
 
@@ -116,8 +116,11 @@ Additionally, Players can pay an extra dollar to purchase a multiplier number kn
 The data that we utilized for this study was supplied by [NY Open Data](https://data.ny.gov/), and consists of biweekly winning Mega Millions lottery numbers from 2002, through the current week. The dataset is in CSV format and can be accessed at the following location - [Lottery Mega Millions Winning Numbers: Beginning 2002](https://data.ny.gov/Government-Finance/Lottery-Mega-Millions-Winning-Numbers-Beginning-20/5xaw-6ayf/data). As of writing, the set contains 2058 observations broken into 4 columns:
 
 - **Draw Date**: _The date on which the lottery draw took place_.
+\ 
 - **Winning Numbers**: _The winning numbers for the given lottery draw_.
+\ 
 - **Mega Ball**: _The winning Mega Ball for the draw_.
+\ 
 - **Multiplier**: _The winning multiplier number for the draw_.
 
 \newpage
@@ -162,7 +165,7 @@ This comparison was carried out using **T-tests**. T-tests were the ideal compar
 
 ### Most and Least Frequent Numbers Strategies
 
-The Most and Least Frequent Numbers strategies deserve their own section within our methodology as the preperation behind these strategies was more involved than that of the other 3.
+The Most and Least Frequent Numbers strategies deserve their own section within our methodology as the preparation behind these strategies was more involved than that of the other 3.
 
 The Most and Least Frequent Numbers strategies are based on the Hot Hand Fallacy (_the believe that selecting winning numbers that occurred frequently in the past will better your odds of winning_), and the Gambler's Fallacy (_the believe that not selecting such numbers will better your odds of winning_) respectively.
 
@@ -212,9 +215,9 @@ For the Most Frequent Numbers strategy, we created 1 random ticket consisting of
  
 ## Results
 
-For ease of interpretation, the findings of this study have been segmented into sections corresponding to the strategies that they derived from. Each section consists of the T-Test results that were generated as a consequence of comparing the average winnings of the strategy under discussion, with those of the base case. Further, each section contains a visual representation of comparison results in the form of a distribution histogram.
+For ease of interpretation, the findings of this study have been segmented into sections corresponding to the strategies that they derived from. Each section consists of the T-test results that were generated as a consequence of comparing the average winnings of the strategy under discussion, with those of the base case. Further, each section contains a visual representation of comparison results in the form of a distribution histogram.
 
-As the comparison section of this study was based on hypothesis testing, each section contains the _null_ and _alternative_ hypotheses corresponding to the strategy they are listed under. However, the general _null_ and _alternative_ hypotheses of the study can be interpeted as follows:
+As the comparison section of this study was based on hypothesis testing, each section contains the _null_ and _alternative_ hypotheses corresponding to the strategy they are listed under. However, the general _null_ and _alternative_ hypotheses of the study can be interpreted as follows:
 
 **Null Hypothesis (_H0_)**: A specific strategy is the same as the base case in terms of average winnings generated and therefore neither strategy will result in more winnings.
 
@@ -234,7 +237,7 @@ $\text{Ha: }\mu_{base}-\mu_{most frequent} \neq 0$
 
 The T-test results above reveal a **_p_** value of **_0.8872_** indicating that the average winnings of the Most Frequent Numbers strategy are not significantly different from those of the base case. We therefore cannot reject the null hypothesis that the _Most Frequent Numbers strategy is the same as the base case in terms of average winnings_. This is further consolidated by the insignificant **_t_** value of **_0.14182_**.
 
-To get a better understanding of the test outcome, we plotted the results. The subsequent histogram confirms that the average winnings generated by the Most Frequent Numbers strategy fall within the expected values of the base case, thus proving the T-Test to be accurate. Furthermore, the chart reveals that both strategies yield negative winnings. When we consider a win to be **_total winnings - total ticket spend_**, this suggests that we cannot rely on either strategy to increase our winnings.  
+To get a better understanding of the test outcome, we plotted the results. The subsequent histogram confirms that the average winnings generated by the Most Frequent Numbers strategy fall within the expected values of the base case, thus proving the T-test to be accurate. Furthermore, the chart reveals that both strategies yield negative winnings. When we consider a win to be **_total winnings - total ticket spend_**, this suggests that we cannot rely on either strategy to increase our winnings.  
 
 ![](./images/baseVsMostFrequent.png)
 
@@ -250,11 +253,11 @@ We next compared the Least Frequent Numbers strategy to the base case which yiel
 
 ![](./images/ttest_base_gambler.png)
 
-As with the Most Frequent Numbers strategy's T-Test results, the Least Frequent Numbers strategy's **_t_** and **_p_** values of **_0.70181_** and **_0.4828_** respectively reveal that there is not a significant difference in the average winnings for this strategy versus those of the base case. Before rejecting the null hypothesis, we plotted the results in order to gain insight into the distributions generated by both strategies. 
+As with the Most Frequent Numbers strategy's T-test results, the Least Frequent Numbers strategy's **_t_** and **_p_** values of **_0.70181_** and **_0.4828_** respectively reveal that there is not a significant difference in the average winnings for this strategy versus those of the base case. Before rejecting the null hypothesis, we plotted the results in order to gain insight into the distributions generated by both strategies. 
 
 ![](./images/baseVsLeastFrequent.png)
 
-Whilst there is less overlap between the distributions of this strategy and the base case than there was with the Most Frequent Numbers strategy, it is still evident that the values fall within the expected values of the base case. Therefore, based on this evidence and the evidence provided by the T-Test, we can conclude that the Least Frequent Numbers strategy does not result in more winnings than the base case and as such, we cannot reject the null hypothesis that the _Least Frequent Numbers strategy is the same as the base case in terms of average winnings_.
+Whilst there is less overlap between the distributions of this strategy and the base case than there was with the Most Frequent Numbers strategy, it is still evident that the values fall within the expected values of the base case. Therefore, based on this evidence and the evidence provided by the T-test, we can conclude that the Least Frequent Numbers strategy does not result in more winnings than the base case and as such, we cannot reject the null hypothesis that the _Least Frequent Numbers strategy is the same as the base case in terms of average winnings_.
 
 \ 
 
@@ -307,7 +310,7 @@ When looking at the results of each experiment collectively, it is clear that th
 
 ## Conclusion
 
-Based on our experiments, we can conclude that consistently picking the same numbers (_base case_) every game will not give you anymore of an advantage in terms of winning the lottery than randomizing your number choices, or picking numbers based on past results. Furthermore, we discovered that paying the extra dollar for the multiplier number (_a strategy that is supposed to increase your winnings_) actually results in a higher loss due to the higher cost of the lottery ticket. In conclusion, we believe that the lottery is not worth playing as the average amount won is less than the amount spent on tickets. This average does not get better based on how numbers are picked, but does get worse when you pay more for a chance at a multiplier.
+Based on our experiments, we can conclude that consistently picking the same numbers (_base case_) every game will not give you anymore of an advantage in terms of winning the lottery than randomizing your number choices, or picking numbers based on past results. Furthermore, we discovered that paying the extra dollar for the multiplier number (_a strategy that is supposed to increase your winnings_) actually results in a higher loss due to the higher cost of the lottery ticket. In conclusion, we believe that the lottery is not worth playing as the average amount won is less than the amount spent on tickets. This average does not get better based on how numbers are picked, but does get worse when you pay more to add a multiplier number to a lottery ticket.
 
 
 ### Future Work
@@ -355,6 +358,6 @@ Lottery games such as New York's **_[Win4](https://nylottery.ny.gov/draw-game?ga
 
 ## Appendix 
 
-https://github.com/stephen-haslett/Data698ResearchProject
+The lottery simulation code that was written for this study can be found at the following location:
 
-Add links to individual files along with a summary explaining each file.
+https://github.com/stephen-haslett/Data698ResearchProject/blob/master/Code/LotterySimulations.Rmd
