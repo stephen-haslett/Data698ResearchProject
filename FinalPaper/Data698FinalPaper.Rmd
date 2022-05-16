@@ -216,8 +216,6 @@ For ease of interpretation, the findings of this study have been segmented into 
 
 As the comparison section of this study was based on hypothesis testing, each section contains the _null_ and _alternative_ hypotheses corresponding to the strategy they are listed under. However, the general _null_ and _alternative_ hypotheses of the study can be interpeted as follows:
 
-\ 
-
 **Null Hypothesis (_H0_)**: A specific strategy is the same as the base case in terms of average winnings generated and therefore neither strategy will result in more winnings.
 
 **Alternative Hypothesis (_Ha_)**: A specific strategy is not the same as the base case in terms of average winnings generated and therefore playing the strategy under comparison, or the base strategy, will result in more winnings.
@@ -227,12 +225,10 @@ As the comparison section of this study was based on hypothesis testing, each se
 
 **Most Frequent Numbers Strategy (_Hot Hand Fallacy approach_)**
 
-$$
-\text{Ho: }\mu_{base}-\mu_{most frequent} = 0
-$$
-$$
-\text{Ha: }\mu_{base}-\mu_{most frequent} \neq 0
-$$
+$\text{Ho: }\mu_{base}-\mu_{most frequent} = 0$
+
+$\text{Ha: }\mu_{base}-\mu_{most frequent} \neq 0$
+
 
 ![](./images/ttest_base_hot.png)
 
@@ -246,12 +242,9 @@ To get a better understanding of the test outcome, we plotted the results. The s
 
 **Least Frequent Numbers Strategy (_Gambler's Fallacy approach_)**
 
-$$
-\text{Ho: }\mu_{base}-\mu_{most frequent} = 0
-$$
-$$
-\text{Ha: }\mu_{base}-\mu_{most frequent} \neq 0
-$$
+$\text{Ho: }\mu_{base}-\mu_{most frequent} = 0$
+
+$\text{Ha: }\mu_{base}-\mu_{most frequent} \neq 0$
 
 We next compared the Least Frequent Numbers strategy to the base case which yielded the following T-test results:
 
@@ -267,12 +260,9 @@ Whilst there is less overlap between the distributions of this strategy and the 
 
 ### Random Numbers Strategy
 
-$$
-\text{Ho: }\mu_{base}-\mu_{most frequent} = 0
-$$
-$$
-\text{Ha: }\mu_{base}-\mu_{most frequent} \neq 0
-$$
+$\text{Ho: }\mu_{base}-\mu_{most frequent} = 0$
+
+$\text{Ha: }\mu_{base}-\mu_{most frequent} \neq 0$
 
 ![](./images/ttest_base_random.png)
 
@@ -286,12 +276,9 @@ Plotting the distribution of the sample means further proves this as it reveals 
 
 ### Multiplier Strategy
 
-$$
-\text{Ho: }\mu_{base}-\mu_{most frequent} = 0
-$$
-$$
-\text{Ha: }\mu_{base}-\mu_{most frequent} \neq 0
-$$
+$\text{Ho: }\mu_{base}-\mu_{most frequent} = 0$
+
+$\text{Ha: }\mu_{base}-\mu_{most frequent} \neq 0$
 
 ![](./images/ttest_base_multi.png)
 
