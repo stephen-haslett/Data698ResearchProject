@@ -161,7 +161,7 @@ The same approach was adopted for the Most Frequent Numbers strategy only in thi
 
 In order to evaluate the effectiveness of each strategy in terms of increasing the odds of winning and return on investment, we adopted a Hypothesis Testing approach and compared the average winnings for each of the above 4 strategies (_Least and Most Frequent Numbers strategies, Multiplier, and Random Numbers strategies_) to those of our base case. The metric that we focused on during this comparison was the average win amount across 10,000 trials. The average winnings were evaluated with a 95% confidence interval.
 
-This comparison was carried out using **T-tests**. T-tests were the ideal comparison method for this study as they provided us with a means by which to determine the significance of difference between each strategy's mean.
+This comparison was carried out using **T-tests**. T-tests were the ideal comparison method for this study as they provided us with a means by which to determine the significance of difference between each strategy's mean winnings.
 
 ### Most and Least Frequent Numbers Strategies
 
