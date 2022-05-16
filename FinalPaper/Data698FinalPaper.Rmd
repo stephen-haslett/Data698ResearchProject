@@ -312,6 +312,8 @@ Looking at the sample distribution of the means, it is clear that the average wi
 
 Based on our experiments, we can conclude that consistently picking the same numbers (_base case_) for every lottery game is just as effective/ineffective as randomizing your number choices every game, or picking numbers based on past results. However, we also found that paying an extra dollar for the multiplier number is strictly worse and typically results in a higher loss. In conclusion, we believe that the lottery is not worth playing as the average amount won is less than the amount spent on tickets. This average does not get better based on how numbers are picked, but does get worse when you pay more for a chance at a multiplier.
 
+\newpage
+
 ### Future Work
 
 While we started out hopeful that we would discover a solid strategy for winning the Mega Millions lottery, the results of this study dwindled our hopes and proved that such a strategy is unattainable. Although it is almost assured that this truth can be applied to lottery games in general, follow-up studies could explore applying the strategies we investigated to different lottery games in order to be able to make this claim with certainty.
