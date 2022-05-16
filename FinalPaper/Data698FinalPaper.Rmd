@@ -22,15 +22,17 @@ library(kableExtra)
 
 ## Abstract
 
-The goal of this study is to establish if it is possible to strategically play the lottery in order to increase both prize money, and the chances of winning. To determine this, we focused on the [Mega Millions](https://nylottery.ny.gov/draw-game/?game=megamillions) lottery game. Mega Millions is a United States based lottery that is played twice a week, and is available in 45 states plus the District of Columbia and the U.S. Virgin Islands. To participate in the game, players must select 5 numbers from 1 to 70, and 1 number from 1 to 25 for the Mega Ball. If the player matches all 5 numbers plus the Mega Ball, then they win the jackpot. [Lower prize tiers](https://nylottery.ny.gov/draw-game/?game=megamillions#odds_prizes) are available for matches that fall short of the jackpot requirement.      
+The goal of this study is to establish if it is possible to strategically play the lottery in order to increase both prize money, and the chances of winning. To determine this, we focused on the [Mega Millions](https://nylottery.ny.gov/draw-game/?game=megamillions) lottery game. Mega Millions is a United States based lottery that is played twice a week, and is available in 45 states plus the District of Columbia and the U.S. Virgin Islands. To participate in the game, players must select 5 numbers from 1 to 70, and 1 number from 1 to 25 for the Mega Ball. If the player matches all 5 numbers plus the Mega Ball, then they win the jackpot. [Lower prize tiers](https://nylottery.ny.gov/draw-game/?game=megamillions#odds_prizes) are available for matches that fall short of the jackpot requirement.
 
-Abstract: use 250 words or less to summarize your problem, methodology, and major outcomes.
+Our methodology toward satisfying this goal was to compare 4 different approaches to playing the lottery using hypothesis testing. We compared the average winnings of each strategy through the use of T-Tests in order to establish whether or not specific strategies outperformed others in terms of bettering the odds of winning, and increasing return on investment. The results showed no evidence that one strategy was better than another, suggesting that the lottery is purely a game of chance, and that applying strategy to game play has little to no influence over the outcome of the game. 
 
-**Keywords**: _probability_, _lottery strategy_, _gambler's fallacy_, _hot hand fallacy_.
+**Keywords: _probability_, _lottery strategy_, _gambler's fallacy_, _hot hand fallacy_**.
 
 ## Introduction
 
 The famous American writer Ambrose Bierce once defined a lottery as "_A tax on people who are bad at math_" (_The Unabridged Devil's Dictionary_). According to the United States Census Bureau's [2020 Annual Survey of State Government Finances](https://www.census.gov/data/tables/2020/econ/state/historical-tables.html), Americans spent more than $80 billion on lottery tickets in 2020 alone. Based on these statistics, it is clear that many Americans, despite the incredibly thin odds of winning the jackpot (_1 in 302,575,350 for the Mega Millions jackpot_), are willing to shun Bierce's advice and part with a significant amount of money for the chance of lifelong financial security.
+
+\newpage
 
 The outrageously slim chances of winning have led to an array of different approaches to playing the lottery in the hope of beating the odds. These range from strategies based on mysticism, such as playing numbers based on [numerology](https://www.mercurynews.com/2019/03/20/want-to-win-tonights-550m-powerball-take-a-deeper-look-at-the-numbers/), to those based on statistical probability, such as playing numbers that have frequently shown up in winning number sets in the past and are thus believed to be more likely to show up in future drawings.
 
@@ -49,6 +51,8 @@ In order to assess if these strategies can better one's odds of winning, We will
 - In terms of winning, is it better to play the same numbers, or pick random numbers every game?
 
 - Out of all the strategies under investigation, which strategy gives us the best return on investment (if any)?
+
+\ 
 
 We will compare 5 different game strategies in this study to determine if one or more strategies results in a greater amount of wins. The strategies that we will investigate are as follows:
 
@@ -71,8 +75,7 @@ _Applying the Mega Millions Megaplier number to the Consistent Numbers Strategy_
 _(Please refer to the "Game Rules"" section of the "Mega Millions Lottery Game" section_   
 _for further information on multplier numbers)_.
 
-
-
+\newpage
 
 ### Mega Millions Lottery Game
 
@@ -84,14 +87,11 @@ Optionally, players can opt for randomly selected numbers at the time of ticket 
 #### Game Rules
 
 Lottery numbers are drawn randomly **twice** a week on _Tuesdays_ and _Fridays_ at 11PM (EST). 
-50% of lottery ticket sales is allocated as prize money (_75% of which is__used for the jackpot payout_). 
+50% of lottery ticket sales is allocated as prize money (_75% of which is used for the jackpot payout_). 
 If all of the numbers selected by the player (_including the Mega Ball_) are drawn, then the player wins the jackpot. 
 If multiple players win the jackpot, then the jackpot is divided equally among the winning players. 
 If no one wins the jackpot for a particular drawing, then the jackpot amount rolls over to the next drawing. 
 The remaining 25% of the prize money is then allocated to lower tiered prizes.
-
-\newpage
-
 
 ```{r, prizeTiers, echo=FALSE, message=FALSE, warning=FALSE}
 tableData <- data.frame(c("Jackpot", "Second Prize", "Third Prize", "Fourth Prize", "Fifth Prize",  "Sixth Prize", "Seventh Prize", "Eighth Prize", "Ninth Prize"),
@@ -104,34 +104,33 @@ tableData <- data.frame(c("Jackpot", "Second Prize", "Third Prize", "Fourth Priz
 colnames(tableData) <- c("Prize", "Winning Criterion", "Payout", "Odds of Winning")
 
 kable(tableData, caption = 'Prize Tiers and Payouts') %>%
-      kable_styling(bootstrap_options = c('striped', 'hover', 'condensed', 'responsive')) %>% 
+      kable_styling(bootstrap_options = c('striped', 'hover', 'condensed', 'responsive'), latex_options = "HOLD_position") %>% 
       scroll_box(width = '100%')
 ```
-
 
 Additionally, Players can pay an extra dollar to purchase a multiplier number known as the _Megaplier_. Multiplier numbers range from **2** to **5**. If a player picks a winning multiplier number and also winning lottery numbers, then the payout for the winning lottery numbers will be multiplied by the winning multiplier number. 
 
 
 ## Data Source
 
-The data that we utilized for this project was supplied by [NY Open Data](https://data.ny.gov/), and consists of biweekly winning Mega Millions lottery numbers from 2002, through the current week. The dataset is in CSV format and can be accessed at the following location - [Lottery Mega Millions Winning Numbers: Beginning 2002](https://data.ny.gov/Government-Finance/Lottery-Mega-Millions-Winning-Numbers-Beginning-20/5xaw-6ayf/data). As of writing, the set contains 2058 observations broken into 4 columns:
+The data that we utilized for this study was supplied by [NY Open Data](https://data.ny.gov/), and consists of biweekly winning Mega Millions lottery numbers from 2002, through the current week. The dataset is in CSV format and can be accessed at the following location - [Lottery Mega Millions Winning Numbers: Beginning 2002](https://data.ny.gov/Government-Finance/Lottery-Mega-Millions-Winning-Numbers-Beginning-20/5xaw-6ayf/data). As of writing, the set contains 2058 observations broken into 4 columns:
 
 - **Draw Date**: _The date on which the lottery draw took place_.
 - **Winning Numbers**: _The winning numbers for the given lottery draw_.
 - **Mega Ball**: _The winning Mega Ball for the draw_.
 - **Multiplier**: _The winning multiplier number for the draw_.
 
-
+\newpage
 
 ## Literature Review
 
 In a 2012 study on predicting lottery numbers (_Galbo-Jørgensen, Claus B., Suetens, Sigrid., Tyran, Jean-Robert. 2012_), it was observed that many lottery players fall prey to the [gambler's fallacy](https://en.wikipedia.org/wiki/Gambler%27s_fallacy) when picking lottery numbers. According to the gambler's fallacy, players tend to avoid picking numbers that were recently included in the winning numbers set under the believe that if an event occurred recently, it is less likely to occur again. Contrary to this, other players pick numbers in accordance with the [hot hand fallacy](https://en.wikipedia.org/wiki/Hot_hand) which is the believe in a continuation of a trend, i.e. if specific numbers were recently included in the winning numbers set, then they are more likely to occur in future drawings [(1)](#references).
 
-Otekunrin and Folorunso (_2021_) observed that some players will select lottery numbers based on personally significant numbers such as birthdays, house numbers, anniversary dates etc., whilst others heuristically choose numbers based on their frequency of occurrence in previous drawings. When a heuristic approach is applied to lottery number selection, it was observed that players tend to believe that well-spread out numbers are better than distinctive ones even though both have the same probability of occurrence [(2)](#references).
+_Otekunrin and Folorunso_ (_2021_) observed that some players will select lottery numbers based on personally significant numbers such as birthdays, house numbers, anniversary dates etc., whilst others heuristically choose numbers based on their frequency of occurrence in previous drawings. When a heuristic approach is applied to lottery number selection, it was observed that players tend to believe that well-spread out numbers are better than distinctive ones even though both have the same probability of occurrence [(2)](#references).
 
 While the aforementioned studies are concerned with the psychology behind picking lottery numbers, this study focuses on whether or not these selection techniques increase one's chances of selecting winning lottery numbers. We are more concerned with proving these techniques to be either effective or ineffective through the application of mathematics, than with why people believe them to be so.
 
-This approach is in the same vein as Renato Gianella's approach to this subject. Gianella (_2014_) observed that winning lottery number combinations follow a predictable pattern. By applying probability theory to lottery drawings, Gianella established that the results of a lottery draw follow the same behavior pattern as predicted by the Law of Large Numbers - _When an event is repeated many times, the average of the results from all events should be close to the expected result_ [(3)](#references).
+This approach is in the same vein as Renato Gianella's approach to this subject. _Gianella_ (_2014_) observed that winning lottery number combinations follow a predictable pattern. By applying probability theory to lottery drawings, Gianella established that the results of a lottery draw follow the same behavior pattern as predicted by the Law of Large Numbers - _When an event is repeated many times, the average of the results from all events should be close to the expected result_ [(3)](#references).
 
 Gianella's method is based on groups of number combinations built from previous lottery results. When tested, his method demonstrated that the probability that a given number combination occurs is not the same for all groups, and that certain groups display a higher probability of winning.
 
@@ -151,15 +150,15 @@ For the Random Numbers Strategy, we generated a different lottery ticket consist
 
 For the Multiplier strategy, we used our base case (_The Consistent Numbers Strategy_) and just applied the multiplier number logic (_i.e. If both a winning multiplier number and winning lottery numbers are selected, then the payout for the winning lottery numbers is multiplied by the winning multiplier number_). 
 
-For the last two strategies that we evaluated (_the Least and Most Frequent Numbers strategies_) we leveraged the NY Open Data Mega Millions Winning Numbers dataset in order to select the most and least frequent winning numbers. This involved analyzing the dataset and rank ordered the occurrence of individual numbers, and Mega Balls. We then used the top 50 percentile to represent the most frequent numbers, and the bottom 50 percentile to represent the least frequent numbers.
+For the last two strategies that we evaluated (_the Least and Most Frequent Numbers strategies_) we leveraged the _NY Open Data Mega Millions Winning Numbers_ dataset in order to select the most and least frequent winning numbers. This involved analyzing the dataset and rank ordered the occurrence of individual numbers, and Mega Balls. We then used the top 50 percentile to represent the most frequent numbers, and the bottom 50 percentile to represent the least frequent numbers.
 
 For the Least Frequent Numbers strategy, we generated a single random lottery ticket using the least frequent winning numbers extracted from the Mega Millions Winning Numbers dataset and then played the same ticket against a randomly generated winning ticket for each trail.
 
-The same approach was adopted for the Most Frequent Numbers strategy only in this case we used the most frequent winning numbers extracted from the dataset rather than the least frequent.
+The same approach was adopted for the Most Frequent Numbers strategy only in this case, we used the most frequent winning numbers extracted from the dataset rather than the least frequent.
 
-In order to evaluate the effectiveness of each strategy in terms of increasing the odds of winning and return on investment, we adopted a Hypothesis Testing approach and compared the average winnings for each of the above 4 strategies (_Least and Most Frequent Numbers strategies, Multiplier, and Random Numbers strategies_) to those of our base case. The metric that we focused on during this comparison was the average win amount across 10,000 trials. We will evaluate the average winnings with a 95% confidence.
+In order to evaluate the effectiveness of each strategy in terms of increasing the odds of winning and return on investment, we adopted a Hypothesis Testing approach and compared the average winnings for each of the above 4 strategies (_Least and Most Frequent Numbers strategies, Multiplier, and Random Numbers strategies_) to those of our base case. The metric that we focused on during this comparison was the average win amount across 10,000 trials. The average winnings were evaluated with a 95% confidence interval.
 
-This comparison was carried out using **T-tests**. T tests were the ideal comparison method for this study as they provided us with a means by which to determine the significance of difference between each strategy's mean.
+This comparison was carried out using **T-tests**. T-tests were the ideal comparison method for this study as they provided us with a means by which to determine the significance of difference between each strategy's mean.
 
 
  
@@ -222,12 +221,8 @@ The next step was to compare the average winnings obtained from playing these ti
 
 **Most Frequent Numbers Strategy (_Hot Hand Fallacy approach_)**
 
-$$
-\text{Ho: }\mu_{base}-\mu_{most frequent} = 0
-$$
-$$
-\text{Ha: }\mu_{base}-\mu_{most frequent} \neq 0
-$$
+Ho: mean(base) - mean(high_freq) = 0
+Ha: mean(base) - mean(high_freq) != 0
 
 ![](./images/ttest_base_hot.png)
 
@@ -241,12 +236,8 @@ To get a better understanding of the test outcome, we plotted the results. The s
 
 **Least Frequent Numbers Strategy (_Gambler's Fallacy approach_)**
 
-$$
-\text{Ho: }\mu_{base}-\mu_{least frequent} = 0
-$$
-$$
-\text{Ha: }\mu_{base}-\mu_{least frequent} \neq 0
-$$
+Ho: mean(base) - mean(low_freq) = 0
+Ha: mean(base) - mean(low_freq) != 0
 
 We next compared the Least Frequent Numbers strategy to the base case which yielded the following T-test results:
 
@@ -262,35 +253,27 @@ Whilst there is less overlap between the distributions of this strategy and the 
 
 ### Random Numbers Strategy
 
-$$
-\text{Ho: }\mu_{base}-\mu_{random} = 0
-$$
-$$
-\text{Ha: }\mu_{base}-\mu_{random} \neq 0
-$$
+Ho: mean(base) - mean(random) = 0
+Ha: mean(base) - mean(random) != 0
 
 ![](./images/ttest_base_random.png)
 
-Comparing the average winnings from the random number and consistent number strategies, we are able to obtain **_t_** and **_p_** values of **_0.71965_** and **_0.4718_** respectively.This reveals that there is not a significant difference in the average winnings for this strategy versus those of the base case as a t-score of 0.71965 is within the bounds when using a 95% confidence interval. With these results, we are not able to reject the null hypothesis and assume that the average winnings in both strategies are the same.
+Comparing the average winnings from the Random Numbers and Consistent Numbers strategies, we were able to obtain **_t_** and **_p_** values of **_0.71965_** and **_0.4718_** respectively. This reveals that there is not a significant difference in the average winnings for this strategy versus those of the base case as a t-score of 0.71965 is within bounds when using a 95% confidence interval. Based on these results, we are unable to reject the null hypothesis, and assume that the average winnings for both strategies are the same.
 
 
 ![](./images/baseVsRandom.png)
 
-Plotting the distribution of the sample means also show the overlap between the random number and consistent number strategies. Here we can clearly see that the means are within 95% of each other
+Plotting the distribution of the sample means further proves this as it reveals overlap between the Random Numbers and Consistent Numbers strategies. Here we can clearly see that the means are within 95% of each other.
 
 
 ### Multiplier Strategy
 
-$$
-\text{Ho: }\mu_{base}-\mu_{multiplier} = 0
-$$
-$$
-\text{Ha: }\mu_{base}-\mu_{multiplier} \neq 0
-$$
+Ho: mean(base) - mean(multi) = 0
+Ha: mean(base) - mean(multi) != 0
 
 ![](./images/ttest_base_multi.png)
 
-Comparing the average winnings from the multiplier and consistent number strategies, we are able to obtain **_t_**  value of **_54.458_** and a near 0 **_p_** value. This reveals that there is a significant difference in the average winnings for the multiplier strategy versus the base case as  **_t_**  = 54.458 is well outside the bounds when using a 95% confidence interval. Due to the significant difference, we are able to reject the null hypothesis and accept the alternate that the average winning amounts are different. 
+Comparing the average winnings from the Multiplier and Consistent Numbers strategies, we obtained a **_t_**  value of **_54.458_**, and a near 0 **_p_** value. This reveals that there is a significant difference in the average winnings for the Multiplier strategy versus the base case as  **_t_**  = 54.458, which is well outside the bounds when using a 95% confidence interval. Due to the significant difference, we are able to reject the null hypothesis and accept the alternative hypothesis that the average winnings for both strategies are different. 
 
 
 ![](./images/baseVsMultiplier.png)
@@ -298,24 +281,14 @@ Comparing the average winnings from the multiplier and consistent number strateg
 Looking at the sample distribution of the means, it is clear that the average winnings between the two methods are different. 
 
 
-
-describe what you did (validation, experimental design, the study of the theories, etc.), and what you found out (statistical analysis, comparison of various approaches, system performance improvement, optimization, new algorithm development, etc.).
-
+### Summary Of Results Table
 
 ![](./images/averageWinningsTable.png)
 
 
-
-
-
-
-
-
-
-
 ## Conclusion
 
-Based on our experiments, we can conclude that picking the same number(base case) for every lottery is just as good as randomizing your tickets every week or picking tickets based on past results. However, we also found out that paying an extra dollar for a multiplier is strictly worse and typically yields in a higher loss. In conclusion, we believe the lottery is not worth playing as the average amount won is less than the amount a ticket costs. This average does not get better based on how numbers are picked but do get worse when you pay more for a chance at a multiplier.
+Based on our experiments, we can conclude that picking the same number(base case) for every lottery is just as good as randomizing your tickets every week or picking tickets based on past results. However, we also found out that paying an extra dollar for a multiplier is strictly worse and typically results in a higher loss. In conclusion, we believe that the lottery is not worth playing as the average amount won is less than the amount spent on tickets. This average does not get better based on how numbers are picked, but does get worse when you pay more for a chance at a multiplier.
 
 ### Future Work
 
@@ -365,7 +338,3 @@ Lottery games such as New York's **_[Win4](https://nylottery.ny.gov/draw-game?ga
 https://github.com/stephen-haslett/Data698ResearchProject
 
 Add links to individual files along with a summary explaining each file.
-
-
-
-
