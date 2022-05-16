@@ -227,8 +227,12 @@ As the comparison section of this study was based on hypothesis testing, each se
 
 **Most Frequent Numbers Strategy (_Hot Hand Fallacy approach_)**
 
-_Ho: mean(base) - mean(high_freq) = 0_
-_Ha: mean(base) - mean(high_freq) != 0_
+$$
+\text{Ho: }\mu_{base}-\mu_{most frequent} = 0
+$$
+$$
+\text{Ha: }\mu_{base}-\mu_{most frequent} \neq 0
+$$
 
 ![](./images/ttest_base_hot.png)
 
@@ -242,8 +246,12 @@ To get a better understanding of the test outcome, we plotted the results. The s
 
 **Least Frequent Numbers Strategy (_Gambler's Fallacy approach_)**
 
-_Ho: mean(base) - mean(low_freq) = 0_
-_Ha: mean(base) - mean(low_freq) != 0_
+$$
+\text{Ho: }\mu_{base}-\mu_{most frequent} = 0
+$$
+$$
+\text{Ha: }\mu_{base}-\mu_{most frequent} \neq 0
+$$
 
 We next compared the Least Frequent Numbers strategy to the base case which yielded the following T-test results:
 
@@ -259,8 +267,12 @@ Whilst there is less overlap between the distributions of this strategy and the 
 
 ### Random Numbers Strategy
 
-_Ho: mean(base) - mean(random) = 0_
-_Ha: mean(base) - mean(random) != 0_
+$$
+\text{Ho: }\mu_{base}-\mu_{most frequent} = 0
+$$
+$$
+\text{Ha: }\mu_{base}-\mu_{most frequent} \neq 0
+$$
 
 ![](./images/ttest_base_random.png)
 
@@ -274,8 +286,12 @@ Plotting the distribution of the sample means further proves this as it reveals 
 
 ### Multiplier Strategy
 
-_Ho: mean(base) - mean(multi) = 0_
-_Ha: mean(base) - mean(multi) != 0_
+$$
+\text{Ho: }\mu_{base}-\mu_{most frequent} = 0
+$$
+$$
+\text{Ha: }\mu_{base}-\mu_{most frequent} \neq 0
+$$
 
 ![](./images/ttest_base_multi.png)
 
